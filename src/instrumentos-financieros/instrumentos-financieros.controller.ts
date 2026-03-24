@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { InstrumentosFinancierosService } from './instrumentos-financieros.service';
 import { InstrumentosFinancieros, Riesgo } from './instrumentos-financieros.entity';
 import { ParseIntPipe } from '@nestjs/common';
+import { CreateInstrumentoFinancieroDto } from './instrumentos-financieros.dto';
 
 @Controller('instrumentos-financieros')
 export class InstrumentosFinancierosController {
@@ -24,11 +25,11 @@ export class InstrumentosFinancierosController {
 
     @Get(':id')
     async getByID(@Param('id', ParseIntPipe) id_instrumento: number): Promise<InstrumentosFinancieros> {
-        return await this.instrumentosFinancierosService.getByID(id_instrumento);
+        return await this.instrumentosFinancierosService.getById(id_instrumento);
     }
 
     @Post()
-    async create(@Body() instrumento: InstrumentosFinancieros): Promise<InstrumentosFinancieros> {
+    async create(@Body() instrumento: CreateInstrumentoFinancieroDto): Promise<InstrumentosFinancieros> {
         return await this.instrumentosFinancierosService.create(instrumento);
     }
 

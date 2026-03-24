@@ -1,47 +1,69 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { InstrumentosFinancieros, Riesgo } from './instrumentos-financieros.entity';
-import { Like, Repository } from 'typeorm';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, ILike } from 'typeorm';
+
+import { InstrumentosFinancieros, Riesgo } from './instrumentos-financieros.entity';
+import { CreateInstrumentoFinancieroDto } from './instrumentos-financieros.dto';
 
 @Injectable()
 export class InstrumentosFinancierosService {
+  constructor(
+    @InjectRepository(InstrumentosFinancieros)
+    private readonly repository: Repository<InstrumentosFinancieros>,
+  ) {}
 
-    constructor(@InjectRepository(InstrumentosFinancieros) private readonly instrumentosFinancierosRepository: Repository<InstrumentosFinancieros>) {
+  async getAll(): Promise<InstrumentosFinancieros[]> {
+    return this.repository.find();
+  }
+
+  async getById(id: number): Promise<InstrumentosFinancieros> {
+    const instrumento = await this.repository.findOne({
+      where: { id_instrumento: id },
+    });
+
+    if (!instrumento) {
+      throw new NotFoundException('El instrumento financiero no existe');
     }
 
-    async getAll(): Promise<InstrumentosFinancieros[]> {
-        return await this.instrumentosFinancierosRepository.find();
+    return instrumento;
+  }
+
+  async filterByName(nombre: string): Promise<InstrumentosFinancieros[]> {
+    return this.repository.find({
+      where: {
+        nombre_instrumento: ILike(`%${nombre}%`),
+      },
+    });
+  }
+
+  async filterByRiesgo(riesgo: Riesgo): Promise<InstrumentosFinancieros[]> {
+    return this.repository.find({
+      where: { riesgo },
+    });
+  }
+
+  async create(
+    dto: CreateInstrumentoFinancieroDto,
+  ): Promise<InstrumentosFinancieros> {
+    const exists = await this.repository.exists({
+      where: { nombre_instrumento: dto.nombre_instrumento },
+    });
+
+    if (exists) {
+      throw new BadRequestException(
+        'El instrumento financiero ya existe',
+      );
     }
 
-    async getByID(id_instrumento: number): Promise<InstrumentosFinancieros> {
-        const exists = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento } });
-        if (!exists) {
-            throw new BadRequestException('El instrumento financiero no existe');
-        }
-        return exists;
-    }
+    const instrumento = this.repository.create(dto);
+    return this.repository.save(instrumento);
+  }
 
-    async filterByName(nombre_instrumento: string): Promise<InstrumentosFinancieros[]> {
-        return await this.instrumentosFinancierosRepository.find({ where: { nombre_instrumento: Like(`%${nombre_instrumento}%`) } });
-    }
+  async delete(id: number): Promise<void> {
+    const result = await this.repository.delete(id);
 
-    async filterByRiesgo(riesgo: Riesgo): Promise<InstrumentosFinancieros[]> {
-        return await this.instrumentosFinancierosRepository.find({ where: { riesgo } });
+    if (result.affected === 0) {
+      throw new NotFoundException('El instrumento financiero no existe');
     }
-
-    async create(instrumento: InstrumentosFinancieros): Promise<InstrumentosFinancieros> {
-        const exists = await this.instrumentosFinancierosRepository.findOne({ where: { nombre_instrumento: instrumento.nombre_instrumento } });
-        if (exists) {
-            throw new BadRequestException('El instrumento financiero ya existe');
-        }
-        return this.instrumentosFinancierosRepository.save(instrumento);
-    }
-
-    async delete(id_instrumento: number): Promise<void> {
-        const exists = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento } });
-        if (!exists) {
-            throw new BadRequestException('El instrumento financiero no existe');
-        }
-        await this.instrumentosFinancierosRepository.delete(id_instrumento);
-    }
+  }
 }
