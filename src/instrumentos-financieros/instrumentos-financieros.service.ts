@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InstrumentosFinancieros, Riesgo } from './instrumentos-financieros.entity';
 import { Like, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class InstrumentosFinancierosService {
-    constructor(private readonly instrumentosFinancierosRepository: Repository<InstrumentosFinancieros>) {
+
+    constructor(@InjectRepository(InstrumentosFinancieros) private readonly instrumentosFinancierosRepository: Repository<InstrumentosFinancieros>) {
     }
 
     async getAll(): Promise<InstrumentosFinancieros[]> {
