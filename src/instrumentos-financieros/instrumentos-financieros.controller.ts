@@ -81,7 +81,7 @@ export class InstrumentosFinancierosController {
         status: 200,
         description: 'Instrumento financiero agregado correctamente'
     })
-    async create(@Body() instrumentoFinanciero: CreateInstrumentoFinancieroDto) {
+    async create(@Body() instrumentoFinanciero: CreateInstrumentoFinancieroDto): Promise<ResponseDTO> {
         return await this.instrumentosFinancierosService.create(instrumentoFinanciero);
     }
 
@@ -104,7 +104,7 @@ export class InstrumentosFinancierosController {
         status: 404,
         description: 'Instrumento financiero no encontrado'
     })
-    async update(@Param('id') id: number, @Body() instrumentoFinanciero: UpdateInstrumentoFinancieroDto) {
+    async update(@Param('id') id: number, @Body() instrumentoFinanciero: UpdateInstrumentoFinancieroDto): Promise<ResponseDTO> {
         return this.instrumentosFinancierosService.update(id, instrumentoFinanciero);
     }
 }
