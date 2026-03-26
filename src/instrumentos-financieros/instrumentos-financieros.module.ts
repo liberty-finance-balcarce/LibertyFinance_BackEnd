@@ -1,6 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InstrumentosFinancieros } from "./instrumentos-financieros.entity";
+import { InstrumentosFinancieros } from "./entities/instrumentos-financieros.entity";
 import { InstrumentosFinancierosController } from "./instrumentos-financieros.controller";
 import { InstrumentosFinancierosService } from "./instrumentos-financieros.service";
 

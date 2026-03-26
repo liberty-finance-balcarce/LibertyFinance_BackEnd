@@ -1,69 +1,74 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, ILike } from 'typeorm';
-
-import { InstrumentosFinancieros, Riesgo } from './instrumentos-financieros.entity';
-import { CreateInstrumentoFinancieroDto } from './instrumentos-financieros.dto';
+import { Repository } from 'typeorm';
+import { InstrumentosFinancieros } from './entities/instrumentos-financieros.entity';
+import { ResponseDTO } from './dto/response.dto';
+import { CreateInstrumentoFinancieroDto } from "./dto/create-instrumento-financiero.dto";
+import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
 
 @Injectable()
 export class InstrumentosFinancierosService {
   constructor(
     @InjectRepository(InstrumentosFinancieros)
-    private readonly repository: Repository<InstrumentosFinancieros>,
-  ) {}
+    private readonly instrumentosFinancierosRepository: Repository<InstrumentosFinancieros>,
+  ) { }
 
-  async getAll(): Promise<InstrumentosFinancieros[]> {
-    return this.repository.find();
+  async findAll(): Promise<ResponseDTO> {
+    const instrumentosFinancieros = await this.instrumentosFinancierosRepository.find();
+    if (!instrumentosFinancieros.length) throw new NotFoundException("No se encontraron instrumentos financieros")
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Instrumentos financieros obtenidos correctamente',
+      data: instrumentosFinancieros,
+    };
   }
 
-  async getById(id: number): Promise<InstrumentosFinancieros> {
-    const instrumento = await this.repository.findOne({
-      where: { id_instrumento: id },
-    });
-
-    if (!instrumento) {
-      throw new NotFoundException('El instrumento financiero no existe');
+  async getById(id: number): Promise<ResponseDTO> {
+    const instrumentoFinanciero = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
+    if (!instrumentoFinanciero) throw new NotFoundException("Instrumento financiero no encontrado")
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Instrumento financiero obtenido correctamente',
+      data: instrumentoFinanciero,
     }
-
-    return instrumento;
   }
 
-  async filterByName(nombre: string): Promise<InstrumentosFinancieros[]> {
-    return this.repository.find({
-      where: {
-        nombre_instrumento: ILike(`%${nombre}%`),
-      },
-    });
-  }
+  async create(instrumentoFinancieroData: CreateInstrumentoFinancieroDto): Promise<ResponseDTO> {
+    const newInstrumentoFinanciero = this.instrumentosFinancierosRepository.create(instrumentoFinancieroData);
+    const res = await this.instrumentosFinancierosRepository.save(newInstrumentoFinanciero);
 
-  async filterByRiesgo(riesgo: Riesgo): Promise<InstrumentosFinancieros[]> {
-    return this.repository.find({
-      where: { riesgo },
-    });
-  }
-
-  async create(
-    dto: CreateInstrumentoFinancieroDto,
-  ): Promise<InstrumentosFinancieros> {
-    const exists = await this.repository.exists({
-      where: { nombre_instrumento: dto.nombre_instrumento },
-    });
-
-    if (exists) {
-      throw new BadRequestException(
-        'El instrumento financiero ya existe',
-      );
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Instrumento financiero agregado correctamente',
+      data: res
     }
-
-    const instrumento = this.repository.create(dto);
-    return this.repository.save(instrumento);
   }
 
-  async delete(id: number): Promise<void> {
-    const result = await this.repository.delete(id);
+  async remove(id: number): Promise<ResponseDTO> {
+    const instrumentoFinanciero = await this.instrumentosFinancierosRepository.delete(id);
+    if (!instrumentoFinanciero.affected) throw new NotFoundException(`Instrumento financiero con el Id ${id} no encontrado`)
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Instrumento financiero eliminado correctamente'
+    }
+  }
 
-    if (result.affected === 0) {
-      throw new NotFoundException('El instrumento financiero no existe');
+  async update(id: number, updateData: UpdateInstrumentoFinancieroDto): Promise<ResponseDTO> {
+    const instrumentoFinanciero = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
+    
+    if (!instrumentoFinanciero) throw new NotFoundException("Instrumento financiero no encontrado")
+    
+    const instrumentoActualizado = this.instrumentosFinancierosRepository.merge(
+      instrumentoFinanciero,
+      updateData
+    ) 
+
+    const saved = await this.instrumentosFinancierosRepository.save(instrumentoActualizado);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Instrumento financiero actualizado correctamente',
+      data: saved
     }
   }
 }
