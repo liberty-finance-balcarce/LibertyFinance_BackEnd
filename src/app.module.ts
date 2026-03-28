@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { InstrumentosFinancierosModule } from './instrumentos-financieros/instrumentos-financieros.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -16,8 +15,7 @@ import { InstrumentosFinancierosModule } from './instrumentos-financieros/instru
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
-    }),
-    InstrumentosFinancierosModule
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

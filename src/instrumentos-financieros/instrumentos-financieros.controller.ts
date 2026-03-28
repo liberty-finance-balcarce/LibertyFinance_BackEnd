@@ -95,7 +95,9 @@ export class InstrumentosFinancierosController {
     })
     @ApiParam({
         name: 'id',
-        description: 'Id del instrumento financiero'
+        description: 'Id del instrumento financiero',
+        required: true,
+        type: 'number'
     })
     @ApiBody({
         type: UpdateInstrumentoFinancieroDto
