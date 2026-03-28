@@ -2,7 +2,7 @@ import { IsDateString, IsNumber, IsString } from 'class-validator';
 
 export class CreateTransaccionHistoricoVentaDto {
   @IsDateString()
-  fecha_operacion: Date;
+  fecha_operacion: string;
 
   @IsNumber()
   id_instrumento: number;

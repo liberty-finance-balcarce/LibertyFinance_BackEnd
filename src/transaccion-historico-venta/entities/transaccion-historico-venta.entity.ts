@@ -1,16 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { InstrumentosFinancieros } from './instrumentos_financieros.entity';
-import { Usuarios } from './usuarios.entity';
+import { InstrumentoFinanciero } from "../../instrumentos-financieros/entities/instrumento-financiero.entity"
 
-/*
-    id_transaccion_venta PK autoincrement
-	id_instrumento FK reference instrumento financiero
-    precio_instrumento FK reference instrumento financiero
-	fecha_operacion DATE
-	dni_usuario FK reference usuario
-*/
-
-@Entity ('transaccion_historico_venta')
+@Entity('transaccion_historico_venta')
 
 export class TransaccionHistoricoVenta {
     @PrimaryGeneratedColumn('increment')
@@ -19,22 +10,22 @@ export class TransaccionHistoricoVenta {
     @Column({ type: 'date' })
     fecha_operacion: Date;
 
-    @ManyToOne(() => InstrumentosFinancieros)
-    @JoinColumn({ 
+    @ManyToOne(() => InstrumentoFinanciero)
+    @JoinColumn({
         name: 'id_instrumento',
-        referencedColumnName: 'id_instrumento'    
+        referencedColumnName: 'id_instrumento'
     })
-        id_instrumento: InstrumentosFinancieros;
+    id_instrumento: InstrumentoFinanciero;
 
-    @ManyToOne(()=> InstrumentosFinancieros)
-    @JoinColumn({ 
+    @ManyToOne(() => InstrumentoFinanciero)
+    @JoinColumn({
         name: 'precio_instrumento',
         referencedColumnName: 'precio_instrumento'
     })
     precio_instrumento: number;
 
-    @ManyToOne(()=> Usuarios)
-    @JoinColumn({ 
+    @ManyToOne(() => Usuarios)
+    @JoinColumn({
         name: 'dni_usuario',
         referencedColumnName: 'dni_usuario'
     })
