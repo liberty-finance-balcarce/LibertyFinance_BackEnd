@@ -34,13 +34,17 @@ export class InstrumentosFinancierosService {
   }
 
   async create(instrumentoFinanciero: CreateInstrumentoFinancieroDto): Promise<ResponseDTO> {
-    const newInstrumentoFinanciero = this.instrumentosFinancierosRepository.create(instrumentoFinanciero);
-    const res = await this.instrumentosFinancierosRepository.save(newInstrumentoFinanciero);
+    try {
+      const newInstrumentoFinanciero = this.instrumentosFinancierosRepository.create(instrumentoFinanciero);
+      const res = await this.instrumentosFinancierosRepository.save(newInstrumentoFinanciero);
 
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Instrumento financiero agregado correctamente',
-      data: res
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Instrumento financiero agregado correctamente',
+        data: res
+      }
+    } catch (error) {
+      throw new InternalServerErrorException("Error al agregar el instrumento financiero")
     }
   }
 
