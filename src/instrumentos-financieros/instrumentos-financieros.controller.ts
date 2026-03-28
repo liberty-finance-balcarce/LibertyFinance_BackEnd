@@ -66,6 +66,10 @@ export class InstrumentosFinancierosController {
         status: 404,
         description: 'No se encontro el instrumento financiero'
     })
+    @ApiResponse({
+        status: 500,
+        description: 'Error al eliminar el instrumento financiero'
+    })
     async remove(@Param('id') id: number): Promise<ResponseDTO> {
         return await this.instrumentosFinancierosService.remove(id);
     }

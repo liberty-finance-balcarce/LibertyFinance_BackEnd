@@ -33,8 +33,8 @@ export class InstrumentosFinancierosService {
     }
   }
 
-  async create(instrumentoFinancieroData: CreateInstrumentoFinancieroDto): Promise<ResponseDTO> {
-    const newInstrumentoFinanciero = this.instrumentosFinancierosRepository.create(instrumentoFinancieroData);
+  async create(instrumentoFinanciero: CreateInstrumentoFinancieroDto): Promise<ResponseDTO> {
+    const newInstrumentoFinanciero = this.instrumentosFinancierosRepository.create(instrumentoFinanciero);
     const res = await this.instrumentosFinancierosRepository.save(newInstrumentoFinanciero);
 
     return {
@@ -45,8 +45,11 @@ export class InstrumentosFinancierosService {
   }
 
   async remove(id: number): Promise<ResponseDTO> {
-    const instrumentoFinanciero = await this.instrumentosFinancierosRepository.delete(id);
-    if (!instrumentoFinanciero.affected) throw new NotFoundException(`Instrumento financiero con el Id ${id} no encontrado`)
+    const exists = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
+    if (!exists) throw new NotFoundException("Instrumento financiero no encontrado")
+    const res = await this.instrumentosFinancierosRepository.delete(id);
+    if (!res.affected) throw new InternalServerErrorException("Error al eliminar el instrumento financiero")
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Instrumento financiero eliminado correctamente'
@@ -55,13 +58,13 @@ export class InstrumentosFinancierosService {
 
   async update(id: number, updateData: UpdateInstrumentoFinancieroDto): Promise<ResponseDTO> {
     const instrumentoFinanciero = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
-    
+
     if (!instrumentoFinanciero) throw new NotFoundException("Instrumento financiero no encontrado")
-    
+
     const instrumentoActualizado = this.instrumentosFinancierosRepository.merge(
       instrumentoFinanciero,
       updateData
-    ) 
+    )
 
     const saved = await this.instrumentosFinancierosRepository.save(instrumentoActualizado);
 

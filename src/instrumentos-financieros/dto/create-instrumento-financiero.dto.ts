@@ -3,7 +3,6 @@ import { Riesgo } from '../entities/instrumentos-financieros.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateInstrumentoFinancieroDto {
-  
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ example: 'Bono' })
