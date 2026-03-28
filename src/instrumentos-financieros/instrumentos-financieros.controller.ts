@@ -110,6 +110,10 @@ export class InstrumentosFinancierosController {
         status: 404,
         description: 'Instrumento financiero no encontrado'
     })
+    @ApiResponse({
+        status: 500,
+        description: 'Error al actualizar el instrumento financiero'
+    })
     async update(@Param('id') id: number, @Body() instrumentoFinanciero: UpdateInstrumentoFinancieroDto): Promise<ResponseDTO> {
         return this.instrumentosFinancierosService.update(id, instrumentoFinanciero);
     }

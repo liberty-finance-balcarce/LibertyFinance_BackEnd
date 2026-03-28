@@ -14,22 +14,30 @@ export class InstrumentosFinancierosService {
   ) { }
 
   async findAll(): Promise<ResponseDTO> {
-    const instrumentosFinancieros = await this.instrumentosFinancierosRepository.find();
-    if (!instrumentosFinancieros.length) throw new NotFoundException("No se encontraron instrumentos financieros")
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Instrumentos financieros obtenidos correctamente',
-      data: instrumentosFinancieros,
-    };
+    try {
+      const instrumentosFinancieros = await this.instrumentosFinancierosRepository.find();
+      if (!instrumentosFinancieros.length) throw new NotFoundException("No se encontraron instrumentos financieros")
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Instrumentos financieros obtenidos correctamente',
+        data: instrumentosFinancieros,
+      };
+    } catch (error) {
+      throw new InternalServerErrorException("Error al obtener los instrumentos financieros");
+    }
   }
 
   async getById(id: number): Promise<ResponseDTO> {
-    const instrumentoFinanciero = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
-    if (!instrumentoFinanciero) throw new NotFoundException("Instrumento financiero no encontrado")
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Instrumento financiero obtenido correctamente',
-      data: instrumentoFinanciero,
+    try {
+      const instrumentoFinanciero = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
+      if (!instrumentoFinanciero) throw new NotFoundException("Instrumento financiero no encontrado")
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Instrumento financiero obtenido correctamente',
+        data: instrumentoFinanciero,
+      }
+    } catch (error) {
+      throw new InternalServerErrorException("Error al obtener el instrumento financiero")
     }
   }
 
@@ -61,21 +69,25 @@ export class InstrumentosFinancierosService {
   }
 
   async update(id: number, updateData: UpdateInstrumentoFinancieroDto): Promise<ResponseDTO> {
-    const instrumentoFinanciero = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
+    try {
+      const instrumentoFinanciero = await this.instrumentosFinancierosRepository.findOne({ where: { id_instrumento: id } })
 
-    if (!instrumentoFinanciero) throw new NotFoundException("Instrumento financiero no encontrado")
+      if (!instrumentoFinanciero) throw new NotFoundException("Instrumento financiero no encontrado")
 
-    const instrumentoActualizado = this.instrumentosFinancierosRepository.merge(
-      instrumentoFinanciero,
-      updateData
-    )
+      const instrumentoActualizado = this.instrumentosFinancierosRepository.merge(
+        instrumentoFinanciero,
+        updateData
+      )
 
-    const saved = await this.instrumentosFinancierosRepository.save(instrumentoActualizado);
+      const saved = await this.instrumentosFinancierosRepository.save(instrumentoActualizado);
 
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Instrumento financiero actualizado correctamente',
-      data: saved
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Instrumento financiero actualizado correctamente',
+        data: saved
+      }
+    } catch (error) {
+      throw new InternalServerErrorException("Error al actualizar el instrumento financiero")
     }
   }
 }
