@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { ProvinciasModule } from './provincias/provincias.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -15,8 +16,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
-    })
-  ],
+    }), ProvinciasModule
+  ], 
   controllers: [AppController],
   providers: [AppService],
 })
