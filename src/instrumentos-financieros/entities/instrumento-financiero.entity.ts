@@ -7,7 +7,7 @@ export enum Riesgo {
 }
 
 @Entity('instrumentos_financieros')
-export class InstrumentosFinancieros {
+export class InstrumentoFinanciero {
     @PrimaryGeneratedColumn('increment')
     id_instrumento: number;
     @Column('varchar')

@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsEnum, IsNumber, Min } from 'class-validator';
-import { Riesgo } from '../entities/instrumentos-financieros.entity';
+import { Riesgo } from '../entities/instrumento-financiero.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateInstrumentoFinancieroDto {

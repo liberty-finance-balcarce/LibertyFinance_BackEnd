@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InstrumentosFinancieros } from './entities/instrumentos-financieros.entity';
+import { InstrumentoFinanciero } from './entities/instrumento-financiero.entity';
 import { ResponseDTO } from './dto/response.dto';
 import { CreateInstrumentoFinancieroDto } from "./dto/create-instrumento-financiero.dto";
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
@@ -9,8 +9,8 @@ import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financi
 @Injectable()
 export class InstrumentosFinancierosService {
   constructor(
-    @InjectRepository(InstrumentosFinancieros)
-    private readonly instrumentosFinancierosRepository: Repository<InstrumentosFinancieros>,
+    @InjectRepository(InstrumentoFinanciero)
+    private readonly instrumentosFinancierosRepository: Repository<InstrumentoFinanciero>,
   ) { }
 
   async findAll(): Promise<ResponseDTO> {
