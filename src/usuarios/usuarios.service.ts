@@ -2,7 +2,9 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
+  InternalServerErrorException,
   UnauthorizedException,
+  ConflictException,
 } from '@nestjs/common';
 import { Usuario } from './usuario.entity';
 import { ResponseDTO } from './dto/usuario.response.dto';
@@ -45,21 +47,35 @@ export class UsuariosService {
   }
 
   async crearUsuario(usuario: UsuarioDto): Promise<ResponseDTO> {
-    const nivelHashs = 10;
-    const hashContraseña = await bcrypt.hash(usuario.contraseña, nivelHashs);
-    const nuevoUsuario = this.usuarioRepository.create({
-      ...usuario,
-      contraseña: hashContraseña,
-    });
-    const res = await this.usuarioRepository.save(nuevoUsuario);
-    console.log(
-      `Usuario: ${res.nombre} ${res.apellido} con ID: ${res.id} RESGISTRADO!`,
-    );
-    return {
-      code: HttpStatus.CREATED,
-      message: 'Usuario Creado Exitosamente!',
-      data: res,
-    };
+    try {
+      const nivelHashs = 10;
+      const hashContraseña = await bcrypt.hash(usuario.contraseña, nivelHashs);
+      const nuevoUsuario = this.usuarioRepository.create({
+        ...usuario,
+        contraseña: hashContraseña,
+      });
+      const res = await this.usuarioRepository.save(nuevoUsuario);
+      console.log(
+        `Usuario: ${res.nombre} ${res.apellido} con ID: ${res.id} RESGISTRADO!`,
+      );
+      return {
+        code: HttpStatus.CREATED,
+        message: 'Usuario Creado Exitosamente!',
+        data: res,
+      };
+    } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
+        throw new ConflictException({
+          code: HttpStatus.CONFLICT,
+          message: 'Campo DNI o EMAIL DUPLICADO',
+          error: 'CONFLICTO',
+        });
+      }
+      throw new InternalServerErrorException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Error interno al procesar el registro del usuario',
+      });
+    }
   }
 
   async eliminarUsuario(id: number): Promise<ResponseDTO> {
@@ -72,7 +88,7 @@ export class UsuariosService {
       message: `Usuario con ID: ${id} Eliminado Correctamente`,
     };
   }
-  
+
   async modificarUsuario(
     id: number,
     modificaciones: ModificarUsuarioDto,
@@ -95,7 +111,7 @@ export class UsuariosService {
     };
   }
 
-  async buscarUsuarioxNombre(nombreBuscar: string): Promise<ResponseDTO> {
+  async usuarioxNombre(nombreBuscar: string): Promise<ResponseDTO> {
     const res = await this.usuarioRepository.find({
       where: {
         nombre: Like(`%${nombreBuscar}%`),

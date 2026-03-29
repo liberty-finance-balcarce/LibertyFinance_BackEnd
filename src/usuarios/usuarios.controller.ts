@@ -7,14 +7,12 @@ import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
 export class UsuariosController {
   constructor(private usuariosService: UsuariosService){}
 
-@Get()    
-listarUsuarios(){
-    return this.usuariosService.getAllUsuariosDB();
-}
-
-@Get('buscarxNombre')
-buscarUsuarioxNombre(@Query('nombre')nombre:string){
-    return this.usuariosService.buscarUsuarioxNombre(nombre);
+@Get()
+traerUsuarios(@Query('nombre')nombre?:string){
+    if (nombre) {
+  return this.usuariosService.usuarioxNombre(nombre);
+                }
+  return this.usuariosService.getAllUsuariosDB(); 
 }
 
 @Get(':identificador')    
