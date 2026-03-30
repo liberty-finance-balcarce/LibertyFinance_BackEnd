@@ -96,6 +96,5 @@ export class TransaccionHistoricoVentaService {
             message: "Transacción de venta actualizada correctamente.",
             data: guardarTransaccionVenta
         }
-
     }
 }
