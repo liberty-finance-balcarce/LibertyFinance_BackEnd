@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { InstrumentosFinancierosModule } from './instrumentos-financieros/instrumentos-financieros.module';
+import { ProvinciasModule } from './provincias/provincias.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -17,7 +19,7 @@ import { InstrumentosFinancierosModule } from './instrumentos-financieros/instru
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
     }),
-    InstrumentosFinancierosModule
+    InstrumentosFinancierosModule, ProvinciasModule, UsuariosModule
   ],
   controllers: [AppController],
   providers: [AppService],
