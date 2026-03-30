@@ -18,10 +18,8 @@ import { ProvinciasModule } from './provincias/provincias.module';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
     }),
-    InstrumentosFinancierosModule
+    InstrumentosFinancierosModule, ProvinciasModule
   ],
-    }), ProvinciasModule
-  ], 
   controllers: [AppController],
   providers: [AppService],
 })
