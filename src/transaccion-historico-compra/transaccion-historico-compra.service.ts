@@ -10,9 +10,7 @@ import { ResponseDTO } from './dto/response.dto';
 export class TransaccionHistoricoCompraService {
     constructor(
         @InjectRepository(TransaccionHistoricoCompra)
-        private readonly transaccionHistoricoCompraRepository: Repository<TransaccionHistoricoCompra>,
-
-        private readonly instrumentosFinancierosRepository: Repository<TransaccionHistoricoCompra>
+        private readonly transaccionHistoricoCompraRepository: Repository<TransaccionHistoricoCompra>
     ) { }
 
 
