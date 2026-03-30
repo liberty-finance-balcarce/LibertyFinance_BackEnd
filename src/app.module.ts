@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { InstrumentosFinancierosModule } from './instrumentos-financieros/instrumentos-financieros.module';
 import { ProvinciasModule } from './provincias/provincias.module';
 
 @Module({
@@ -16,6 +17,9 @@ import { ProvinciasModule } from './provincias/provincias.module';
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: true,
+    }),
+    InstrumentosFinancierosModule
+  ],
     }), ProvinciasModule
   ], 
   controllers: [AppController],
