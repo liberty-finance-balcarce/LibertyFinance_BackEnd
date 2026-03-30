@@ -1,16 +1,16 @@
-import { IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsNumber } from 'class-validator';
 
 export class CreateTransaccionHistoricoCompraDto {
 
-    @isDateString()
+    @IsDateString()
     fecha_operacion: string;
 
-    @isNumber()
+    @IsNumber()
     id_instrumento: number;
 
-    @isNumber()
+    @IsNumber()
     precio_instrumento: number;
 
-    @isNumber()
+    @IsNumber()
     dni_usuario: number;
 }
