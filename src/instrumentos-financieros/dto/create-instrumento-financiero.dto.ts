@@ -14,8 +14,8 @@ export class CreateInstrumentoFinancieroDto {
   rendimiento: number;
 
   @IsEnum(Riesgo)
-  @ApiProperty({ 
-    enum: Riesgo, 
+  @ApiProperty({
+    enum: Riesgo,
     example: Riesgo.MEDIO,
     description: 'Nivel de riesgo del instrumento'
   })
