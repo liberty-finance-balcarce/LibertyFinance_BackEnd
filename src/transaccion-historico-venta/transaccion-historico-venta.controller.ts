@@ -32,6 +32,16 @@ export class TransaccionHistoricoVentaController {
     return await this.transaccionHistoricoVentaService.getById(id);
   }
 
+  @Get('dni-usuario')
+  @ApiOperation({ description: "Obtener una transaccion historica de venta por DNI de usuario" })
+  @ApiResponse({ status: 200, description: "Transaccion historica de venta obtenida correctamente." })
+  @ApiResponse({ status: 404, description: "No se encontró ninguna transaccion historica de venta." })
+  @ApiResponse({ status: 500, description: "Error al obtener la transaccion historica de venta." })
+
+  async getByDniUsuario(@Param('dni_usuario') dni_usuario: number): Promise<ResponseDTO> {
+    return await this.transaccionHistoricoVentaService.getByDniUsuario(dni_usuario);
+  }
+
   @Delete(':id')
   @ApiOperation({ description: "Eliminar una transaccion historica de venta" })
   @ApiParam({ name: "id", description: "Id de la transaccion historica de venta", required: true, type: "number" })
