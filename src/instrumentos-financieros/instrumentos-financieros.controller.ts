@@ -84,7 +84,7 @@ export class InstrumentosFinancierosController {
         type: CreateInstrumentoFinancieroDto
     })
     @ApiResponse({
-        status: 200,
+        status: 201,
         description: 'Instrumento financiero agregado correctamente'
     })
     async create(@Body() instrumentoFinanciero: CreateInstrumentoFinancieroDto): Promise<ResponseDTO> {

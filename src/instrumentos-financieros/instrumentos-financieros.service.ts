@@ -49,14 +49,11 @@ export class InstrumentosFinancierosService {
   ): Promise<ResponseDTO> {
     const newInstrumentoFinanciero =
       this.instrumentosFinancierosRepository.create(instrumentoFinanciero);
-    const res = await this.instrumentosFinancierosRepository.save(
-      newInstrumentoFinanciero,
-    );
+    await this.instrumentosFinancierosRepository.save(newInstrumentoFinanciero);
 
     return {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       message: 'Instrumento financiero agregado correctamente',
-      data: res,
     };
   }
 
