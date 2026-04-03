@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { InstrumentosFinancierosService } from './instrumentos-financieros.service';
-import { ResponseDTO } from './dto/response.dto';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ResponseDTO } from './dto/response-instrumento-financiero.dto';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
 
@@ -49,6 +49,7 @@ export class InstrumentosFinancierosController {
     }
 
     @Delete(':id')
+    @ApiBearerAuth()
     @ApiOperation({
         description: 'Eliminar un instrumento financiero por Id'
     })
@@ -75,6 +76,7 @@ export class InstrumentosFinancierosController {
     }
 
     @Post()
+    @ApiBearerAuth()
     @ApiOperation({
         description: 'Crear un nuevo instrumento financiero'
     })
@@ -90,6 +92,7 @@ export class InstrumentosFinancierosController {
     }
 
     @Patch(':id')
+    @ApiBearerAuth()
     @ApiOperation({
         description: 'Actualizar un instrumento financiero'
     })

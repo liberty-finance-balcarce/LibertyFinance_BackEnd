@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InstrumentoFinanciero } from './entities/instrumento-financiero.entity';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from './dto/response-instrumento-financiero.dto';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
 
