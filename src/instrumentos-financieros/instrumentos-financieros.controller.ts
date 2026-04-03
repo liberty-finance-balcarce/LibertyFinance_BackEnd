@@ -87,6 +87,10 @@ export class InstrumentosFinancierosController {
         status: 201,
         description: 'Instrumento financiero agregado correctamente'
     })
+    @ApiResponse({
+        status: 400,
+        description: 'El precio del instrumento debe estar entre 0 y 1000000'
+    })
     async create(@Body() instrumentoFinanciero: CreateInstrumentoFinancieroDto): Promise<ResponseDTO> {
         return await this.instrumentosFinancierosService.create(instrumentoFinanciero);
     }
@@ -108,6 +112,10 @@ export class InstrumentosFinancierosController {
     @ApiResponse({
         status: 200,
         description: 'Instrumento financiero actualizado correctamente'
+    })
+    @ApiResponse({
+        status: 400,
+        description: 'El precio del instrumento debe estar entre 0 y 1000000'
     })
     @ApiResponse({
         status: 404,
