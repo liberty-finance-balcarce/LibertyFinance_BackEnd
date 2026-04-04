@@ -10,12 +10,12 @@ export enum Riesgo {
 export class InstrumentoFinanciero {
     @PrimaryGeneratedColumn('increment')
     id_instrumento: number;
-    @Column('varchar')
+    @Column({ type: 'varchar', length: 50 })
     nombre_instrumento: string;
-    @Column('float')
+    @Column({ type: 'float', precision: 10, scale: 2 })
     rendimiento: number;
     @Column({ type: 'enum', enum: Riesgo })
     riesgo: Riesgo;
-    @Column('float')
+    @Column({ type: 'float', precision: 10, scale: 2 })
     precio_instrumento: number;
 }

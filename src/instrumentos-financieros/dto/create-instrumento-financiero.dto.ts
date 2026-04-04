@@ -6,6 +6,8 @@ export class CreateInstrumentoFinancieroDto {
   @IsString({ message: 'El nombre del instrumento debe ser un string' })
   @IsNotEmpty({ message: 'El nombre es obligatorio' })
   @ApiProperty({ example: 'Bono' })
+  @Min(3, { message: 'El nombre del instrumento debe tener al menos 3 caracteres' })
+  @Max(50, { message: 'El nombre del instrumento debe tener un maximo de 50 caracteres' })
   nombre_instrumento: string;
 
   @IsNumber({}, { message: 'El rendimiento del instrumento debe ser un numero' })

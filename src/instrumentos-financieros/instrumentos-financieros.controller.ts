@@ -280,6 +280,17 @@ export class InstrumentosFinancierosController {
   })
   @ApiResponse({
     status: 400,
+    description: 'Debe enviar al menos un campo para actualizar',
+    schema: {
+      type: 'object',
+      properties: {
+        statusCode: { type: 'number', example: 400 },
+        message: { type: 'string', example: 'Debe enviar al menos un campo para actualizar' }
+      }
+    }
+  })
+  @ApiResponse({
+    status: 400,
     description: 'Casos de errores: 400',
     schema: {
       type: 'object',

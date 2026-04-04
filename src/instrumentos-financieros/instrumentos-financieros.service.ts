@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
@@ -79,6 +80,8 @@ export class InstrumentosFinancierosService {
     id: number,
     updateData: UpdateInstrumentoFinancieroDto,
   ): Promise<ResponseDTO> {
+    if (!Object.keys(updateData).length)
+      throw new BadRequestException('Debe enviar al menos un campo para actualizar');
     const instrumentoFinanciero =
       await this.instrumentosFinancierosRepository.findOne({
         where: { id_instrumento: id },
