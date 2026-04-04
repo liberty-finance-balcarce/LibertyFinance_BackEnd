@@ -16,32 +16,32 @@ export class UsuariosController {
   constructor(private usuariosService: UsuariosService) {}
 
   @Get()
-  traerUsuarios(@Query('nombre') nombre?: string) {
+  findAll(@Query('nombre') nombre?: string) {
     if (nombre) {
-      return this.usuariosService.usuarioxNombre(nombre);
+      return this.usuariosService.getByNombre(nombre);
     }
-    return this.usuariosService.getAllUsuariosDB();
+    return this.usuariosService.findAll();
   }
 
-  @Get(':identificador')
-  buscarUsuarioxID(@Param('identificador') identificador: number) {
-    return this.usuariosService.getUsuarioDBxID(identificador);
+  @Get(':dni')
+  getByDNI(@Param('dni') dni: number) {
+    return this.usuariosService.getByDNI(dni);
   }
 
   @Post()
-  crearNuevoUsuario(@Body() nuevoUsuario: UsuarioDto) {
-    return this.usuariosService.crearUsuario(nuevoUsuario);
+  create(@Body() nuevoUsuario: UsuarioDto) {
+    return this.usuariosService.create(nuevoUsuario);
   }
-  @Delete(':identificador')
-  eliminarUsuario(@Param('identificador') identificador: number) {
-    return this.usuariosService.eliminarUsuario(identificador);
+  @Delete(':id')
+  delete(@Param('id') id: number) {
+    return this.usuariosService.delete(id);
   }
 
-  @Patch(':identificador')
-  modificarUsuario(
-    @Param('identificador') identificador: number,
+  @Patch(':id')
+  update(
+    @Param('id') id: number,
     @Body() modificaciones: ModificarUsuarioDto,
   ) {
-    return this.usuariosService.modificarUsuario(identificador, modificaciones);
+    return this.usuariosService.update(id, modificaciones);
   }
 }

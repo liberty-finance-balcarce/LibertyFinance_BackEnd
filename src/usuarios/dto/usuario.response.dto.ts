@@ -1,7 +1,7 @@
-import { Usuario } from "../usuario.entity"
+import { Usuario } from "../entities/usuario.entity"
 
 export interface ResponseDTO {
-    code:number
+    statusCode:number
     message: string
     data?: Usuario | Usuario[]
 }

@@ -1,12 +1,9 @@
 import { Provincia } from "src/provincias/entities/provincia.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("usuarios")
 export class Usuario{
-
-  @PrimaryGeneratedColumn()
-  id:number
-  @Column({name: 'dni_usuario', unique:true})
+  @PrimaryColumn()
   dni_usuario: number
   @Column()  
   nombre:string
@@ -14,7 +11,7 @@ export class Usuario{
   apellido:string
   @Column({unique:true})
   mail:string
-  @Column()
+  @Column({select:false})
   contraseña:string
   @Column() 
   numero_telefono:string
