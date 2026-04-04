@@ -3,15 +3,15 @@ import {
   Injectable,
   NotFoundException,
   InternalServerErrorException,
-  UnauthorizedException,
   ConflictException,
 } from '@nestjs/common';
 import { Usuario } from './entities/usuario.entity';
-import { ResponseDTO } from './dto/usuario.response.dto';
-import { UsuarioDto, ModificarUsuarioDto } from './dto/usuario.dto';
+import { ResponseDTO } from './dto/response.dto';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
@@ -46,7 +46,7 @@ export class UsuariosService {
     };
   }
   */
-  async create(usuario: UsuarioDto): Promise<ResponseDTO> {
+  async create(usuario: CreateUsuarioDto): Promise<ResponseDTO> {
     try {
       const nivelHashs = 10;
       const hashContraseña = await bcrypt.hash(usuario.contraseña, nivelHashs);
@@ -87,7 +87,7 @@ export class UsuariosService {
 
   async update(
     id: number,
-    modificaciones: ModificarUsuarioDto,
+    modificaciones: UpdateUsuarioDto,
   ): Promise<ResponseDTO> {
     const { contraseña } = modificaciones;
     if (contraseña) {

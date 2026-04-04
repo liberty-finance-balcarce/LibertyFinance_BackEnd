@@ -19,8 +19,9 @@ import {
   ApiBody 
 } from '@nestjs/swagger';
 import { UsuariosService } from './usuarios.service';
-import { ModificarUsuarioDto, UsuarioDto } from './dto/usuario.dto';
-import { ResponseDTO } from './dto/usuario.response.dto';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { ResponseDTO } from './dto/response.dto';
 
 @ApiTags('usuarios')
 @Controller('usuarios')
@@ -53,11 +54,11 @@ export class UsuariosController {
 
   @Post()
   @ApiOperation({ summary: 'Registrar nuevo usuario', description: 'Crea un usuario y hashea la contraseña automáticamente.' })
-  @ApiBody({ type: UsuarioDto })
+  @ApiBody({ type: CreateUsuarioDto })
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Usuario creado con éxito.', type: ResponseDTO })
   @ApiResponse({ status: HttpStatus.CONFLICT, description: 'El DNI o Email ya se encuentran registrados.' })
   @ApiResponse({ status: HttpStatus.INTERNAL_SERVER_ERROR, description: 'Error interno del servidor.' })
-  async create(@Body() usuarioDto: UsuarioDto): Promise<ResponseDTO> {
+  async create(@Body() usuarioDto: CreateUsuarioDto): Promise<ResponseDTO> {
     return await this.usuariosService.create(usuarioDto);
   }
 
@@ -68,7 +69,7 @@ export class UsuariosController {
   @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'El ID proporcionado no existe.' })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() modificaciones: ModificarUsuarioDto,
+    @Body() modificaciones: UpdateUsuarioDto,
   ): Promise<ResponseDTO> {
     return await this.usuariosService.update(id, modificaciones);
   }

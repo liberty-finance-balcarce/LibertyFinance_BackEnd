@@ -2,7 +2,7 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import {IsString, IsOptional, IsEmail, IsNumber} from "class-validator";
 import { Provincia } from "src/provincias/entities/provincia.entity";
 
-export class UsuarioDto {
+export class CreateUsuarioDto {
   @ApiProperty({
     description: 'DNI del usuario (sin puntos)',
     example: 30123456,
@@ -82,7 +82,6 @@ export class UsuarioDto {
   id_rol: number;
 }
 
-export class ModificarUsuarioDto extends PartialType(UsuarioDto) {}
 
 /*
 export class UsuarioDto {
