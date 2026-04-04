@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
@@ -48,14 +47,6 @@ export class InstrumentosFinancierosService {
   async create(
     instrumentoFinanciero: CreateInstrumentoFinancieroDto,
   ): Promise<ResponseDTO> {
-    if (
-      instrumentoFinanciero.precio_instrumento < 0 ||
-      instrumentoFinanciero.precio_instrumento > 1000000
-    ) {
-      throw new BadRequestException(
-        'El precio del instrumento debe estar entre 0 y 1000000',
-      );
-    }
     const newInstrumentoFinanciero =
       this.instrumentosFinancierosRepository.create(instrumentoFinanciero);
     await this.instrumentosFinancierosRepository.save(newInstrumentoFinanciero);
@@ -88,15 +79,6 @@ export class InstrumentosFinancierosService {
     id: number,
     updateData: UpdateInstrumentoFinancieroDto,
   ): Promise<ResponseDTO> {
-    if (
-      updateData.precio_instrumento !== undefined &&
-      (updateData.precio_instrumento < 0 ||
-        updateData.precio_instrumento > 1000000)
-    ) {
-      throw new BadRequestException(
-        'El precio del instrumento debe estar entre 0 y 1000000',
-      );
-    }
     const instrumentoFinanciero =
       await this.instrumentosFinancierosRepository.findOne({
         where: { id_instrumento: id },
