@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InstrumentoFinanciero } from './entities/instrumento-financiero.entity';
+import {
+  InstrumentoFinanciero,
+  Riesgo,
+} from './entities/instrumento-financiero.entity';
 import { ResponseDTO } from './dto/response.dto';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
@@ -19,9 +22,9 @@ export class InstrumentosFinancierosService {
     private readonly instrumentosFinancierosRepository: Repository<InstrumentoFinanciero>,
   ) {}
 
-  async findAll(): Promise<ResponseDTO> {
+  async findAll(filters: Object): Promise<ResponseDTO> {
     const instrumentosFinancieros =
-      await this.instrumentosFinancierosRepository.find();
+      await this.instrumentosFinancierosRepository.find({ where: filters });
     if (!instrumentosFinancieros.length)
       throw new NotFoundException('No se encontraron instrumentos financieros');
     return {
@@ -81,7 +84,9 @@ export class InstrumentosFinancierosService {
     updateData: UpdateInstrumentoFinancieroDto,
   ): Promise<ResponseDTO> {
     if (!Object.keys(updateData).length)
-      throw new BadRequestException('Debe enviar al menos un campo para actualizar');
+      throw new BadRequestException(
+        'Debe enviar al menos un campo para actualizar',
+      );
     const instrumentoFinanciero =
       await this.instrumentosFinancierosRepository.findOne({
         where: { id_instrumento: id },

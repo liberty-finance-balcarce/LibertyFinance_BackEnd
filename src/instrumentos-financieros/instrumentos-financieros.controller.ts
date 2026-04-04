@@ -4,8 +4,10 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { InstrumentosFinancierosService } from './instrumentos-financieros.service';
 import { ResponseDTO } from './dto/response.dto';
@@ -14,11 +16,16 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
+import {
+  Riesgo,
+  TipoInstrumento,
+} from './entities/instrumento-financiero.entity';
 
 @ApiTags('Instrumentos Financieros')
 @Controller('instrumentos-financieros')
@@ -30,6 +37,18 @@ export class InstrumentosFinancierosController {
   @Get()
   @ApiOperation({
     description: 'Obtener todos los instrumentos financieros',
+  })
+  @ApiQuery({
+    name: 'riesgo',
+    required: false,
+    enum: Riesgo,
+    enumName: 'Riesgo'
+  })
+  @ApiQuery({
+    name: 'tipo_instrumento',
+    required: false,
+    enum: TipoInstrumento,
+    enumName: 'Tipo del instrumento financiero'
   })
   @ApiResponse({
     status: 200,
@@ -52,6 +71,11 @@ export class InstrumentosFinancierosController {
               rendimiento: { type: 'number', example: 5 },
               riesgo: { type: 'string', example: 'Medio' },
               precio_instrumento: { type: 'number', example: 1000 },
+              tipo_instrumento: {
+                type: 'string',
+                enum: ['Tradicional', 'No Tradicional'],
+                example: 'Tradicional',
+              },
             },
           },
         },
@@ -72,8 +96,15 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  async findAll(): Promise<ResponseDTO> {
-    return await this.instrumentosFinancierosService.findAll();
+  async findAll(
+    @Query('riesgo') riesgo?: Riesgo,
+    @Query('tipo_instrumento') tipo_instrumento?: TipoInstrumento,
+  ): Promise<ResponseDTO> {
+    const filters = {
+      riesgo: riesgo,
+      tipo_instrumento: tipo_instrumento,
+    };
+    return await this.instrumentosFinancierosService.findAll(filters);
   }
 
   @Get(':id')
@@ -105,6 +136,11 @@ export class InstrumentosFinancierosController {
             rendimiento: { type: 'number', example: 5 },
             riesgo: { type: 'string', example: 'Medio' },
             precio_instrumento: { type: 'number', example: 1000 },
+            tipo_instrumento: {
+              type: 'string',
+              enum: ['Tradicional', 'No Tradicional'],
+              example: 'Tradicional',
+            },
           },
         },
       },
@@ -117,11 +153,14 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 404 },
-        message: { type: 'string', example: 'No se encontro el instrumento financiero' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'No se encontro el instrumento financiero',
+        },
+      },
+    },
   })
-  async getById(@Param('id') id: number): Promise<ResponseDTO> {
+  async getById(@Param('id', ParseIntPipe) id: number): Promise<ResponseDTO> {
     return await this.instrumentosFinancierosService.getById(id);
   }
 
@@ -143,9 +182,12 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 200 },
-        message: { type: 'string', example: 'Instrumento financiero eliminado correctamente' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'Instrumento financiero eliminado correctamente',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 404,
@@ -154,9 +196,12 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 404 },
-        message: { type: 'string', example: 'No se encontro el instrumento financiero' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'No se encontro el instrumento financiero',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 500,
@@ -165,11 +210,14 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 500 },
-        message: { type: 'string', example: 'Error al eliminar el instrumento financiero' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'Error al eliminar el instrumento financiero',
+        },
+      },
+    },
   })
-  async remove(@Param('id') id: number): Promise<ResponseDTO> {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<ResponseDTO> {
     return await this.instrumentosFinancierosService.remove(id);
   }
 
@@ -206,18 +254,21 @@ export class InstrumentosFinancierosController {
           type: 'array',
           items: { type: 'string' },
           example: [
+            'El nombre del instrumento es obligatorio',
             'El nombre del instrumento debe ser un string',
-            'El nombre es obligatorio',
+            'El nombre del instrumento debe tener entre 3 y 50 caracteres',
             'El rendimiento del instrumento debe ser un numero',
-            'El rendimiento del instrumento no debe ser menor a 1',
             'El rendimiento del instrumento es obligatorio',
-            'El rendimiento del instrumento es esperado en porcentaje',
+            'El rendimiento del instrumento no debe ser menor a -99',
+            'El rendimiento del instrumento no debe ser mayor a 10000',
             'El riesgo del instrumento debe ser Bajo, Medio o Alto',
             'El riesgo del instrumento es requerido',
             'El precio del instrumento debe ser un numero',
             'El precio del instrumento no puede ser menor a 1',
             'El precio del instrumento no puede ser mayor a 1000000',
             'El precio del instrumento es requerido',
+            'El tipo del instrumento debe ser Tradicional o No Tradicional',
+            'El tipo del instrumento es requerido',
           ],
         },
       },
@@ -252,9 +303,12 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 200 },
-        message: { type: 'string', example: 'Instrumento financiero actualizado correctamente' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'Instrumento financiero actualizado correctamente',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 404,
@@ -263,9 +317,12 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 404 },
-        message: { type: 'string', example: 'Instrumento financiero no encontrado' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'Instrumento financiero no encontrado',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 500,
@@ -274,9 +331,12 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 500 },
-        message: { type: 'string', example: 'Error al actualizar el instrumento financiero' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'Error al actualizar el instrumento financiero',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
@@ -285,9 +345,12 @@ export class InstrumentosFinancierosController {
       type: 'object',
       properties: {
         statusCode: { type: 'number', example: 400 },
-        message: { type: 'string', example: 'Debe enviar al menos un campo para actualizar' }
-      }
-    }
+        message: {
+          type: 'string',
+          example: 'Debe enviar al menos un campo para actualizar',
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 400,
@@ -301,24 +364,23 @@ export class InstrumentosFinancierosController {
           items: { type: 'string' },
           example: [
             'El nombre del instrumento debe ser un string',
-            'El nombre es obligatorio',
+            'El nombre del instrumento debe tener entre 3 y 50 caracteres',
             'El rendimiento del instrumento debe ser un numero',
-            'El rendimiento del instrumento no debe ser menor a 1',
-            'El rendimiento del instrumento es obligatorio',
+            'El rendimiento del instrumento no debe ser menor a -99',
+            'El rendimiento del instrumento no debe ser mayor a 10000',
             'El rendimiento del instrumento es esperado en porcentaje',
             'El riesgo del instrumento debe ser Bajo, Medio o Alto',
-            'El riesgo del instrumento es requerido',
             'El precio del instrumento debe ser un numero',
             'El precio del instrumento no puede ser menor a 1',
             'El precio del instrumento no puede ser mayor a 1000000',
-            'El precio del instrumento es requerido',
+            'El tipo del instrumento debe ser Tradicional o No Tradicional',
           ],
         },
       },
     },
   })
   async update(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() instrumentoFinanciero: UpdateInstrumentoFinancieroDto,
   ): Promise<ResponseDTO> {
     return this.instrumentosFinancierosService.update(
