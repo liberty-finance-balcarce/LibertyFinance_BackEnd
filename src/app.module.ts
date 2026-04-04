@@ -17,7 +17,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: false,
+      synchronize: true,
     }),
     InstrumentosFinancierosModule, ProvinciasModule, UsuariosModule
   ],
