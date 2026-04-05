@@ -55,7 +55,7 @@ export class CreateUsuarioDto {
 
   @ApiProperty({
     description: 'ID de la provincia (Relación)',
-    example: 1,
+    example: 6,
   })
   @IsNumber()
   provincia: Provincia;

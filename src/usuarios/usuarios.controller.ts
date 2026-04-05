@@ -62,16 +62,16 @@ export class UsuariosController {
     return await this.usuariosService.create(usuarioDto);
   }
 
-  @Patch(':id')
+  @Patch(':dni')
   @ApiOperation({ summary: 'Actualizar datos', description: 'Permite modificar datos del usuario. Si se envía contraseña, se re-hashea.' })
-  @ApiParam({ name: 'id', description: 'ID autoincremental de la base de datos', type: Number })
+  @ApiParam({ name: 'dni', description: 'DNI Ingresado por el usuario', type: Number })
   @ApiResponse({ status: HttpStatus.OK, description: 'Usuario actualizado correctamente.', type: ResponseDTO })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'El ID proporcionado no existe.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'El DNI proporcionado no existe.' })
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('dni', ParseIntPipe) dni: number,
     @Body() modificaciones: UpdateUsuarioDto,
   ): Promise<ResponseDTO> {
-    return await this.usuariosService.update(id, modificaciones);
+    return await this.usuariosService.update(dni, modificaciones);
   }
 
   @Delete(':dni')

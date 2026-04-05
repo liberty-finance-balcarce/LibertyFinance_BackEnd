@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedC
 
 @Entity("usuarios")
 export class Usuario{
-  @PrimaryColumn()
+  @PrimaryColumn({unique:true})
   dni_usuario: number
   @Column()  
   nombre:string

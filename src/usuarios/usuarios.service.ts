@@ -3,7 +3,8 @@ import {
   Injectable,
   NotFoundException,
   InternalServerErrorException,
-  ConflictException,
+  ConflictException, BadRequestException,
+  HttpException,
 } from '@nestjs/common';
 import { Usuario } from './entities/usuario.entity';
 import { ResponseDTO } from './dto/response.dto';
@@ -47,7 +48,13 @@ export class UsuariosService {
   }
   */
   async create(usuario: CreateUsuarioDto): Promise<ResponseDTO> {
-    try {
+   // try {
+      const existsDNI=await this.usuarioRepository.findOne({where: {dni_usuario:usuario.dni_usuario}})
+      if (existsDNI) {
+                        throw new ConflictException('DNI Duplicado');
+                          }
+      const existsMail=await this.usuarioRepository.findOne({where: {mail:usuario.mail}})
+      if (existsMail) throw new ConflictException('Mail Duplicado');      
       const nivelHashs = 10;
       const hashContraseña = await bcrypt.hash(usuario.contraseña, nivelHashs);
       const nuevoUsuario = this.usuarioRepository.create({
@@ -58,20 +65,22 @@ export class UsuariosService {
       return {
         statusCode: HttpStatus.CREATED,
         message: 'Usuario Creado Exitosamente!',
-      };
-    } catch (error) {
+     };
+    //} catch (error) {
+      /*
       if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
         throw new ConflictException({
           statusCode: HttpStatus.CONFLICT,
           message: 'Campo DNI o EMAIL DUPLICADO',
           error: 'CONFLICTO',
         });
-      }
+      }*/
+     /*
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Error interno al procesar el registro del usuario',
-      });
-    }
+      });*/
+   // }
   }
 
   async delete(dni_usuario: number): Promise<ResponseDTO> {
@@ -86,24 +95,25 @@ export class UsuariosService {
   }
 
   async update(
-    id: number,
+    dni: number,
     modificaciones: UpdateUsuarioDto,
   ): Promise<ResponseDTO> {
+    if (!Object.keys(modificaciones).length)
+      throw new BadRequestException('Debe enviar al menos un campo para actualizar');
     const { contraseña } = modificaciones;
     if (contraseña) {
-      console.log('tiene contraseña', contraseña);
       const nivelHashs = 10;
       const hashContraseña = await bcrypt.hash(contraseña, nivelHashs);
       modificaciones.contraseña = hashContraseña;
     }
-    const res = await this.usuarioRepository.update(id, modificaciones);
+    const res = await this.usuarioRepository.update(dni, modificaciones);
     if (!res.affected)
       throw new NotFoundException(
-        `ID:${id} o Usuario inexistente!!, NO SE ACTUALIZO usuario`,
+        `DNI:${dni} o Usuario inexistente!!, NO SE ACTUALIZO usuario`,
       );
     return {
       statusCode: HttpStatus.CREATED,
-      message: `Usuario ${id} ACTUALIZADO!`,
+      message: `Usuario ${dni} ACTUALIZADO!`,
     };
   }
 
