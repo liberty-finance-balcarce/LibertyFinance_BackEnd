@@ -51,22 +51,15 @@ export class TransaccionHistoricoCompraService {
     };
   }
 
-  async getByDniUsuario(dni_usuario: string): Promise<ResponseDTO> {
-    const transaccionHistoricoCompra =
-      await this.transaccionHistoricoCompraRepository.find({
-        where: { dni_usuario: dni_usuario },
-        relations: ['id_instrumento', 'dni_usuario'],
-      });
-    if (!transaccionHistoricoCompra)
-      throw new NotFoundException(
-        'No se encontraron transacciones historicas de compras.',
-      );
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Transacciones historicas de compras obtenidas correctamente.',
-      data: transaccionHistoricoCompra,
-    };
-  }
+    async getByDniUsuario(dni_usuario: number): Promise<ResponseDTO> {
+        const transaccionHistoricoCompra = await this.transaccionHistoricoCompraRepository.find({ where: { dni_usuario: { dni_usuario: dni_usuario } }, relations: ['id_instrumento', 'dni_usuario'] });
+        if (!transaccionHistoricoCompra.length) throw new NotFoundException("No se encontraron transacciones historicas de compras.")
+        return {
+            statusCode: HttpStatus.OK,
+            message: "Transacciones historicas de compras obtenidas correctamente.",
+            data: transaccionHistoricoCompra,
+        }
+    }
 
   async create(
     transaccionHistoricoCompra: CreateTransaccionHistoricoCompraDto,
