@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpStatus,
   Injectable,
   InternalServerErrorException,
@@ -6,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InstrumentoFinanciero } from './entities/instrumento-financiero.entity';
+import {
+  InstrumentoFinanciero,
+  Riesgo,
+} from './entities/instrumento-financiero.entity';
 import { ResponseDTO } from './dto/response.dto';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
@@ -18,9 +22,9 @@ export class InstrumentosFinancierosService {
     private readonly instrumentosFinancierosRepository: Repository<InstrumentoFinanciero>,
   ) {}
 
-  async findAll(): Promise<ResponseDTO> {
+  async findAll(filters: Object): Promise<ResponseDTO> {
     const instrumentosFinancieros =
-      await this.instrumentosFinancierosRepository.find();
+      await this.instrumentosFinancierosRepository.find({ where: filters });
     if (!instrumentosFinancieros.length)
       throw new NotFoundException('No se encontraron instrumentos financieros');
     return {
@@ -49,14 +53,11 @@ export class InstrumentosFinancierosService {
   ): Promise<ResponseDTO> {
     const newInstrumentoFinanciero =
       this.instrumentosFinancierosRepository.create(instrumentoFinanciero);
-    const res = await this.instrumentosFinancierosRepository.save(
-      newInstrumentoFinanciero,
-    );
+    await this.instrumentosFinancierosRepository.save(newInstrumentoFinanciero);
 
     return {
-      statusCode: HttpStatus.OK,
+      statusCode: HttpStatus.CREATED,
       message: 'Instrumento financiero agregado correctamente',
-      data: res,
     };
   }
 
@@ -82,6 +83,10 @@ export class InstrumentosFinancierosService {
     id: number,
     updateData: UpdateInstrumentoFinancieroDto,
   ): Promise<ResponseDTO> {
+    if (!Object.keys(updateData).length)
+      throw new BadRequestException(
+        'Debe enviar al menos un campo para actualizar',
+      );
     const instrumentoFinanciero =
       await this.instrumentosFinancierosRepository.findOne({
         where: { id_instrumento: id },
@@ -95,14 +100,11 @@ export class InstrumentosFinancierosService {
       updateData,
     );
 
-    const saved = await this.instrumentosFinancierosRepository.save(
-      instrumentoActualizado,
-    );
+    await this.instrumentosFinancierosRepository.save(instrumentoActualizado);
 
     return {
       statusCode: HttpStatus.OK,
       message: 'Instrumento financiero actualizado correctamente',
-      data: saved,
     };
   }
 }

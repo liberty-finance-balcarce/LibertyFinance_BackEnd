@@ -1,4 +1,4 @@
-import {TransaccionHistoricoCompra} from "../entities/transaccion-historico-compra.entity.ts";
+import {TransaccionHistoricoCompra} from "../entities/transaccion-historico-compra.entity";
 
 export interface ResponseDTO {
     statusCode: number;

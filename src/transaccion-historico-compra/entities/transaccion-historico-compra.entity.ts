@@ -1,6 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { InstrumentosFinancieros } from '../../instrumentos-financieros/entities/instrumentos-financieros.entity';
-import { Usuarios } from './usuarios.entity';
+import { InstrumentoFinanciero } from '../../instrumentos-financieros/entities/instrumento-financiero.entity';
+import { Usuario } from '../../usuarios/usuario.entity';
+
 @Entity ('transaccion_historico_compra')
 
 export class TransaccionHistoricoCompra {
@@ -10,24 +11,24 @@ export class TransaccionHistoricoCompra {
     @Column({ type: 'date' })
     fecha_operacion: Date;
 
-    @ManyToOne(() => InstrumentosFinancieros)
+    @ManyToOne(() => InstrumentoFinanciero)
     @JoinColumn({ 
         name: 'id_instrumento',
         referencedColumnName: 'id_instrumento'    
     })
-        id_instrumento: InstrumentosFinancieros;
+        id_instrumento: InstrumentoFinanciero;
 
-    @ManyToOne(()=> InstrumentosFinancieros)
+    @ManyToOne(()=> InstrumentoFinanciero)
     @JoinColumn({ 
         name: 'precio_instrumento',
         referencedColumnName: 'precio_instrumento'
     })
     precio_instrumento: number;
 
-    @ManyToOne(()=> Usuarios)
+    @ManyToOne(()=> Usuario)
     @JoinColumn({ 
         name: 'dni_usuario',
         referencedColumnName: 'dni_usuario'
     })
-    dni_usuario: Usuarios;
+    dni_usuario: Usuario;
 }
