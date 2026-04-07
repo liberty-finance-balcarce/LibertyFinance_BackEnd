@@ -87,7 +87,7 @@ export class UsuariosService {
     const res = await this.usuarioRepository.delete({ dni_usuario });
     console.log(res);
     if (!res.affected)
-      throw new NotFoundException('Usuario o Id no existente!');
+      throw new NotFoundException(`No se encontro el usuario con DNI: ${dni_usuario}`);
     return {
       statusCode: HttpStatus.OK,
       message: `Usuario con DNI: ${dni_usuario} Eliminado Correctamente`,
@@ -109,11 +109,11 @@ export class UsuariosService {
     const res = await this.usuarioRepository.update(dni, modificaciones);
     if (!res.affected)
       throw new NotFoundException(
-        `DNI:${dni} o Usuario inexistente!!, NO SE ACTUALIZO usuario`,
+        `DNI:${dni} no encontrado. NO SE REALIZO ACTUALIZACION.`,
       );
     return {
-      statusCode: HttpStatus.CREATED,
-      message: `Usuario ${dni} ACTUALIZADO!`,
+      statusCode: HttpStatus.OK,
+      message: `Usuario con DNI:${dni} ACTUALIZADO correctamente!`,
     };
   }
 
@@ -125,11 +125,11 @@ export class UsuariosService {
       relations: ['provincia'],
     });
     if (!res.length)
-      throw new NotFoundException('Criterio de Busqueda INEXISTENTE!');
+      throw new NotFoundException('No se encontraron usuarios con ese nombre.');
     console.log(`Se encontraron ${res.length} registros para esta Busqueda`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'Busqueda Exitosa!',
+      message: 'Busqueda por nombre Exitosa!',
       data: res,
     };
   }
@@ -141,11 +141,11 @@ export class UsuariosService {
       relations: ['provincia'],
     });
     if (!res.length)
-      throw new NotFoundException('Criterio de Busqueda INEXISTENTE!');
+      throw new NotFoundException(`Usuario con DNI ${dni_usuario} no encontrado`);
     console.log(`Se encontraron ${res.length} registros para esta Busqueda`);
     return {
       statusCode: HttpStatus.OK,
-      message: 'Busqueda Exitosa!',
+      message: 'Búsqueda por DNI exitosa',
       data: res,
     };
   }
