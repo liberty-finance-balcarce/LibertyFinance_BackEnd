@@ -12,12 +12,16 @@ import {
 import { InstrumentosFinancierosService } from './instrumentos-financieros.service';
 import { ResponseDTO } from './dto/response.dto';
 import {
+  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
+  ApiCreatedResponse,
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
-  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
@@ -50,8 +54,7 @@ export class InstrumentosFinancierosController {
     enum: TipoInstrumento,
     enumName: 'Tipo del instrumento financiero'
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Instrumentos financieros obtenidos correctamente',
     schema: {
       type: 'object',
@@ -82,8 +85,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No se encontraron instrumentos financieros',
     schema: {
       type: 'object',
@@ -117,8 +119,7 @@ export class InstrumentosFinancierosController {
     required: true,
     type: 'number',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Instrumento financiero obtenido correctamente',
     schema: {
       type: 'object',
@@ -146,8 +147,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No se encontro el instrumento financiero',
     schema: {
       type: 'object',
@@ -175,8 +175,7 @@ export class InstrumentosFinancierosController {
     required: true,
     type: 'number',
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Instrumento financiero eliminado correctamente',
     schema: {
       type: 'object',
@@ -189,8 +188,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'No se encontro el instrumento financiero',
     schema: {
       type: 'object',
@@ -203,8 +201,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 500,
+  @ApiInternalServerErrorResponse({
     description: 'Error al eliminar el instrumento financiero',
     schema: {
       type: 'object',
@@ -229,8 +226,7 @@ export class InstrumentosFinancierosController {
   @ApiBody({
     type: CreateInstrumentoFinancieroDto,
   })
-  @ApiResponse({
-    status: 201,
+  @ApiCreatedResponse({
     description: 'Instrumento financiero agregado correctamente',
     schema: {
       type: 'object',
@@ -243,8 +239,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Casos de errores: 400',
     schema: {
       type: 'object',
@@ -296,8 +291,7 @@ export class InstrumentosFinancierosController {
   @ApiBody({
     type: UpdateInstrumentoFinancieroDto,
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Instrumento financiero actualizado correctamente',
     schema: {
       type: 'object',
@@ -310,8 +304,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 404,
+  @ApiNotFoundResponse({
     description: 'Instrumento financiero no encontrado',
     schema: {
       type: 'object',
@@ -324,8 +317,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 500,
+  @ApiInternalServerErrorResponse({
     description: 'Error al actualizar el instrumento financiero',
     schema: {
       type: 'object',
@@ -338,8 +330,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Debe enviar al menos un campo para actualizar',
     schema: {
       type: 'object',
@@ -352,8 +343,7 @@ export class InstrumentosFinancierosController {
       },
     },
   })
-  @ApiResponse({
-    status: 400,
+  @ApiBadRequestResponse({
     description: 'Casos de errores: 400',
     schema: {
       type: 'object',
