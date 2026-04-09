@@ -12,16 +12,12 @@ import {
 import { InstrumentosFinancierosService } from './instrumentos-financieros.service';
 import { ResponseDTO } from './dto/response.dto';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
-  ApiCreatedResponse,
-  ApiInternalServerErrorResponse,
-  ApiNotFoundResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiQuery,
+  ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
@@ -54,10 +50,12 @@ export class InstrumentosFinancierosController {
     enum: TipoInstrumento,
     enumName: 'Tipo del instrumento financiero'
   })
-  @ApiOkResponse({
+  @ApiResponse({
+    status: 200,
     description: 'Instrumentos financieros obtenidos correctamente',
   })
-  @ApiNotFoundResponse({
+  @ApiResponse({
+    status: 404,
     description: 'No se encontraron instrumentos financieros',
   })
   async findAll(
@@ -81,10 +79,12 @@ export class InstrumentosFinancierosController {
     required: true,
     type: 'number',
   })
-  @ApiOkResponse({
+  @ApiResponse({
+    status: 200,
     description: 'Instrumento financiero obtenido correctamente',
   })
-  @ApiNotFoundResponse({
+  @ApiResponse({
+    status: 404,
     description: 'No se encontro el instrumento financiero',
   })
   async getById(@Param('id', ParseIntPipe) id: number): Promise<ResponseDTO> {
@@ -102,13 +102,16 @@ export class InstrumentosFinancierosController {
     required: true,
     type: 'number',
   })
-  @ApiOkResponse({
+  @ApiResponse({
+    status: 200,
     description: 'Instrumento financiero eliminado correctamente',
   })
-  @ApiNotFoundResponse({
+  @ApiResponse({
+    status: 404,
     description: 'No se encontro el instrumento financiero',
   })
-  @ApiInternalServerErrorResponse({
+  @ApiResponse({
+    status: 500,
     description: 'Error al eliminar el instrumento financiero',
   })
   async remove(@Param('id', ParseIntPipe) id: number): Promise<ResponseDTO> {
@@ -123,10 +126,12 @@ export class InstrumentosFinancierosController {
   @ApiBody({
     type: CreateInstrumentoFinancieroDto,
   })
-  @ApiCreatedResponse({
+  @ApiResponse({
+    status: 201,
     description: 'Instrumento financiero agregado correctamente',
   })
-  @ApiBadRequestResponse({
+  @ApiResponse({
+    status: 400,
     description: 'Casos de errores: 400',
   })
   async create(
@@ -151,19 +156,24 @@ export class InstrumentosFinancierosController {
   @ApiBody({
     type: UpdateInstrumentoFinancieroDto,
   })
-  @ApiOkResponse({
+  @ApiResponse({
+    status: 200,
     description: 'Instrumento financiero actualizado correctamente',
   })
-  @ApiNotFoundResponse({
+  @ApiResponse({
+    status: 404,
     description: 'Instrumento financiero no encontrado',
   })
-  @ApiInternalServerErrorResponse({
+  @ApiResponse({
+    status: 500,
     description: 'Error al actualizar el instrumento financiero',
   })
-  @ApiBadRequestResponse({
+  @ApiResponse({
+    status: 400,
     description: 'Debe enviar al menos un campo para actualizar',
   })
-  @ApiBadRequestResponse({
+  @ApiResponse({
+    status: 400,
     description: 'Casos de errores: 400',
   })
   async update(
