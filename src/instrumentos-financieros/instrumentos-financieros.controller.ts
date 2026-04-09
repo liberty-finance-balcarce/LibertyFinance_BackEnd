@@ -56,47 +56,9 @@ export class InstrumentosFinancierosController {
   })
   @ApiOkResponse({
     description: 'Instrumentos financieros obtenidos correctamente',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 200 },
-        message: {
-          type: 'string',
-          example: 'Instrumentos financieros obtenidos correctamente',
-        },
-        data: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id_instrumento: { type: 'number', example: 1 },
-              nombre_instrumento: { type: 'string', example: 'Bonos' },
-              rendimiento: { type: 'number', example: 5 },
-              riesgo: { type: 'string', example: 'Medio' },
-              precio_instrumento: { type: 'number', example: 1000 },
-              tipo_instrumento: {
-                type: 'string',
-                enum: ['Tradicional', 'No Tradicional'],
-                example: 'Tradicional',
-              },
-            },
-          },
-        },
-      },
-    },
   })
   @ApiNotFoundResponse({
     description: 'No se encontraron instrumentos financieros',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 404 },
-        message: {
-          type: 'string',
-          example: 'No se encontraron instrumentos financieros',
-        },
-      },
-    },
   })
   async findAll(
     @Query('riesgo') riesgo?: Riesgo,
@@ -121,44 +83,9 @@ export class InstrumentosFinancierosController {
   })
   @ApiOkResponse({
     description: 'Instrumento financiero obtenido correctamente',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 200 },
-        message: {
-          type: 'string',
-          example: 'Instrumento financiero obtenido correctamente',
-        },
-        data: {
-          type: 'object',
-          properties: {
-            id_instrumento: { type: 'number', example: 1 },
-            nombre_instrumento: { type: 'string', example: 'Bonos' },
-            rendimiento: { type: 'number', example: 5 },
-            riesgo: { type: 'string', example: 'Medio' },
-            precio_instrumento: { type: 'number', example: 1000 },
-            tipo_instrumento: {
-              type: 'string',
-              enum: ['Tradicional', 'No Tradicional'],
-              example: 'Tradicional',
-            },
-          },
-        },
-      },
-    },
   })
   @ApiNotFoundResponse({
     description: 'No se encontro el instrumento financiero',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 404 },
-        message: {
-          type: 'string',
-          example: 'No se encontro el instrumento financiero',
-        },
-      },
-    },
   })
   async getById(@Param('id', ParseIntPipe) id: number): Promise<ResponseDTO> {
     return await this.instrumentosFinancierosService.getById(id);
@@ -177,42 +104,12 @@ export class InstrumentosFinancierosController {
   })
   @ApiOkResponse({
     description: 'Instrumento financiero eliminado correctamente',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 200 },
-        message: {
-          type: 'string',
-          example: 'Instrumento financiero eliminado correctamente',
-        },
-      },
-    },
   })
   @ApiNotFoundResponse({
     description: 'No se encontro el instrumento financiero',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 404 },
-        message: {
-          type: 'string',
-          example: 'No se encontro el instrumento financiero',
-        },
-      },
-    },
   })
   @ApiInternalServerErrorResponse({
     description: 'Error al eliminar el instrumento financiero',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 500 },
-        message: {
-          type: 'string',
-          example: 'Error al eliminar el instrumento financiero',
-        },
-      },
-    },
   })
   async remove(@Param('id', ParseIntPipe) id: number): Promise<ResponseDTO> {
     return await this.instrumentosFinancierosService.remove(id);
@@ -228,46 +125,9 @@ export class InstrumentosFinancierosController {
   })
   @ApiCreatedResponse({
     description: 'Instrumento financiero agregado correctamente',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 201 },
-        message: {
-          type: 'string',
-          example: 'Instrumento financiero agregado correctamente',
-        },
-      },
-    },
   })
   @ApiBadRequestResponse({
     description: 'Casos de errores: 400',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: {
-          type: 'array',
-          items: { type: 'string' },
-          example: [
-            'El nombre del instrumento es obligatorio',
-            'El nombre del instrumento debe ser un string',
-            'El nombre del instrumento debe tener entre 3 y 50 caracteres',
-            'El rendimiento del instrumento debe ser un numero',
-            'El rendimiento del instrumento es obligatorio',
-            'El rendimiento del instrumento no debe ser menor a -99',
-            'El rendimiento del instrumento no debe ser mayor a 10000',
-            'El riesgo del instrumento debe ser Bajo, Medio o Alto',
-            'El riesgo del instrumento es requerido',
-            'El precio del instrumento debe ser un numero',
-            'El precio del instrumento no puede ser menor a 1',
-            'El precio del instrumento no puede ser mayor a 1000000',
-            'El precio del instrumento es requerido',
-            'El tipo del instrumento debe ser Tradicional o No Tradicional',
-            'El tipo del instrumento es requerido',
-          ],
-        },
-      },
-    },
   })
   async create(
     @Body() instrumentoFinanciero: CreateInstrumentoFinancieroDto,
@@ -293,81 +153,18 @@ export class InstrumentosFinancierosController {
   })
   @ApiOkResponse({
     description: 'Instrumento financiero actualizado correctamente',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 200 },
-        message: {
-          type: 'string',
-          example: 'Instrumento financiero actualizado correctamente',
-        },
-      },
-    },
   })
   @ApiNotFoundResponse({
     description: 'Instrumento financiero no encontrado',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 404 },
-        message: {
-          type: 'string',
-          example: 'Instrumento financiero no encontrado',
-        },
-      },
-    },
   })
   @ApiInternalServerErrorResponse({
     description: 'Error al actualizar el instrumento financiero',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 500 },
-        message: {
-          type: 'string',
-          example: 'Error al actualizar el instrumento financiero',
-        },
-      },
-    },
   })
   @ApiBadRequestResponse({
     description: 'Debe enviar al menos un campo para actualizar',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: {
-          type: 'string',
-          example: 'Debe enviar al menos un campo para actualizar',
-        },
-      },
-    },
   })
   @ApiBadRequestResponse({
     description: 'Casos de errores: 400',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: {
-          type: 'array',
-          items: { type: 'string' },
-          example: [
-            'El nombre del instrumento debe ser un string',
-            'El nombre del instrumento debe tener entre 3 y 50 caracteres',
-            'El rendimiento del instrumento debe ser un numero',
-            'El rendimiento del instrumento no debe ser menor a -99',
-            'El rendimiento del instrumento no debe ser mayor a 10000',
-            'El rendimiento del instrumento es esperado en porcentaje',
-            'El riesgo del instrumento debe ser Bajo, Medio o Alto',
-            'El precio del instrumento debe ser un numero',
-            'El precio del instrumento no puede ser menor a 1',
-            'El precio del instrumento no puede ser mayor a 1000000',
-            'El tipo del instrumento debe ser Tradicional o No Tradicional',
-          ],
-        },
-      },
-    },
   })
   async update(
     @Param('id', ParseIntPipe) id: number,
