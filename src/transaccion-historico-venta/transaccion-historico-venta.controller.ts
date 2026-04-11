@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, Delete, Patch } from '@nestjs/commo
 import { TransaccionHistoricoVentaService } from './transaccion-historico-venta.service';
 import { CreateTransaccionHistoricoVentaDto } from './dto/create-transaccion-historico-venta.dto';
 import { UpdateTransaccionHistoricoVentaDTO } from './dto/update-transaccion-historico-venta.dto';
-import { ResponseTransaccionHistoricoVentaDTO } from './dto/response-transaccion-historico-venta.dto';
+import { ResponseDTO } from './dto/response.dto';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Transaccion Historico Venta')
@@ -18,7 +18,7 @@ export class TransaccionHistoricoVentaController {
   @ApiResponse({ status: 404, description: "No se encontraron transacciones historicas de ventas." })
   @ApiResponse({ status: 500, description: "Error al obtener las transacciones historicas de ventas." })
 
-  async findAll(): Promise<ResponseTransaccionHistoricoVentaDTO> {
+  async findAll(): Promise<ResponseDTO> {
     return await this.transaccionHistoricoVentaService.findAll();
   }
 
@@ -28,7 +28,7 @@ export class TransaccionHistoricoVentaController {
   @ApiResponse({ status: 404, description: "No se encontró ninguna transaccion historica de venta." })
   @ApiResponse({ status: 500, description: "Error al obtener la transaccion historica de venta." })
 
-  async getById(@Param('id') id: number): Promise<ResponseTransaccionHistoricoVentaDTO> {
+  async getById(@Param('id') id: number): Promise<ResponseDTO> {
     return await this.transaccionHistoricoVentaService.getById(id);
   }
 
@@ -38,7 +38,7 @@ export class TransaccionHistoricoVentaController {
   @ApiResponse({ status: 404, description: "No se encontró ninguna transaccion historica de venta." })
   @ApiResponse({ status: 500, description: "Error al obtener la transaccion historica de venta." })
 
-  async getByDniUsuario(@Param('dni_usuario') dni_usuario: number): Promise<ResponseTransaccionHistoricoVentaDTO> {
+  async getByDniUsuario(@Param('dni_usuario') dni_usuario: number): Promise<ResponseDTO> {
     return await this.transaccionHistoricoVentaService.getByDniUsuario(dni_usuario);
   }
 
@@ -49,7 +49,7 @@ export class TransaccionHistoricoVentaController {
   @ApiResponse({ status: 404, description: "Transacción de venta no encontrada." })
   @ApiResponse({ status: 500, description: "Error al eliminar la transacción de venta." })
 
-  async remove(@Param('id') id: number): Promise<ResponseTransaccionHistoricoVentaDTO> {
+  async remove(@Param('id') id: number): Promise<ResponseDTO> {
     return await this.transaccionHistoricoVentaService.remove(id);
   }
 
@@ -61,7 +61,7 @@ export class TransaccionHistoricoVentaController {
 
   async create(
     @Body() dto: CreateTransaccionHistoricoVentaDto,
-  ): Promise<ResponseTransaccionHistoricoVentaDTO> {
+  ): Promise<ResponseDTO> {
     return await this.transaccionHistoricoVentaService.create(dto);
   }
 
@@ -76,7 +76,7 @@ export class TransaccionHistoricoVentaController {
   async update(
     @Param('id') id: number,
     @Body() TransaccionHistoricoVenta: UpdateTransaccionHistoricoVentaDTO,
-  ): Promise<ResponseTransaccionHistoricoVentaDTO> {
+  ): Promise<ResponseDTO> {
     return this.transaccionHistoricoVentaService.update(
       id,
       TransaccionHistoricoVenta,

@@ -4,9 +4,10 @@ import { TransaccionHistoricoVenta } from './entities/transaccion-historico-vent
 import { TransaccionHistoricoVentaService } from './transaccion-historico-venta.service';
 import { TransaccionHistoricoVentaController } from './transaccion-historico-venta.controller';
 import { InstrumentoFinanciero } from '../instrumentos-financieros/entities/instrumento-financiero.entity';
+import { Usuario } from '../usuarios/entities/usuario.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TransaccionHistoricoVenta, InstrumentoFinanciero])],
+  imports: [TypeOrmModule.forFeature([TransaccionHistoricoVenta, InstrumentoFinanciero, Usuario])],
   controllers: [TransaccionHistoricoVentaController],
   providers: [TransaccionHistoricoVentaService],
 })

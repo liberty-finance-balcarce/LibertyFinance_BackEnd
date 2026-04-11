@@ -4,8 +4,9 @@ import { Repository } from 'typeorm';
 import { TransaccionHistoricoVenta } from './entities/transaccion-historico-venta.entity';
 import { CreateTransaccionHistoricoVentaDto } from './dto/create-transaccion-historico-venta.dto';
 import { UpdateTransaccionHistoricoVentaDTO } from './dto/update-transaccion-historico-venta.dto';
-import { ResponseTransaccionHistoricoVentaDTO } from './dto/response-transaccion-historico-venta.dto';
+import { ResponseDTO } from './dto/response.dto';
 import { InstrumentoFinanciero } from '../instrumentos-financieros/entities/instrumento-financiero.entity';
+import { Usuario } from '../usuarios/entities/usuario.entity';
 
 @Injectable()
 export class TransaccionHistoricoVentaService {
@@ -14,10 +15,12 @@ export class TransaccionHistoricoVentaService {
         private readonly transaccionHistoricoVentaRepository: Repository<TransaccionHistoricoVenta>,
         @InjectRepository(InstrumentoFinanciero)
         private readonly instrumentoFinancieroRepository: Repository<InstrumentoFinanciero>,
+        @InjectRepository(Usuario)
+        private readonly usuarioRepository: Repository<Usuario>,
     ) { }
 
 
-    async findAll(): Promise<ResponseTransaccionHistoricoVentaDTO> {
+    async findAll(): Promise<ResponseDTO> {
         const transaccionHistoricoVenta = await this.transaccionHistoricoVentaRepository.find({ relations: ['id_instrumento', 'dni_usuario'] });
         if (!transaccionHistoricoVenta.length) throw new NotFoundException("No se encontraron transacciones historicas de ventas.")
         return {
@@ -28,7 +31,7 @@ export class TransaccionHistoricoVentaService {
 
     }
 
-    async getById(id: number): Promise<ResponseTransaccionHistoricoVentaDTO> {
+    async getById(id: number): Promise<ResponseDTO> {
         const transaccionHistoricoVenta = await this.transaccionHistoricoVentaRepository.findOne({ where: { id_transaccion_venta: id }, relations: ['id_instrumento', 'dni_usuario'] });
         if (!transaccionHistoricoVenta) throw new NotFoundException("No se encontró ninguna transaccion historica de venta.")
         return {
@@ -39,7 +42,7 @@ export class TransaccionHistoricoVentaService {
 
     }
 
-    async getByDniUsuario(dni_usuario: number): Promise<ResponseTransaccionHistoricoVentaDTO> {
+    async getByDniUsuario(dni_usuario: number): Promise<ResponseDTO> {
         const transaccionHistoricoVenta = await this.transaccionHistoricoVentaRepository.find({ where: { dni_usuario: { dni_usuario: dni_usuario } }, relations: ['id_instrumento', 'dni_usuario'] });
         if (!transaccionHistoricoVenta.length) throw new NotFoundException("No se encontraron transacciones historicas de ventas.")
         return {
@@ -49,9 +52,11 @@ export class TransaccionHistoricoVentaService {
         }
     }
 
-    async create(transaccionHistoricoVenta: CreateTransaccionHistoricoVentaDto): Promise<ResponseTransaccionHistoricoVentaDTO> {
-        const exists = await this.instrumentoFinancieroRepository.findOne({ where: { id_instrumento: transaccionHistoricoVenta.id_instrumento } });
-        if (!exists) throw new NotFoundException("No se encontró ningún instrumento financiero con ese ID")
+    async create(transaccionHistoricoVenta: CreateTransaccionHistoricoVentaDto): Promise<ResponseDTO> {
+        const existsInstrumento = await this.instrumentoFinancieroRepository.findOne({ where: { id_instrumento: transaccionHistoricoVenta.id_instrumento } });
+        if (!existsInstrumento) throw new NotFoundException("No se encontró ningún instrumento financiero con ese ID")
+        const existsUsuario = await this.usuarioRepository.findOne({ where: { dni_usuario: transaccionHistoricoVenta.dni_usuario } });
+        if (!existsUsuario) throw new NotFoundException("No se encontró ningún usuario con ese DNI")
         const newTransaccionHistoricoVenta = this.transaccionHistoricoVentaRepository.create({
             fecha_operacion: new Date(transaccionHistoricoVenta.fecha_operacion),
             id_instrumento: { id_instrumento: transaccionHistoricoVenta.id_instrumento },
@@ -67,7 +72,7 @@ export class TransaccionHistoricoVentaService {
 
     }
 
-    async remove(id: number): Promise<ResponseTransaccionHistoricoVentaDTO> {
+    async remove(id: number): Promise<ResponseDTO> {
         const exists = await this.transaccionHistoricoVentaRepository.findOne({ where: { id_transaccion_venta: id } })
         if (!exists) throw new NotFoundException("Transacción de venta no encontrada.")
         const res = await this.transaccionHistoricoVentaRepository.delete(id);
@@ -78,7 +83,7 @@ export class TransaccionHistoricoVentaService {
         }
     }
 
-    async update(id: number, updateData: UpdateTransaccionHistoricoVentaDTO): Promise<ResponseTransaccionHistoricoVentaDTO> {
+    async update(id: number, updateData: UpdateTransaccionHistoricoVentaDTO): Promise<ResponseDTO> {
         const transaccionVenta = await this.transaccionHistoricoVentaRepository.findOne({ where: { id_transaccion_venta: id } });
         if (!transaccionVenta) throw new NotFoundException("Transacción de venta no encontrada.");
 
