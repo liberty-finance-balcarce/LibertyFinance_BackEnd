@@ -5,12 +5,15 @@ import { TransaccionHistoricoVenta } from './entities/transaccion-historico-vent
 import { CreateTransaccionHistoricoVentaDto } from './dto/create-transaccion-historico-venta.dto';
 import { UpdateTransaccionHistoricoVentaDTO } from './dto/update-transaccion-historico-venta.dto';
 import { ResponseTransaccionHistoricoVentaDTO } from './dto/response-transaccion-historico-venta.dto';
+import { InstrumentoFinanciero } from '../instrumentos-financieros/entities/instrumento-financiero.entity';
 
 @Injectable()
 export class TransaccionHistoricoVentaService {
     constructor(
         @InjectRepository(TransaccionHistoricoVenta)
-        private readonly transaccionHistoricoVentaRepository: Repository<TransaccionHistoricoVenta>
+        private readonly transaccionHistoricoVentaRepository: Repository<TransaccionHistoricoVenta>,
+        @InjectRepository(InstrumentoFinanciero)
+        private readonly instrumentoFinancieroRepository: Repository<InstrumentoFinanciero>,
     ) { }
 
 
@@ -47,7 +50,8 @@ export class TransaccionHistoricoVentaService {
     }
 
     async create(transaccionHistoricoVenta: CreateTransaccionHistoricoVentaDto): Promise<ResponseTransaccionHistoricoVentaDTO> {
-
+        const exists = await this.instrumentoFinancieroRepository.findOne({ where: { id_instrumento: transaccionHistoricoVenta.id_instrumento } });
+        if (!exists) throw new NotFoundException("No se encontró ningún instrumento financiero con ese ID")
         const newTransaccionHistoricoVenta = this.transaccionHistoricoVentaRepository.create({
             fecha_operacion: new Date(transaccionHistoricoVenta.fecha_operacion),
             id_instrumento: { id_instrumento: transaccionHistoricoVenta.id_instrumento },
