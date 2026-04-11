@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Rol } from './entities/rol.entity';
 import { CreateRolDto } from './dto/create-rol.dto';
-import { UpdateRolDto } from './dto/update-rol-dto';
-import { ResponseDTO } from './dto/response.dto';
+import { UpdateRolDto } from './dto/update-rol.dto';
+import { ResponseRolDTO } from './dto/response-rol.dto';
 
 @Injectable()
 export class RolService {
@@ -14,7 +14,7 @@ export class RolService {
 
     ) { }
 
-    async findAll(): Promise<ResponseDTO> {
+    async findAll(): Promise<ResponseRolDTO> {
         const rol = await this.rolRepository.find();
         if (!rol.length) throw new NotFoundException('No se encontraron roles.')
         return {
@@ -25,7 +25,7 @@ export class RolService {
 
     }
 
-    async getById(id: number): Promise<ResponseDTO> {
+    async getById(id: number): Promise<ResponseRolDTO> {
         const rol = await this.rolRepository.findOne({ where: { id_rol: id } });
         if (!rol) throw new NotFoundException('No se encontró ningun rol.')
         return {
@@ -36,7 +36,7 @@ export class RolService {
 
     }
 
-    async getByDniUsuario(dni_usuario: number): Promise<ResponseDTO> {
+    async getByDniUsuario(dni_usuario: number): Promise<ResponseRolDTO> {
         const rol = await this.rolRepository.findOne({
             where: { usuarios: { dni_usuario: dni_usuario } },
             relations: ['usuarios']
@@ -49,7 +49,7 @@ export class RolService {
         }
     }
 
-    async create(rol: CreateRolDto): Promise<ResponseDTO> {
+    async create(rol: CreateRolDto): Promise<ResponseRolDTO> {
         const newRol = this.rolRepository.create({
             nombre: rol.nombre,
         });
@@ -61,7 +61,7 @@ export class RolService {
         }
     }
 
-    async remove(id: number): Promise<ResponseDTO> {
+    async remove(id: number): Promise<ResponseRolDTO> {
         const exists = await this.rolRepository.findOne({
             where: { id_rol: id }
         });
@@ -74,7 +74,7 @@ export class RolService {
         }
     }
 
-    async update(id: number, updateData: UpdateRolDto): Promise<ResponseDTO> {
+    async update(id: number, updateData: UpdateRolDto): Promise<ResponseRolDTO> {
         const rol = await this.rolRepository.findOne({
             where: { id_rol: id }
         });
