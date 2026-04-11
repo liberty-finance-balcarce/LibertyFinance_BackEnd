@@ -7,7 +7,7 @@ import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/s
 
 @ApiTags('Rol')
 @Controller('rol')
-export class RolController {
+export class RolControlle {
     constructor(
         private readonly rolService: RolService,) { }
 
