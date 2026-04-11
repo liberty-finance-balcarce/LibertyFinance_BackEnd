@@ -2,7 +2,7 @@ import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException
 import { InjectRepository } from '@nestjs/typeorm';
 import { PerfilInversor } from './entities/perfil-inversor.entity';
 import { Repository } from 'typeorm';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponsePerfilInversorDTO } from './dto/response-perfil-inversor.dto';
 
 @Injectable()
 export class PerfilInversorService {
@@ -11,7 +11,7 @@ export class PerfilInversorService {
         private readonly perfilInversorRepository: Repository<PerfilInversor>
     ) { }
 
-    async findAll(): Promise<ResponseDTO> {
+    async findAll(): Promise<ResponsePerfilInversorDTO> {
         const perfilInversor = await this.perfilInversorRepository.find();
         if (!perfilInversor.length) throw new NotFoundException('No se encontraron perfiles de inversor.')
         return {
@@ -21,7 +21,7 @@ export class PerfilInversorService {
         }
     }
 
-    async getById(id: number): Promise<ResponseDTO> {
+    async getById(id: number): Promise<ResponsePerfilInversorDTO> {
         const perfilInversor = await this.perfilInversorRepository.findOne({ where: { id_perfil_inversor: id } });
         if (!perfilInversor) throw new NotFoundException('No se encontró ningun perfil de inversor.')
         return {
@@ -31,7 +31,7 @@ export class PerfilInversorService {
         }
     }
 
-    async getByDniUsuario(dni_usuario: number): Promise<ResponseDTO> {
+    async getByDniUsuario(dni_usuario: number): Promise<ResponsePerfilInversorDTO> {
         const perfilInversor = await this.perfilInversorRepository.findOne({
             where: { usuarios: { dni_usuario: dni_usuario } },
             relations: ['usuarios']
