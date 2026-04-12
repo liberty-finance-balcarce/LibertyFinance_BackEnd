@@ -51,7 +51,7 @@ export class InstrumentosFinancierosController {
     enumName: 'Tipo del instrumento financiero',
   })
   @ApiQuery({
-    name: 'precio',
+    name: 'precio_instrumento',
     required: false,
     type: 'number'
   })
@@ -66,12 +66,12 @@ export class InstrumentosFinancierosController {
   async findAll(
     @Query('riesgo') riesgo?: Riesgo,
     @Query('tipo_instrumento') tipo_instrumento?: TipoInstrumento,
-    @Query('precio') precio?: number,
+    @Query('precio_instrumento') precio_instrumento?: number,
   ): Promise<ResponseDTO> {
     const filters = {
       riesgo: riesgo,
       tipo_instrumento: tipo_instrumento,
-      precio: precio,
+      precio_instrumento: precio_instrumento,
     };
     return await this.instrumentosFinancierosService.findAll(filters);
   }
