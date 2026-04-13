@@ -1,30 +1,34 @@
 import { Provincia } from "src/provincias/entities/provincia.entity";
+import { Rol } from "src/rol/entities/rol.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("usuarios")
 export class Usuario{
   @PrimaryColumn({unique:true})
-  dni_usuario: number
+  dni_usuario!: number
   @Column()  
-  nombre:string
+  nombre!:string
   @Column()  
-  apellido:string
+  apellido!:string
   @Column({unique:true})
-  mail:string
+  mail!:string
   @Column({select:false})
-  contraseña:string
+  contraseña!:string
   @Column() 
-  numero_telefono:string
+  numero_telefono!:string
   @Column()
-  direccion: string
+  direccion!: string
   @Column()
-  id_perfilinv:number
+  id_perfilinv!:number
   @Column() 
-  id_codigo_referidos:number
-  @Column() 
-  id_rol:number
+  id_codigo_referidos!:number
+  
+  @ManyToOne(()=> Rol, (rol)=> rol.usuarios)
+  @JoinColumn({name:'id_rol'})
+  rol!:Rol
+
   @ManyToOne(()=>Provincia,{nullable:false})       //@ManyToOne(()=>Provincia)
   @JoinColumn({name:'id_provincia'})
-  provincia:Provincia      //provincia:Provincia
+  provincia!:Provincia      //provincia:Provincia
 }
 

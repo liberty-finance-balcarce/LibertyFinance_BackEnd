@@ -6,6 +6,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { InstrumentosFinancierosModule } from './instrumentos-financieros/instrumentos-financieros.module';
 import { ProvinciasModule } from './provincias/provincias.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { RolModule } from './rol/rol.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -17,9 +18,9 @@ import { UsuariosModule } from './usuarios/usuarios.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: true,
+      synchronize: false,
     }),
-    InstrumentosFinancierosModule, ProvinciasModule, UsuariosModule
+    InstrumentosFinancierosModule, ProvinciasModule, UsuariosModule, RolModule,
   ],
   controllers: [AppController],
   providers: [AppService],
