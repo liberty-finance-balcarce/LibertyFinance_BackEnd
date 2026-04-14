@@ -1,8 +1,10 @@
-import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PerfilInversor } from './entities/perfil-inversor.entity';
 import { Repository } from 'typeorm';
-import { ResponsePerfilInversorDTO } from './dto/response-perfil-inversor.dto';
+import { ResponseDTO } from './dto/response.dto';
+import { CreatePerfilInversorDto } from './dto/create-perfil-inversor.dto';
+import { UpdatePerfilInversorDto } from './dto/update-perfil-inversor.dto';
 
 @Injectable()
 export class PerfilInversorService {
@@ -11,17 +13,17 @@ export class PerfilInversorService {
         private readonly perfilInversorRepository: Repository<PerfilInversor>
     ) { }
 
-    async findAll(): Promise<ResponsePerfilInversorDTO> {
+    async findAll(): Promise<ResponseDTO> {
         const perfilInversor = await this.perfilInversorRepository.find();
         if (!perfilInversor.length) throw new NotFoundException('No se encontraron perfiles de inversor.')
         return {
             statusCode: HttpStatus.OK,
-            message: 'Perfiles de inversión obtenidos correctamente.',
+            message: 'Perfiles de inversor obtenidos correctamente.',
             data: perfilInversor,
         }
     }
 
-    async getById(id: number): Promise<ResponsePerfilInversorDTO> {
+    async getById(id: number): Promise<ResponseDTO> {
         const perfilInversor = await this.perfilInversorRepository.findOne({ where: { id_perfil_inversor: id } });
         if (!perfilInversor) throw new NotFoundException('No se encontró ningun perfil de inversor.')
         return {
@@ -31,7 +33,7 @@ export class PerfilInversorService {
         }
     }
 
-    async getByDniUsuario(dni_usuario: number): Promise<ResponsePerfilInversorDTO> {
+    async getByDniUsuario(dni_usuario: number): Promise<ResponseDTO> {
         const perfilInversor = await this.perfilInversorRepository.findOne({
             where: { usuarios: { dni_usuario: dni_usuario } },
             relations: ['usuarios']
@@ -43,4 +45,41 @@ export class PerfilInversorService {
             data: perfilInversor,
         }
     }
+
+    async create(perfilInversor: CreatePerfilInversorDto): Promise<ResponseDTO> {
+        const existingPerfilInversor = await this.perfilInversorRepository.findOne({ where: { nombre: perfilInversor.nombre } });
+        if (existingPerfilInversor) throw new BadRequestException('El perfil de inversor ya existe.')
+        const newPerfilInversor = this.perfilInversorRepository.create(perfilInversor);
+        const res = await this.perfilInversorRepository.save(newPerfilInversor);
+        return {
+            statusCode: HttpStatus.OK,
+            message: 'Perfil de inversor creado correctamente.',
+            data: res,
+        }
+    }
+
+    async remove(id: number): Promise<ResponseDTO> {
+        const existingPerfilInversor = await this.perfilInversorRepository.findOne({ where: { id_perfil_inversor: id } });
+        if (!existingPerfilInversor) throw new NotFoundException('El perfil de inversor no existe.')
+        const deletedPerfilInversor = await this.perfilInversorRepository.delete(existingPerfilInversor.id_perfil_inversor);
+        return {
+            statusCode: HttpStatus.OK,
+            message: 'Perfil de inversor eliminado correctamente.',
+        }
+    }
+
+    async update(id: number, updatePerfilInversorDto: UpdatePerfilInversorDto): Promise<ResponseDTO> {
+        const existingPerfilInversor = await this.perfilInversorRepository.findOne({ where: { id_perfil_inversor: id } });
+        if (!existingPerfilInversor) throw new NotFoundException('El perfil de inversor no existe.');
+
+        const updatedPerfilInversor = this.perfilInversorRepository.merge(existingPerfilInversor, updatePerfilInversorDto);
+        const savedPerfilInversor = await this.perfilInversorRepository.save(updatedPerfilInversor);
+
+        return {
+            statusCode: HttpStatus.OK,
+            message: 'Perfil de inversor actualizado correctamente.',
+            data: savedPerfilInversor,
+        };
+    }
+
 }

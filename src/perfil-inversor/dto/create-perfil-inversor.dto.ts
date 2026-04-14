@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { PerfilInversorEnum } from "../entities/perfil-inversor.entity";
-import { IsEnum } from "class-validator";
+import { IsEnum, IsNotEmpty } from "class-validator";
 
 export class CreatePerfilInversorDto {
     @ApiProperty({
@@ -8,6 +8,7 @@ export class CreatePerfilInversorDto {
         example: PerfilInversorEnum.CONSERVADOR,
     })
 
-    @IsEnum(PerfilInversorEnum)
+    @IsEnum(PerfilInversorEnum, { message: 'El nombre del perfil de inversor debe ser un valor válido de PerfilInversorEnum' })
+    @IsNotEmpty({ message: 'El nombre del perfil de inversor es requerido' })
     nombre: PerfilInversorEnum;
 }

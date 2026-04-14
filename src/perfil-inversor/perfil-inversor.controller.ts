@@ -1,7 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ResponsePerfilInversorDTO } from './dto/response-perfil-inversor.dto';
+import { ResponseDTO } from './dto/response.dto';
 import { PerfilInversorService } from './perfil-inversor.service';
+import { CreatePerfilInversorDto } from './dto/create-perfil-inversor.dto';
+import { UpdatePerfilInversorDto } from './dto/update-perfil-inversor.dto';
 
 @ApiTags('Perfil Inversor')
 @Controller('perfil_inversor')
@@ -14,25 +16,51 @@ export class PerfilInversorController {
     @ApiResponse({ status: 200, description: 'Perfiles de inversor obtenidos correctamente.' })
     @ApiResponse({ status: 404, description: 'No se encontraron perfiles de inversor.' })
     @ApiResponse({ status: 500, description: 'Error al obtener los perfiles de inversor.' })
-    async findAll(): Promise<ResponsePerfilInversorDTO> {
+    async findAll(): Promise<ResponseDTO> {
         return await this.perfilInversorService.findAll();
     }
 
-    @Get('id')
+    @Get(':id')
     @ApiOperation({ description: 'Obtener un perfil de inversor por ID' })
     @ApiResponse({ status: 200, description: 'Perfil de inversor obtenido correctamente.' })
     @ApiResponse({ status: 404, description: 'No se encontró ningún perfil de inversor.' })
     @ApiResponse({ status: 500, description: 'Error al obtener el perfil de inversor.' })
-    async getById(@Param('id') id: number): Promise<ResponsePerfilInversorDTO> {
+    async getById(@Param('id') id: number): Promise<ResponseDTO> {
         return await this.perfilInversorService.getById(id);
     }
 
-    @Get('dni-usuario')
+    @Get('dni-usuario/:dni_usuario')
     @ApiOperation({ description: 'Obtener un perfil de inversor por DNI de usuario' })
     @ApiResponse({ status: 200, description: 'Perfil de inversor por DNI de usuario obtenido correctamente.' })
     @ApiResponse({ status: 404, description: 'No se encontró ningún perfil de inversor por DNI de usuario.' })
     @ApiResponse({ status: 500, description: 'Error al obtener el perfil de inversor por DNI de usuario.' })
-    async getByDniUsuario(@Param('dni_usuario') dni_usuario: number): Promise<ResponsePerfilInversorDTO> {
+    async getByDniUsuario(@Param('dni_usuario') dni_usuario: number): Promise<ResponseDTO> {
         return await this.perfilInversorService.getByDniUsuario(dni_usuario);
+    }
+
+    @Delete(':id')
+    @ApiOperation({ description: 'Eliminar un perfil de inversor' })
+    @ApiResponse({ status: 200, description: 'Perfil de inversor eliminado correctamente.' })
+    @ApiResponse({ status: 404, description: 'No se encontró ningún perfil de inversor.' })
+    @ApiResponse({ status: 500, description: 'Error al eliminar el perfil de inversor.' })
+    async remove(@Param('id') id: number): Promise<ResponseDTO> {
+        return await this.perfilInversorService.remove(id);
+    }
+
+    @Post()
+    @ApiOperation({ description: 'Crear un perfil de inversor' })
+    @ApiResponse({ status: 200, description: 'Perfil de inversor creado correctamente.' })
+    @ApiResponse({ status: 400, description: 'Error al crear el perfil de inversor.' })
+    @ApiResponse({ status: 500, description: 'Error al crear el perfil de inversor.' })
+    async create(@Body() createPerfilInversorDto: CreatePerfilInversorDto): Promise<ResponseDTO> {
+        return await this.perfilInversorService.create(createPerfilInversorDto);
+    }
+    @Patch(':id')
+    @ApiOperation({ description: 'Actualizar un perfil de inversor' })
+    @ApiResponse({ status: 200, description: 'Perfil de inversor actualizado correctamente.' })
+    @ApiResponse({ status: 400, description: 'Error al actualizar el perfil de inversor.' })
+    @ApiResponse({ status: 500, description: 'Error al actualizar el perfil de inversor.' })
+    async update(@Param('id') id: number, @Body() updatePerfilInversorDto: UpdatePerfilInversorDto): Promise<ResponseDTO> {
+        return await this.perfilInversorService.update(id, updatePerfilInversorDto);
     }
 }

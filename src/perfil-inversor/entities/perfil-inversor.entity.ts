@@ -15,6 +15,7 @@ export class PerfilInversor {
     @Column({
         type: 'enum',
         enum: PerfilInversorEnum,
+        unique: true,
     })
     nombre: PerfilInversorEnum
     @OneToMany(() => Usuario, (usuario) => usuario.id_perfilinv)
