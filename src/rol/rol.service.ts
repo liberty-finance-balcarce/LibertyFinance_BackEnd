@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Rol } from './entities/rol.entity';
 import { CreateRolDto } from './dto/create-rol.dto';
 import { UpdateRolDto } from './dto/update-rol.dto';
-import { ResponseRolDTO } from './dto/response-rol.dto';
+import { ResponseDTO } from './dto/response.dto';
 
 @Injectable()
 export class RolService {
@@ -14,7 +14,7 @@ export class RolService {
 
     ) { }
 
-    async findAll(): Promise<ResponseRolDTO> {
+    async findAll(): Promise<ResponseDTO> {
         const rol = await this.rolRepository.find();
         if (!rol.length) throw new NotFoundException('No se encontraron roles.')
         return {
@@ -25,7 +25,7 @@ export class RolService {
 
     }
 
-    async getById(id: number): Promise<ResponseRolDTO> {
+    async getById(id: number): Promise<ResponseDTO> {
         const rol = await this.rolRepository.findOne({ where: { id_rol: id } });
         if (!rol) throw new NotFoundException('No se encontró ningun rol.')
         return {
@@ -36,7 +36,7 @@ export class RolService {
 
     }
 
-    async getByDniUsuario(dni_usuario: number): Promise<ResponseRolDTO> {
+    async getByDniUsuario(dni_usuario: number): Promise<ResponseDTO> {
         const rol = await this.rolRepository.findOne({
             where: { usuarios: { dni_usuario: dni_usuario } },
             relations: ['usuarios']
@@ -49,7 +49,16 @@ export class RolService {
         }
     }
 
-    async create(rol: CreateRolDto): Promise<ResponseRolDTO> {
+    async create(rol: CreateRolDto): Promise<ResponseDTO> {
+        const existingRol = await this.rolRepository.findOne({ where: { nombre: rol.nombre } });
+
+        if (existingRol) {
+            return {
+                statusCode: HttpStatus.BAD_REQUEST,
+                message: 'El rol ya existe'
+            };
+        }
+
         const newRol = this.rolRepository.create({
             nombre: rol.nombre,
         });
@@ -61,7 +70,7 @@ export class RolService {
         }
     }
 
-    async remove(id: number): Promise<ResponseRolDTO> {
+    async remove(id: number): Promise<ResponseDTO> {
         const exists = await this.rolRepository.findOne({
             where: { id_rol: id }
         });
@@ -74,7 +83,7 @@ export class RolService {
         }
     }
 
-    async update(id: number, updateData: UpdateRolDto): Promise<ResponseRolDTO> {
+    async update(id: number, updateData: UpdateRolDto): Promise<ResponseDTO> {
         const rol = await this.rolRepository.findOne({
             where: { id_rol: id }
         });
