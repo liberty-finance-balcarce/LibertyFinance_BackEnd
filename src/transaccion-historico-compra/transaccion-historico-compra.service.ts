@@ -10,12 +10,20 @@ import { TransaccionHistoricoCompra } from './entities/transaccion-historico-com
 import { CreateTransaccionHistoricoCompraDto } from './dto/create-transaccion-historico-compra.dto';
 import { UpdateTransaccionHistoricoCompraDTO } from './dto/update-transaccion-historico-compra.dto';
 import { ResponseDTO } from './dto/response.dto';
+import { InstrumentoFinanciero } from 'src/instrumentos-financieros/entities/instrumento-financiero.entity';
+import { Usuario } from 'src/usuarios/usuario.entity';
 
 @Injectable()
 export class TransaccionHistoricoCompraService {
   constructor(
     @InjectRepository(TransaccionHistoricoCompra)
     private readonly transaccionHistoricoCompraRepository: Repository<TransaccionHistoricoCompra>,
+
+    @InjectRepository(InstrumentoFinanciero)
+    private readonly instrumentoFinancieroRepository: Repository<InstrumentoFinanciero>,
+
+    @InjectRepository(Usuario)
+    private readonly usuarioRepository: Repository<Usuario>
   ) {}
 
   async findAll(): Promise<ResponseDTO> {
@@ -61,27 +69,26 @@ export class TransaccionHistoricoCompraService {
         }
     }
 
-  async create(
-    transaccionHistoricoCompra: CreateTransaccionHistoricoCompraDto,
-  ): Promise<ResponseDTO> {
-    const newTransaccionHistoricoCompra =
-      this.transaccionHistoricoCompraRepository.create({
-        fecha_operacion: new Date(transaccionHistoricoCompra.fecha_operacion),
-        id_instrumento: {
-          id_instrumento: transaccionHistoricoCompra.id_instrumento,
-        },
-        precio_instrumento: transaccionHistoricoCompra.precio_instrumento,
-        dni_usuario: { dni_usuario: transaccionHistoricoCompra.dni_usuario },
-      });
-    const res = await this.transaccionHistoricoCompraRepository.save(
-      newTransaccionHistoricoCompra,
-    );
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Transacción historica de compra agregada correctamente.',
-      data: res,
-    };
-  }
+async create(TransaccionHistoricoCompra: CreateTransaccionHistoricoCompraDto): Promise<ResponseDTO> {
+        const existsInstrumento = await this.instrumentoFinancieroRepository.findOne({ where: { id_instrumento: TransaccionHistoricoCompra.id_instrumento } });
+        if (!existsInstrumento) throw new NotFoundException("No se encontró ningún instrumento financiero con ese ID")
+
+        const existsUsuario = await this.usuarioRepository.findOne({ where: { dni_usuario: TransaccionHistoricoCompra.dni_usuario } });
+        if (!existsUsuario) throw new NotFoundException("No se encontró ningún usuario con ese DNI")
+
+        const newTransaccionHistoricoCompra = this.transaccionHistoricoCompraRepository.create({
+            fecha_operacion: new Date(TransaccionHistoricoCompra.fecha_operacion),
+            id_instrumento: { id_instrumento: TransaccionHistoricoCompra.id_instrumento },
+            precio_instrumento: TransaccionHistoricoCompra.precio_instrumento,
+            dni_usuario: { dni_usuario: TransaccionHistoricoCompra.dni_usuario },
+        });
+        const res = await this.transaccionHistoricoCompraRepository.save(newTransaccionHistoricoCompra);
+        return {
+            statusCode: HttpStatus.OK,
+            message: "Transacción historica de venta agregada correctamente.",
+            data: res,
+        }
+}
 
   async remove(id: number): Promise<ResponseDTO> {
     const exists = await this.transaccionHistoricoCompraRepository.findOne({
