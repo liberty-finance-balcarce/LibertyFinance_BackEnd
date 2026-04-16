@@ -55,6 +55,16 @@ export class InstrumentosFinancierosController {
     required: false,
     type: 'number'
   })
+  @ApiQuery({
+    name: 'skip',
+    required: false,
+    type: 'number'
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: 'number'
+  })
   @ApiResponse({
     status: 200,
     description: 'Instrumentos financieros obtenidos correctamente',
@@ -67,11 +77,15 @@ export class InstrumentosFinancierosController {
     @Query('riesgo') riesgo?: Riesgo,
     @Query('tipo_instrumento') tipo_instrumento?: TipoInstrumento,
     @Query('precio_instrumento') precio_instrumento?: number,
+    @Query('skip') skip?: number,
+    @Query('limit') limit?: number,
   ): Promise<ResponseDTO> {
     const filters = {
       riesgo: riesgo,
       tipo_instrumento: tipo_instrumento,
       precio_instrumento: precio_instrumento,
+      skip: skip,
+      limit: limit,
     };
     return await this.instrumentosFinancierosService.findAll(filters);
   }

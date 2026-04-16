@@ -18,19 +18,69 @@ export class InstrumentosFinancierosService {
     @InjectRepository(InstrumentoFinanciero)
     private readonly instrumentoFinancieroRepository: Repository<InstrumentoFinanciero>,
   ) {}
+  async findAll(filters: any): Promise<ResponseDTO> {
+    const { skip, limit, ...where } = filters;
 
-  async findAll(filters: Object): Promise<ResponseDTO> {
+    const DEFAULT_SKIP = 0;
+    const DEFAULT_LIMIT = 10;
+    const MAX_LIMIT = 100;
+
+    let parsedSkip = DEFAULT_SKIP;
+    let parsedLimit = DEFAULT_LIMIT;
+
+    if (skip !== undefined) {
+      const value = Number(skip);
+
+      if (isNaN(value)) {
+        throw new BadRequestException('El parametro skip debe ser un número');
+      }
+
+      if (value < 0) {
+        throw new BadRequestException(
+          'El parametro skip no puede ser negativo',
+        );
+      }
+
+      parsedSkip = Math.floor(value);
+    }
+
+    if (limit !== undefined) {
+      const value = Number(limit);
+
+      if (isNaN(value)) {
+        throw new BadRequestException('El parámetro limit debe ser un número');
+      }
+
+      if (value <= 0) {
+        throw new BadRequestException('El parámetro limit debe ser mayor a 0');
+      }
+
+      if (value > MAX_LIMIT) {
+        throw new BadRequestException(
+          `El parametro limit no puede ser mayor a ${MAX_LIMIT}`,
+        );
+      }
+
+      parsedLimit = Math.floor(value);
+    }
+
     const instrumentosFinancieros =
-      await this.instrumentoFinancieroRepository.find({ where: filters });
-    if (!instrumentosFinancieros.length)
+      await this.instrumentoFinancieroRepository.find({
+        where,
+        skip: parsedSkip,
+        take: parsedLimit,
+      });
+
+    if (!instrumentosFinancieros.length) {
       throw new NotFoundException('No se encontraron instrumentos financieros');
+    }
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Instrumentos financieros obtenidos correctamente',
       data: instrumentosFinancieros,
     };
   }
-
   async getById(id: number): Promise<ResponseDTO> {
     const instrumentoFinanciero =
       await this.instrumentoFinancieroRepository.findOne({
