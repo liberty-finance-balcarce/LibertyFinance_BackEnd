@@ -1,9 +1,7 @@
-import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Rol } from './entities/rol.entity';
-import { CreateRolDto } from './dto/create-rol.dto';
-import { UpdateRolDto } from './dto/update-rol.dto';
 import { ResponseDTO } from './dto/response.dto';
 
 @Injectable()
@@ -47,63 +45,5 @@ export class RolService {
             message: 'Rol obtenido correctamente.',
             data: rol,
         }
-    }
-
-    async create(rol: CreateRolDto): Promise<ResponseDTO> {
-        const existingRol = await this.rolRepository.findOne({ where: { nombre: rol.nombre } });
-
-        if (existingRol) {
-            return {
-                statusCode: HttpStatus.BAD_REQUEST,
-                message: 'El rol ya existe'
-            };
-        }
-
-        const newRol = this.rolRepository.create({
-            nombre: rol.nombre,
-        });
-        const res = await this.rolRepository.save(newRol);
-        return {
-            statusCode: HttpStatus.OK,
-            message: 'Rol creado correctamente.',
-            data: res,
-        }
-    }
-
-    async remove(id: number): Promise<ResponseDTO> {
-        const exists = await this.rolRepository.findOne({
-            where: { id_rol: id }
-        });
-        if (!exists) throw new NotFoundException('Rol no encontrado');
-        const res = await this.rolRepository.delete(id);
-        if (!res.affected) throw new InternalServerErrorException('Error al eliminar el rol')
-        return {
-            statusCode: HttpStatus.OK,
-            message: 'Rol eliminado correctamente.'
-        }
-    }
-
-    async update(id: number, updateData: UpdateRolDto): Promise<ResponseDTO> {
-        const rol = await this.rolRepository.findOne({
-            where: { id_rol: id }
-        });
-        if (!rol) throw new NotFoundException('Rol no encontrado');
-
-        const newRol: any = { ...updateData };
-        if (updateData.nombre !== undefined) {
-            newRol.nombre = { nombre: updateData.nombre };
-
-        }
-
-        const rolActualizado = this.rolRepository.merge(
-            rol, newRol
-        );
-        const guardarRol = await this.rolRepository.save(rolActualizado);
-        return {
-            statusCode: HttpStatus.OK,
-            message: 'Rol actualizado correctamente',
-            data: guardarRol
-        }
-
     }
 }
