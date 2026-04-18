@@ -6,7 +6,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { InstrumentosFinancierosModule } from './instrumentos-financieros/instrumentos-financieros.module';
 import { ProvinciasModule } from './provincias/provincias.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
-import { RolModule } from './rol/rol.module';
+import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/transaccion-historico-venta.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -20,7 +20,10 @@ import { RolModule } from './rol/rol.module';
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: false,
     }),
-    InstrumentosFinancierosModule, ProvinciasModule, UsuariosModule, RolModule,
+    InstrumentosFinancierosModule,
+    ProvinciasModule,
+    UsuariosModule,
+    TransaccionHistoricoVentaModule
   ],
   controllers: [AppController],
   providers: [AppService],
