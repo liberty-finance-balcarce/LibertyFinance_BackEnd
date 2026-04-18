@@ -11,7 +11,7 @@ import { CreateTransaccionHistoricoCompraDto } from './dto/create-transaccion-hi
 import { UpdateTransaccionHistoricoCompraDTO } from './dto/update-transaccion-historico-compra.dto';
 import { ResponseDTO } from './dto/response.dto';
 import { InstrumentoFinanciero } from 'src/instrumentos-financieros/entities/instrumento-financiero.entity';
-import { Usuario } from 'src/usuarios/usuario.entity';
+import { Usuario } from 'src/usuarios/entities/usuario.entity';
 
 @Injectable()
 export class TransaccionHistoricoCompraService {

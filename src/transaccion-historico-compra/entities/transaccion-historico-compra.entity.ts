@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { InstrumentoFinanciero } from '../../instrumentos-financieros/entities/instrumento-financiero.entity';
-import { Usuario } from '../../usuarios/usuario.entity';
+import { Usuario } from '../../usuarios/entities/usuario.entity';
 
 @Entity ('transaccion_historico_compra')
 
