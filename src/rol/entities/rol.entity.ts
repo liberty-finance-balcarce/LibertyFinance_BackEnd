@@ -1,0 +1,23 @@
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Usuario } from '../../usuarios/entities/usuario.entity';
+
+export enum RolEnum {
+    USUARIO_REGISTRADO = 'user',
+    ADMINISTRADOR = 'admin',
+}
+
+@Entity('rol')
+export class Rol {
+    @PrimaryGeneratedColumn('increment')
+    id_rol!: number;
+
+    @Column({
+        type: 'enum',
+        enum: RolEnum,
+        unique: true,
+    })
+    nombre!: RolEnum;
+
+    @OneToMany(() => Usuario, (usuario) => usuario.rol)
+    usuarios!: Usuario[];
+}
