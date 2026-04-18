@@ -18,4 +18,4 @@ import { InstrumentoFinanciero } from "../instrumentos-financieros/entities/inst
   controllers: [TransaccionHistoricoCompraController],
   providers: [TransaccionHistoricoCompraService],
 })
-export class HistorialCompraModule {}
+export class TransaccionHistoricoCompraModule {}
