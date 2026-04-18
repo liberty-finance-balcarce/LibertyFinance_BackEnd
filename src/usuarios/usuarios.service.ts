@@ -1,17 +1,18 @@
 import {
-  HttpStatus,
+  HttpStatus,   //relation
   Injectable,
   NotFoundException,
   InternalServerErrorException,
-  UnauthorizedException,
-  ConflictException,
+  ConflictException, BadRequestException,
+  HttpException,
 } from '@nestjs/common';
-import { Usuario } from './usuario.entity';
-import { ResponseDTO } from './dto/usuario.response.dto';
-import { UsuarioDto, ModificarUsuarioDto } from './dto/usuario.dto';
+import { Usuario } from './entities/usuario.entity';
+import { ResponseDTO } from './dto/response.dto';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
@@ -20,34 +21,26 @@ export class UsuariosService {
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
-  async getAllUsuariosDB(): Promise<ResponseDTO> {
+  async findAll(): Promise<ResponseDTO> {
     const usuarios = await this.usuarioRepository.find({
-      relations: ['provincia'],
+      relations: ['provincia','rol'],
     });
     if (!usuarios.length) throw new NotFoundException('NO existen USUARIOS');
     return {
-      code: HttpStatus.OK,
+      statusCode: HttpStatus.OK,
       message: 'Lectura de Usuarios Exitosa',
       data: usuarios,
     };
   }
 
-  async getUsuarioDBxID(id: number): Promise<ResponseDTO> {
-    const usuario = await this.usuarioRepository.findOne({
-      where: { id },
-      relations: ['provincia'],
-    });
-    if (!usuario) throw new NotFoundException('NO existe USUARIO');
-
-    return {
-      code: HttpStatus.OK,
-      message: 'Lectura de Usuario Exitosa',
-      data: usuario,
-    };
-  }
-
-  async crearUsuario(usuario: UsuarioDto): Promise<ResponseDTO> {
-    try {
+  async create(usuario: CreateUsuarioDto): Promise<ResponseDTO> {
+   // try {
+      const existsDNI=await this.usuarioRepository.findOne({where: {dni_usuario:usuario.dni_usuario}})
+      if (existsDNI) {
+                        throw new ConflictException('No se puede crear usuario, DNI duplicado');
+                          }
+      const existsMail=await this.usuarioRepository.findOne({where: {mail:usuario.mail}})
+      if (existsMail) throw new ConflictException('No se puede crear usuario, mail duplicado');      
       const nivelHashs = 10;
       const hashContraseña = await bcrypt.hash(usuario.contraseña, nivelHashs);
       const nuevoUsuario = this.usuarioRepository.create({
@@ -55,76 +48,74 @@ export class UsuariosService {
         contraseña: hashContraseña,
       });
       const res = await this.usuarioRepository.save(nuevoUsuario);
-      console.log(
-        `Usuario: ${res.nombre} ${res.apellido} con ID: ${res.id} RESGISTRADO!`,
-      );
       return {
-        code: HttpStatus.CREATED,
+        statusCode: HttpStatus.CREATED,
         message: 'Usuario Creado Exitosamente!',
-        data: res,
-      };
-    } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY' || error.errno === 1062) {
-        throw new ConflictException({
-          code: HttpStatus.CONFLICT,
-          message: 'Campo DNI o EMAIL DUPLICADO',
-          error: 'CONFLICTO',
-        });
-      }
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Error interno al procesar el registro del usuario',
-      });
-    }
+     };
   }
 
-  async eliminarUsuario(id: number): Promise<ResponseDTO> {
-    const res = await this.usuarioRepository.delete({ id });
-    console.log(res);
+  async delete(dni_usuario: number): Promise<ResponseDTO> {
+    const res = await this.usuarioRepository.delete({ dni_usuario });
     if (!res.affected)
-      throw new NotFoundException('Usuario o Id no existente!');
+      throw new NotFoundException(`No se encontro el usuario con DNI: ${dni_usuario}`);
     return {
-      code: HttpStatus.OK,
-      message: `Usuario con ID: ${id} Eliminado Correctamente`,
+      statusCode: HttpStatus.OK,
+      message: `El usuario fue eliminado correctamente`,
     };
   }
 
-  async modificarUsuario(
-    id: number,
-    modificaciones: ModificarUsuarioDto,
+  async update(
+    dni: number,
+    modificaciones: UpdateUsuarioDto,
   ): Promise<ResponseDTO> {
+    if (!Object.keys(modificaciones).length)
+      throw new BadRequestException('Debe enviar al menos un campo para actualizar');
     const { contraseña } = modificaciones;
     if (contraseña) {
-      console.log('tiene contraseña', contraseña);
       const nivelHashs = 10;
       const hashContraseña = await bcrypt.hash(contraseña, nivelHashs);
       modificaciones.contraseña = hashContraseña;
     }
-    const res = await this.usuarioRepository.update(id, modificaciones);
+    const res = await this.usuarioRepository.update(dni, modificaciones);
     if (!res.affected)
       throw new NotFoundException(
-        `ID:${id} o Usuario inexistente!!, NO SE ACTUALIZO usuario`,
+        `No se encontro DNI con ese numero.`,
       );
     return {
-      code: HttpStatus.CREATED,
-      message: `Usuario ${id} ACTUALIZADO!`,
+      statusCode: HttpStatus.OK,
+      message: `Usuario actualizado correctamente.`,  //caso para estandar
     };
   }
 
-  async usuarioxNombre(nombreBuscar: string): Promise<ResponseDTO> {
+  async getByNombre(nombreBuscar: string): Promise<ResponseDTO> {
     const res = await this.usuarioRepository.find({
       where: {
         nombre: Like(`%${nombreBuscar}%`),
       },
-      relations: ['provincia'],
+      relations: ['provincia','rol'],
     });
     if (!res.length)
-      throw new NotFoundException('Criterio de Busqueda INEXISTENTE!');
-    console.log(`Se encontraron ${res.length} registros para esta Busqueda`);
+      throw new NotFoundException('No se encontro usuario/s con ese nombre.');
     return {
-      code: HttpStatus.OK,
-      message: 'Busqueda Exitosa!',
+      statusCode: HttpStatus.OK,
+      message: 'Usuario/s obtenido/s correctamente.',
       data: res,
     };
   }
+  async getByDNI(dni_usuario: number): Promise<ResponseDTO> {
+    const res = await this.usuarioRepository.findOne({
+      where: {
+        dni_usuario
+      },
+      relations: ['provincia','rol'],
+    });
+    if (!res)
+      throw new NotFoundException(`Usuario con DNI ${dni_usuario} no encontrado`);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Búsqueda por DNI exitosa',
+      data: res,
+    };
+  }
+
 }
