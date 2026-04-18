@@ -14,6 +14,7 @@ export class Rol {
     @Column({
         type: 'enum',
         enum: RolEnum,
+        unique: true,
     })
     nombre!: RolEnum;
 

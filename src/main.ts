@@ -11,6 +11,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.setGlobalPrefix('api/v1')
   const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000'];
   app.enableCors({
     origin: allowedOrigins,
@@ -25,7 +26,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('api/v1/docs', app, document);
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

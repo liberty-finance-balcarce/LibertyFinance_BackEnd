@@ -8,7 +8,11 @@ export class CreateRolDto {
         example: RolEnum.USUARIO_REGISTRADO,
     })
 
-    @IsEnum(RolEnum)
+    @IsEnum(RolEnum, { message: 'El rol debe ser uno de los siguientes: USUARIO_REGISTRADO, ADMINISTRADOR' })
+    @ApiProperty({
+        enum: RolEnum,
+        example: RolEnum.USUARIO_REGISTRADO,
+    })
     @IsNotEmpty()
     nombre: RolEnum;
 }
