@@ -1,10 +1,8 @@
 import {
-  HttpStatus,   //relation
+  HttpStatus,   
   Injectable,
   NotFoundException,
-  InternalServerErrorException,
   ConflictException, BadRequestException,
-  HttpException,
 } from '@nestjs/common';
 import { Usuario } from './entities/usuario.entity';
 import { ResponseDTO } from './dto/response.dto';
@@ -34,7 +32,6 @@ export class UsuariosService {
   }
 
   async create(usuario: CreateUsuarioDto): Promise<ResponseDTO> {
-   // try {
       const existsDNI=await this.usuarioRepository.findOne({where: {dni_usuario:usuario.dni_usuario}})
       if (existsDNI) {
                         throw new ConflictException('No se puede crear usuario, DNI duplicado');
@@ -83,7 +80,7 @@ export class UsuariosService {
       );
     return {
       statusCode: HttpStatus.OK,
-      message: `Usuario actualizado correctamente.`,  //caso para estandar
+      message: `Usuario actualizado correctamente.`,  
     };
   }
 
