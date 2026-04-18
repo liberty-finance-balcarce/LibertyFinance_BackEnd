@@ -19,7 +19,7 @@ export class InstrumentosFinancierosService {
     private readonly instrumentoFinancieroRepository: Repository<InstrumentoFinanciero>,
   ) {}
   async findAll(filters: any): Promise<ResponseDTO> {
-    const { skip, limit, ...where } = filters;
+    const { skip, limit, orderby, ...where } = filters;
 
     const DEFAULT_SKIP = 0;
     const DEFAULT_LIMIT = 10;
@@ -27,11 +27,46 @@ export class InstrumentosFinancierosService {
 
     let parsedSkip = DEFAULT_SKIP;
     let parsedLimit = DEFAULT_LIMIT;
+    let order: any = undefined;
+
+    if (orderby) {
+      if (typeof orderby !== 'string' || !orderby.includes(':')) {
+        throw new BadRequestException(
+          'El parametro orderBy debe tener formato campo:ASC o campo:DESC',
+        );
+      }
+
+      const [field, direction] = orderby.split(':');
+      const cleanField = field?.trim();
+
+      if (!cleanField) {
+        throw new BadRequestException(
+          'El parametro orderBy debe tener formato campo:ASC o campo:DESC',
+        );
+      }
+
+      const metadata = this.instrumentoFinancieroRepository.metadata;
+      const validColumns = metadata.columns.map((col) => col.propertyName);
+
+      if (!validColumns.includes(cleanField)) {
+        throw new BadRequestException(
+          `El campo ${cleanField} no existe en InstrumentoFinanciero`,
+        );
+      }
+
+      const dir = direction?.toUpperCase() || 'ASC';
+
+      if (!['ASC', 'DESC'].includes(dir)) {
+        throw new BadRequestException('El orden debe ser ASC o DESC');
+      }
+
+      order = { [cleanField]: dir };
+    }
 
     if (skip !== undefined) {
       const value = Number(skip);
 
-      if (isNaN(value)) {
+      if (isNaN(value) || !isFinite(value)) {
         throw new BadRequestException('El parametro skip debe ser un número');
       }
 
@@ -47,12 +82,12 @@ export class InstrumentosFinancierosService {
     if (limit !== undefined) {
       const value = Number(limit);
 
-      if (isNaN(value)) {
-        throw new BadRequestException('El parámetro limit debe ser un número');
+      if (isNaN(value) || !isFinite(value)) {
+        throw new BadRequestException('El parAmetro limit debe ser un numero');
       }
 
       if (value <= 0) {
-        throw new BadRequestException('El parámetro limit debe ser mayor a 0');
+        throw new BadRequestException('El parAmetro limit debe ser mayor a 0');
       }
 
       if (value > MAX_LIMIT) {
@@ -69,6 +104,7 @@ export class InstrumentosFinancierosService {
         where,
         skip: parsedSkip,
         take: parsedLimit,
+        ...(order && { order }),
       });
 
     if (!instrumentosFinancieros.length) {

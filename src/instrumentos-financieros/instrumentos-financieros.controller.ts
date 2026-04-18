@@ -53,17 +53,22 @@ export class InstrumentosFinancierosController {
   @ApiQuery({
     name: 'precio_instrumento',
     required: false,
-    type: 'number'
+    type: 'number',
   })
   @ApiQuery({
     name: 'skip',
     required: false,
-    type: 'number'
+    type: 'number',
   })
   @ApiQuery({
     name: 'limit',
     required: false,
-    type: 'number'
+    type: 'number',
+  })
+  @ApiQuery({
+    name: 'orderby',
+    required: false,
+    type: 'string',
   })
   @ApiResponse({
     status: 200,
@@ -73,12 +78,24 @@ export class InstrumentosFinancierosController {
     status: 404,
     description: 'No se encontraron instrumentos financieros',
   })
+  @ApiResponse({
+    status: 400,
+    description: `
+  Casos de error:
+  - Formato invalido de orderBy (campo:ASC|DESC)
+  - Campo de ordenamiento inexistente
+  - Orden invalido (solo ASC o DESC)
+  - Skip invalido o negativo
+  - Limit invalido, menor o mayor al permitido
+  `,
+  })
   async findAll(
     @Query('riesgo') riesgo?: Riesgo,
     @Query('tipo_instrumento') tipo_instrumento?: TipoInstrumento,
     @Query('precio_instrumento') precio_instrumento?: number,
     @Query('skip') skip?: number,
     @Query('limit') limit?: number,
+    @Query('orderby') orderby?: string,
   ): Promise<ResponseDTO> {
     const filters = {
       riesgo: riesgo,
@@ -86,6 +103,7 @@ export class InstrumentosFinancierosController {
       precio_instrumento: precio_instrumento,
       skip: skip,
       limit: limit,
+      orderby: orderby,
     };
     return await this.instrumentosFinancierosService.findAll(filters);
   }
