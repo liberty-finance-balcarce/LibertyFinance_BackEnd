@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { Usuario } from '../../usuarios/usuario.entity';
+import { Usuario } from '../../usuarios/entities/usuario.entity';
 
 export enum RolEnum {
     USUARIO_REGISTRADO = 'user',
@@ -9,15 +9,15 @@ export enum RolEnum {
 @Entity('rol')
 export class Rol {
     @PrimaryGeneratedColumn('increment')
-    id_rol: number;
+    id_rol!: number;
 
     @Column({
         type: 'enum',
         enum: RolEnum,
         unique: true,
     })
-    nombre: RolEnum;
+    nombre!: RolEnum;
 
-    @OneToMany(() => Usuario, (usuario) => usuario.id_rol)
-    usuarios: Usuario[];
+    @OneToMany(() => Usuario, (usuario) => usuario.rol)
+    usuarios!: Usuario[];
 }

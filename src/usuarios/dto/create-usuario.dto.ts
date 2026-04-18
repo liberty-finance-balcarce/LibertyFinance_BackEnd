@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import {IsString, IsOptional, IsEmail, IsNumber} from "class-validator";
+import {IsString, IsOptional, IsEmail, IsNumber, IsNotEmpty} from "class-validator";
 import { Provincia } from "src/provincias/entities/provincia.entity";
 
 export class CreateUsuarioDto {
@@ -7,14 +7,15 @@ export class CreateUsuarioDto {
     description: 'DNI del usuario (sin puntos)',
     example: 30123456,
   })
-  @IsNumber()
+  @IsNumber({},{message:"El DNI del usuario debe ser un numero."})
   dni_usuario: number;
 
   @ApiProperty({
     description: 'Nombre del usuario',
     example: 'Juan',
   })
-  @IsString()
+  @IsString({message:"El nombre debe ser string."})
+  @IsNotEmpty({message:"El nombre de usuario no puede estar vacio."})
   nombre: string;
 
   @ApiProperty({
