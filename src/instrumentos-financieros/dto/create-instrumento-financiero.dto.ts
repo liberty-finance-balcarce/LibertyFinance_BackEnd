@@ -48,13 +48,9 @@ export class CreateInstrumentoFinancieroDto {
   })
   rendimiento: number;
 
-  @IsEnum(Riesgo, {
-    message: 'El riesgo del instrumento debe ser Bajo, Medio o Alto',
-  })
-  @IsNotEmpty({ message: 'El riesgo del instrumento es requerido' })
-  @ApiProperty({
-    enum: Riesgo,
-    enumName: 'Riesgo',
+  @IsEnum(Riesgo)
+  @ApiProperty({ 
+    enum: Riesgo, 
     example: Riesgo.MEDIO,
     description: 'Nivel de riesgo del instrumento',
   })

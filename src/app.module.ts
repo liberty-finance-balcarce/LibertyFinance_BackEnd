@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { InstrumentosFinancierosModule } from './instrumentos-financieros/instrumentos-financieros.module';
+import { ProvinciasModule } from './provincias/provincias.module';
+import { UsuariosModule } from './usuarios/usuarios.module';
+import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/transaccion-historico-venta.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -15,9 +18,12 @@ import { InstrumentosFinancierosModule } from './instrumentos-financieros/instru
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: true,
+      synchronize: false,
     }),
-    InstrumentosFinancierosModule
+    InstrumentosFinancierosModule,
+    ProvinciasModule,
+    UsuariosModule,
+    TransaccionHistoricoVentaModule
   ],
   controllers: [AppController],
   providers: [AppService],
