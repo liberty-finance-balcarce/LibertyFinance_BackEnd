@@ -9,7 +9,7 @@ export class Usuario{
   @Column()  
   nombre:string
   @Column()  
-  apellido!:string
+  apellido:string
   @Column({unique:true})
   mail:string
   @Column({select:false})

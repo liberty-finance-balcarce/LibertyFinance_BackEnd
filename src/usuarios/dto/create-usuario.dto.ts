@@ -1,6 +1,6 @@
-import { ApiProperty, PartialType } from '@nestjs/swagger';
-import {IsString, IsOptional, IsEmail, IsNumber, IsNotEmpty} from "class-validator";
-import { Provincia } from "src/provincias/entities/provincia.entity";
+import { ApiProperty} from '@nestjs/swagger';
+import {IsString, IsEmail, IsNumber, IsNotEmpty, Length, Min, Max} from "class-validator";
+
 
 export class CreateUsuarioDto {
   @ApiProperty({
@@ -22,14 +22,14 @@ export class CreateUsuarioDto {
     description: 'Apellido del usuario',
     example: 'Pérez',
   })
-  @IsString()
+  @IsString({message:"Apellido debe ser un string."})
   apellido: string;
 
   @ApiProperty({
     description: 'Correo electrónico para notificaciones de Liberty Finance',
     example: 'carlosperez@hotmail.com',
   })
-  @IsEmail()
+  @IsEmail({},{message:"El mail debe ser valido."})
   mail: string;
 
   @ApiProperty({
@@ -38,6 +38,7 @@ export class CreateUsuarioDto {
     format: 'password',
   })
   @IsString()
+  @Length(5,10)
   contraseña: string;
 
   @ApiProperty({
@@ -59,7 +60,9 @@ export class CreateUsuarioDto {
     example: 6,
   })
   @IsNumber()
-  provincia: Provincia;
+  @Min(1)
+  @Max(2)
+  id_provincia: number; //Provincia
 
   @ApiProperty({
     description: 'ID del perfil de inversor (1: Conservador, 2: Moderado, 3:Agresivo)',
@@ -80,5 +83,7 @@ export class CreateUsuarioDto {
     example: 2,
   })
   @IsNumber()
+  @Min(1)
+  @Max(1)
   id_rol: number;
 }
