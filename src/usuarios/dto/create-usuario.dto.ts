@@ -59,7 +59,7 @@ export class CreateUsuarioDto {
     example: 6,
   })
   @IsNumber()
-  provincia: Provincia;
+  id_provincia: number; //Provincia
 
   @ApiProperty({
     description: 'ID del perfil de inversor (1: Conservador, 2: Moderado, 3:Agresivo)',
