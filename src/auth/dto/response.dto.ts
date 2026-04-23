@@ -16,7 +16,7 @@ export class LoginResponseDTO {
   @ApiProperty({ 
     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...', 
     description: 'Token JWT para autenticar peticiones posteriores',
-    required: false // Por si usas este mismo DTO para respuestas sin token
+    required: false 
   })
   token?: string;
 }

@@ -23,7 +23,7 @@ export class AuthController {
       }
     }
   })
-  @ApiResponse({ status: 200, description: 'Login exitoso. Devuelve el access_token.' })
+  @ApiResponse({ status: 200, description: 'Login exitoso. Devuelve el token (JWT).' })
   @ApiResponse({ status: 401, description: 'Credenciales incorrectas.' })
   async login(@Body() loginDto: LoginUsuarioDTO) {
     return await this.authService.login(loginDto);
