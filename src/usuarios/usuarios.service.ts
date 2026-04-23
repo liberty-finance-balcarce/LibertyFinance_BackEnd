@@ -173,5 +173,15 @@ export class UsuariosService {
       data: res,
     };
   }
+  
+async findByDniWithPassword(dni: number): Promise<Usuario | null> {
+  return await this.usuarioRepository.findOne({
+    where: { dni_usuario: dni },
+    // Importante: Forzamos la selección de 'contraseña' que tiene select: false
+    select: ['dni_usuario', 'mail', 'contraseña', 'nombre'], 
+    relations: ['rol'],
+  });
+}
+
 }
 

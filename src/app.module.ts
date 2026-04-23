@@ -7,6 +7,7 @@ import { InstrumentosFinancierosModule } from './instrumentos-financieros/instru
 import { ProvinciasModule } from './provincias/provincias.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/transaccion-historico-venta.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -23,7 +24,8 @@ import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/t
     InstrumentosFinancierosModule,
     ProvinciasModule,
     UsuariosModule,
-    TransaccionHistoricoVentaModule
+    TransaccionHistoricoVentaModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

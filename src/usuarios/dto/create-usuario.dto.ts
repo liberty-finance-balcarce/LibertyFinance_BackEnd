@@ -38,7 +38,7 @@ export class CreateUsuarioDto {
     format: 'password',
   })
   @IsString()
-  @Length(5,10)
+  @Length(4,10)
   contraseña: string;
 
   @ApiProperty({
