@@ -60,7 +60,8 @@ export class CreateUsuarioDto {
     example: 6,
   })
   @IsNumber({},{message:"El ID de la provincia debe ser un numero."})
-  @Length(1,2,{message:"El ID de la provincia debe tener entre 1 y 2 digitos."}) 
+  @Min(1,{message:"El ID de la provincia debe mayor a 0."}) 
+  @Max(99,{message:"El ID de la provincia debe ser menor a 100."}) 
   id_provincia: number; //Provincia
 
   @ApiProperty({
