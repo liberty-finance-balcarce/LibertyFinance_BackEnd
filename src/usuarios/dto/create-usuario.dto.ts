@@ -38,52 +38,50 @@ export class CreateUsuarioDto {
     format: 'password',
   })
   @IsString()
-  @Length(5,10)
+  @Length(4,10)
   contraseña: string;
 
   @ApiProperty({
     description: 'Número de contacto para Liberty Finance',
     example: '2266531122',
   })
-  @IsString()
+  @IsString({message:"La numero de telefono debe ser una cadena de texto."})
   numero_telefono: string;
 
   @ApiProperty({
     description: 'Dirección física de residencia',
     example: 'Calle 20 Nro 742',
   })
-  @IsString()
+  @IsString({message:"La direccion debe ser una cadena de texto."})
   direccion: string;
 
   @ApiProperty({
     description: 'ID de la provincia (Relación)',
     example: 6,
   })
-  @IsNumber()
-  @Min(1)
-  @Max(2)
+  @IsNumber({},{message:"El ID de la provincia debe ser un numero."})
+  @Min(1,{message:"El ID de la provincia debe mayor a 0."}) 
+  @Max(99,{message:"El ID de la provincia debe ser menor a 100."}) 
   id_provincia: number; //Provincia
 
   @ApiProperty({
     description: 'ID del perfil de inversor (1: Conservador, 2: Moderado, 3:Agresivo)',
     example: 2,
   })
-  @IsNumber()
+  @IsNumber({},{message:"El ID de perfil de inversor debe ser un numero."})
   id_perfilinv: number;
 
   @ApiProperty({
     description: 'Código para el sistema de referidos',
     example: 505,
   })
-  @IsNumber()
+  @IsNumber({},{message:"El ID de codigo de referidos debe ser un numero."})
   id_codigo_referidos: number;
 
   @ApiProperty({
     description: 'Rol del usuario (1: invitado, 2: Usuario, 3: Administrador)',
     example: 2,
   })
-  @IsNumber()
-  @Min(1)
-  @Max(1)
+  @IsNumber({},{message:"El rol debe ser un numero."})
   id_rol: number;
 }
