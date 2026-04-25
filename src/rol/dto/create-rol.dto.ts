@@ -1,18 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { RolEnum } from "../entities/rol.entity";
-import { IsEnum, IsNotEmpty } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateRolDto {
-    @ApiProperty({
-        enum: RolEnum,
-        example: RolEnum.USUARIO_REGISTRADO,
-    })
-
-    @IsEnum(RolEnum, { message: 'El rol debe ser uno de los siguientes: USUARIO_REGISTRADO, ADMINISTRADOR' })
-    @ApiProperty({
-        enum: RolEnum,
-        example: RolEnum.USUARIO_REGISTRADO,
-    })
-    @IsNotEmpty()
-    nombre: RolEnum;
+  @IsString({ message: 'El rol debe ser un texto' })
+  @ApiProperty({
+    example: 'user',
+  })
+  @IsNotEmpty({ message: 'El nombre del rol es requerido' })
+  nombre: string;
 }
