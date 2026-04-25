@@ -37,8 +37,8 @@ export class CreateUsuarioDto {
     example: 'pass1234',
     format: 'password',
   })
-  @IsString({message:"La contraseña debe ser una cadena de texto."})
-  @Length(5,10)
+  @IsString()
+  @Length(4,10)
   contraseña: string;
 
   @ApiProperty({
