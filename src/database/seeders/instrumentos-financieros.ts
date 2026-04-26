@@ -4,14 +4,16 @@ import {
   Riesgo,
   TipoInstrumento,
 } from 'src/instrumentos-financieros/entities/instrumento-financiero.entity';
+import { CreateInstrumentoFinancieroDto } from 'src/instrumentos-financieros/dto/create-instrumento-financiero.dto';
 
-export const InstrumentosFinancieros: Partial<InstrumentoFinanciero>[] = [
+export const InstrumentosFinancieros: CreateInstrumentoFinancieroDto[] = [
   {
     nombre_instrumento: 'Plazo Fijo',
     rendimiento: 75,
     riesgo: Riesgo.BAJO,
     precio_instrumento: 10000,
     tipo_instrumento: TipoInstrumento.TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/3135/3135706.png',
   },
   {
     nombre_instrumento: 'Bonos del Estado',
@@ -19,6 +21,7 @@ export const InstrumentosFinancieros: Partial<InstrumentoFinanciero>[] = [
     riesgo: Riesgo.BAJO,
     precio_instrumento: 5000,
     tipo_instrumento: TipoInstrumento.TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/2830/2830284.png',
   },
   {
     nombre_instrumento: 'Acciones',
@@ -26,6 +29,7 @@ export const InstrumentosFinancieros: Partial<InstrumentoFinanciero>[] = [
     riesgo: Riesgo.MEDIO,
     precio_instrumento: 15000,
     tipo_instrumento: TipoInstrumento.TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/2920/2920277.png',
   },
   {
     nombre_instrumento: 'Fondos Comunes de Inversión',
@@ -33,6 +37,7 @@ export const InstrumentosFinancieros: Partial<InstrumentoFinanciero>[] = [
     riesgo: Riesgo.MEDIO,
     precio_instrumento: 8000,
     tipo_instrumento: TipoInstrumento.TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/2331/2331970.png',
   },
   {
     nombre_instrumento: 'Criptomonedas',
@@ -40,6 +45,7 @@ export const InstrumentosFinancieros: Partial<InstrumentoFinanciero>[] = [
     riesgo: Riesgo.ALTO,
     precio_instrumento: 20000,
     tipo_instrumento: TipoInstrumento.NO_TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/6001/6001527.png',
   },
   {
     nombre_instrumento: 'NFTs',
@@ -47,6 +53,7 @@ export const InstrumentosFinancieros: Partial<InstrumentoFinanciero>[] = [
     riesgo: Riesgo.ALTO,
     precio_instrumento: 12000,
     tipo_instrumento: TipoInstrumento.NO_TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/2592/2592201.png',
   },
 ];
 
