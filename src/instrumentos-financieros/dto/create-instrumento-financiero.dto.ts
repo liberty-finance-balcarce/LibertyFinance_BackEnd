@@ -7,6 +7,7 @@ import {
   Max,
   Length,
   IsDefined,
+  IsUrl,
 } from 'class-validator';
 import {
   Riesgo,
@@ -17,13 +18,14 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateInstrumentoFinancieroDto {
   @IsString({ message: 'El nombre del instrumento debe ser un string' })
   @IsNotEmpty({ message: 'El nombre del instrumento es obligatorio' })
-  @ApiProperty({ example: 'Bono',
+  @ApiProperty({
+    example: 'Bono',
     minLength: 3,
     maxLength: 50,
-    description: 'Nombre del instrumento financiero'
-   })
+    description: 'Nombre del instrumento financiero',
+  })
   @Length(3, 50, {
-    message: 'El nombre del instrumento debe tener entre 3 y 50 caracteres'
+    message: 'El nombre del instrumento debe tener entre 3 y 50 caracteres',
   })
   nombre_instrumento: string;
 
@@ -44,13 +46,13 @@ export class CreateInstrumentoFinancieroDto {
     format: 'float',
     description: 'Rendimiento del instrumento en porcentaje',
     minimum: -99,
-    maximum: 10000
+    maximum: 10000,
   })
   rendimiento: number;
 
   @IsEnum(Riesgo)
-  @ApiProperty({ 
-    enum: Riesgo, 
+  @ApiProperty({
+    enum: Riesgo,
     example: Riesgo.MEDIO,
     description: 'Nivel de riesgo del instrumento',
   })
@@ -78,4 +80,15 @@ export class CreateInstrumentoFinancieroDto {
     description: 'Tipo del instrumento',
   })
   tipo_instrumento: TipoInstrumento;
+  @IsUrl({}, { message: 'La url del logo debe ser una URL valida' })
+  @IsNotEmpty({ message: 'La url del logo no puede estar vacia' })
+  @Length(5, 255, {
+    message: 'La url del logo debe tener entre 5 y 255 caracteres',
+  })
+  @ApiProperty({
+    type: 'string',
+    example: 'https://mi-cdn.com/logos/bono.png',
+    description: 'Url del logo o imagen del instrumento financiero',
+  })
+  logo_url: string;
 }
