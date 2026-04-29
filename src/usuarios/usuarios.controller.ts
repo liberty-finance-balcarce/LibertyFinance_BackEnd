@@ -9,6 +9,7 @@ import {
   Query,
   HttpStatus,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { 
   ApiTags, 
@@ -23,10 +24,13 @@ import {
   ApiCreatedResponse,
   ApiOkResponse
 } from '@nestjs/swagger';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { ResponseDTO } from './dto/response.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
 
 @ApiTags('usuarios')
 @Controller('usuarios')
@@ -80,7 +84,10 @@ export class UsuariosController {
     return await this.usuariosService.update(dni, modificaciones);
   }
 
+
   @Delete(':dni')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Eliminar usuario', description: 'Elimina permanentemente un usuario de la base de datos por su DNI.' })
   @ApiParam({ name: 'dni', description: 'DNI del usuario a eliminar' })
