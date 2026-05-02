@@ -33,7 +33,7 @@ export const TransaccionesHistoricoCompra: DeepPartial<TransaccionHistoricoCompr
 export async function seedTransaccionHistoricoCompra(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(TransaccionHistoricoCompra);
 
-    console.info('Seeding transacciones historico compra...');
+    console.info('Seeding transacción historico compra...');
 
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.query('TRUNCATE TABLE transaccion_historico_compra;');
@@ -42,5 +42,5 @@ export async function seedTransaccionHistoricoCompra(dataSource: DataSource): Pr
     const data = repository.create(TransaccionesHistoricoCompra);
     await repository.save(data);
 
-    console.info('Transacciones historico compra seed completado.');
+    console.info('Transacción historico compra seed completado.');
 }
