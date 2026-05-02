@@ -19,7 +19,6 @@ async login(loginUsuario:LoginUsuarioDTO):Promise<LoginResponseDTO> {
   const {dni_usuario,contraseña}=loginUsuario;
   const usuario = await this.usuariosService.findByDniWithPassword(dni_usuario);
   if (!usuario) {
-  
     throw new UnauthorizedException('Credenciales incorrectas');
   }
 
