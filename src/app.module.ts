@@ -7,6 +7,7 @@ import { InstrumentosFinancierosModule } from './instrumentos-financieros/instru
 import { ProvinciasModule } from './provincias/provincias.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/transaccion-historico-venta.module';
+import { TransaccionHistoricoCompraModule } from './transaccion-historico-compra/transaccion-historico-compra.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -24,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
     InstrumentosFinancierosModule,
     ProvinciasModule,
     UsuariosModule,
+    TransaccionHistoricoCompraModule,
     TransaccionHistoricoVentaModule,
     AuthModule
   ],
