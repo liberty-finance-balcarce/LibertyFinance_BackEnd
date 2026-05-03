@@ -124,5 +124,5 @@ export async function seedProvincias(dataSource: DataSource,): Promise<void> {
   const data = repo.create(Provincias);
   await repo.save(data);
 
-  console.info('Instrumentos financieros seed completado.');
+  console.info('Provincias seed completado.');
 }
