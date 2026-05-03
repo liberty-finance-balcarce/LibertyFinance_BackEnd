@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
     port: Number(process.env.DB_PORT ?? defaultPort),
     username: process.env.DB_USER ?? 'root',
     password: process.env.DB_PASSWORD ?? 'root',
-    database: process.env.DB_NAME ?? 'libertyfinance',
+    database: process.env.DB_NAME ?? 'libertyfinance2',
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     synchronize: false
 })
