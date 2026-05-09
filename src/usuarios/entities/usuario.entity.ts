@@ -23,10 +23,16 @@ export class Usuario{
   @Column() 
   id_codigo_referidos:number
   
+
+  @Column()
+  id_rol:number;
   @ManyToOne(()=> Rol, (rol)=> rol.usuarios)
   @JoinColumn({name:'id_rol'})
   rol:Rol
 
+
+  @Column()
+  id_provincia:number;
   @ManyToOne(()=>Provincia,{nullable:false})       //@ManyToOne(()=>Provincia)
   @JoinColumn({name:'id_provincia'})
   provincia:Provincia      //provincia:Provincia
