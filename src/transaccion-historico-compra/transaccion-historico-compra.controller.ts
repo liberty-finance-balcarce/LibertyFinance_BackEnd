@@ -20,7 +20,7 @@ import {
 } from '@nestjs/swagger';
 
 @ApiTags('Transaccion Historico Compra')
-@Controller('transaccion-historico-Compra')
+@Controller('transaccion-historico-compra')
 export class TransaccionHistoricoCompraController {
   constructor(
     private readonly transaccionHistoricoCompraService: TransaccionHistoricoCompraService,
