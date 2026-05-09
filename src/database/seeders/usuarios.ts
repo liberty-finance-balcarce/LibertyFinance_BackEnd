@@ -2,7 +2,6 @@ import { DataSource } from 'typeorm';
 import {Usuario} from 'src/usuarios/entities/usuario.entity'
 import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto'
 import chalk from 'chalk';
-import { Provincias } from './provincias';
 
 export const Usuarios: CreateUsuarioDto[] = [
 {
@@ -64,6 +63,7 @@ export async function seedUsuarios(dataSource: DataSource,): Promise<void> {
 
   console.log("Revisando Tabla de Usuarios...");
   const existDatos= await repo.count();
+  console.log(existDatos);
   if (existDatos>0){
        console.log(chalk.bgRed.white.bold("La tabla usuarios NO ESTA VACIA."));
        return;
