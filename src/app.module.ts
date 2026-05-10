@@ -9,6 +9,8 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/transaccion-historico-venta.module';
 import { TransaccionHistoricoCompraModule } from './transaccion-historico-compra/transaccion-historico-compra.module';
 import { AuthModule } from './auth/auth.module';
+import { RolModule } from './rol/rol.module';
+import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -27,7 +29,9 @@ import { AuthModule } from './auth/auth.module';
     UsuariosModule,
     TransaccionHistoricoCompraModule,
     TransaccionHistoricoVentaModule,
-    AuthModule
+    AuthModule,
+    RolModule,
+    PerfilInversorModule
   ],
   controllers: [AppController],
   providers: [AppService],
