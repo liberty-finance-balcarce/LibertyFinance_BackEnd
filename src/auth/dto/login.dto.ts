@@ -1,7 +1,7 @@
 import { IsNumber, IsString, IsNotEmpty} from "class-validator";
 import {Type} from "class-transformer";
 
-export class LoginUsuarioDTO{
+export class LoginDTO{
   @IsNotEmpty({message: 'El DNI es obligatorio.'})
   @Type(()=>Number)
   @IsNumber({},{message: 'El DNI debe ser numerico.'})
