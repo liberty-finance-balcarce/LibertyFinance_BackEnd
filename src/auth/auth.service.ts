@@ -1,12 +1,11 @@
 import {
   HttpStatus,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUsuarioDTO } from './dto/login-usuario.dto';
+import { LoginDTO } from './dto/login.dto';
 import { LoginResponseDTO } from './dto/response.dto';
 import bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,9 +25,12 @@ export class AuthService {
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
-  async login(loginUsuario: LoginUsuarioDTO): Promise<LoginResponseDTO> {
+  async login(loginUsuario: LoginDTO): Promise<LoginResponseDTO> {
     const { dni_usuario, contraseña } = loginUsuario;
-    const usuario = await this.usuarioRepository.findOneBy({ dni_usuario });
+    const usuario = await this.usuarioRepository.findOne({
+      where: { dni_usuario },
+      select: ['dni_usuario', 'contraseña', 'mail', 'id_rol'],
+    });
     if (!usuario) {
       throw new UnauthorizedException('Credenciales incorrectas');
     }
@@ -41,12 +43,12 @@ export class AuthService {
     const payload = {
       sub: usuario.dni_usuario,
       email: usuario.mail,
-      rol: usuario.rol.id_rol,
+      rol: usuario.id_rol,
     };
     return {
       statusCode: 200,
       message: 'Login exitoso',
-      token: await this.jwtService.signAsync(payload),
+      data:{token:await this.jwtService.signAsync(payload)}
     };
   }
   async getProfile(dni: number): Promise<ResponseDTO<Usuario>> {
