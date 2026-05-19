@@ -7,6 +7,7 @@ import { InstrumentosFinancierosModule } from './instrumentos-financieros/instru
 import { ProvinciasModule } from './provincias/provincias.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/transaccion-historico-venta.module';
+import { TransaccionHistoricoCompraModule } from './transaccion-historico-compra/transaccion-historico-compra.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -18,11 +19,12 @@ import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/t
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: false,
+      synchronize: true,
     }),
     InstrumentosFinancierosModule,
     ProvinciasModule,
     UsuariosModule,
+    TransaccionHistoricoCompraModule,
     TransaccionHistoricoVentaModule
   ],
   controllers: [AppController],

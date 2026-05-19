@@ -86,11 +86,8 @@ export class UsuariosController {
 
 
   @Delete(':dni')
-<<<<<<< HEAD
-=======
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(2)
->>>>>>> b3e82ee24ba1fbd8551e22094e874f66fadeb592
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Eliminar usuario', description: 'Elimina permanentemente un usuario de la base de datos por su DNI.' })
   @ApiParam({ name: 'dni', description: 'DNI del usuario a eliminar' })

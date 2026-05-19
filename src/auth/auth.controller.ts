@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import { Body, Controller, Post, HttpCode, HttpStatus } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
-import { LoginUsuarioDTO } from './dto/login-usuario.dto';
-=======
 import {
   Body,
   Controller,
@@ -23,7 +17,6 @@ import { ResponseDTO } from 'src/common/dto/response.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 
->>>>>>> b3e82ee24ba1fbd8551e22094e874f66fadeb592
 
 @ApiTags('Autenticación')
 @Controller('auth')
@@ -32,29 +25,16 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-<<<<<<< HEAD
-  @ApiOperation({ 
-    summary: 'Iniciar sesión', 
-    description: 'Recibe el DNI ("dni_usuario") y la contraseña ("contraseña") para generar un token JWT.' 
-=======
   @ApiOperation({
     summary: 'Iniciar sesión',
     description:
       'Recibe el DNI ("dni_usuario") y la contraseña ("contraseña") para generar un token JWT.',
->>>>>>> b3e82ee24ba1fbd8551e22094e874f66fadeb592
   })
   @ApiBody({
     schema: {
       type: 'object',
       properties: {
         dni_usuario: { type: 'number', example: 26134695 },
-<<<<<<< HEAD
-        contraseña: { type: 'string', example: '1234' }
-      }
-    }
-  })
-  @ApiResponse({ status: 200, description: 'Login exitoso. Devuelve el token (JWT).' })
-=======
         contraseña: { type: 'string', example: '1234' },
       },
     },
@@ -63,13 +43,10 @@ export class AuthController {
     status: 200,
     description: 'Login exitoso. Devuelve el token (JWT).',
   })
->>>>>>> b3e82ee24ba1fbd8551e22094e874f66fadeb592
   @ApiResponse({ status: 401, description: 'Credenciales incorrectas.' })
   async login(@Body() loginDto: LoginUsuarioDTO) {
     return await this.authService.login(loginDto);
   }
-<<<<<<< HEAD
-=======
 
   @Get('profile')
   @ApiOperation({ summary: 'Obtener informacion del usuario'})
@@ -91,5 +68,4 @@ export class AuthController {
     return await this.authService.register(newUser);
   }
 
->>>>>>> b3e82ee24ba1fbd8551e22094e874f66fadeb592
 }

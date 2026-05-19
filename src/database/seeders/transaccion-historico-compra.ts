@@ -8,25 +8,25 @@ export const TransaccionesHistoricoCompra: DeepPartial<TransaccionHistoricoCompr
         fecha_operacion: '2025-08-26',
         id_instrumento: {id_instrumento: 1} ,
         precio_instrumento: 10000,
-        dni_usuario: {dni_usuario: 12345678},
+        dni_usuario: {dni_usuario: 26134695},
     },
     {
         fecha_operacion: '2025-07-10',
         id_instrumento: {id_instrumento: 2},
         precio_instrumento: 5000,
-        dni_usuario: {dni_usuario: 87654321},
+        dni_usuario: {dni_usuario: 35000000},
     },
     {
         fecha_operacion: '2026-09-14',
         id_instrumento: {id_instrumento: 6},
         precio_instrumento: 500000,
-        dni_usuario: {dni_usuario: 87658951},
+        dni_usuario: {dni_usuario: 52000000},
     },
     {
         fecha_operacion: '2025-12-23',
         id_instrumento: {id_instrumento: 3},
         precio_instrumento: 24000,
-        dni_usuario: {dni_usuario: 63554321},
+        dni_usuario: {dni_usuario: 36000000},
     }
 ];
 
