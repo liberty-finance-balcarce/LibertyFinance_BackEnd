@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { Rol } from 'src/rol/entities/rol.entity';
 import { CreateRolDto } from 'src/rol/dto/create-rol.dto';
 
-export const Rols: CreateRolDto[] = [
+export const Roles: CreateRolDto[] = [
   {
     nombre: 'Administrador',
   },
@@ -22,7 +22,7 @@ export async function seedRol(dataSource: DataSource): Promise<void> {
 
   await dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
 
-  const data = repo.create(Rols);
+  const data = repo.create(Roles);
   await repo.save(data);
 
   console.info('Rol seed completado.');
