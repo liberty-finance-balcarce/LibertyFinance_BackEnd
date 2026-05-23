@@ -70,12 +70,6 @@ export async function seedUsuarios(dataSource: DataSource): Promise<void> {
 
   console.info('Seeding Usuarios...');
 
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
-
-  await dataSource.query('TRUNCATE TABLE usuarios');
-
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
-
   const data = repo.create(Usuarios);
   await repo.save(data);
 

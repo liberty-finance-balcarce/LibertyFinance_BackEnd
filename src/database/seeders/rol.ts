@@ -16,8 +16,6 @@ export async function seedRol(dataSource: DataSource): Promise<void> {
 
   console.info('Seeding Rol...');
 
-  await dataSource.query('TRUNCATE TABLE rol');
-
   const data = repo.create(Roles);
   await repo.save(data);
 

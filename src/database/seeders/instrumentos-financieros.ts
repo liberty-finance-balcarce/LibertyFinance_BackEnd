@@ -64,12 +64,6 @@ export async function seedInstrumentosFinancieros(
 
   console.info('Seeding instrumentos financieros...');
 
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
-
-  await dataSource.query('TRUNCATE TABLE instrumentos_financieros');
-
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
-
   const data = repo.create(InstrumentosFinancieros);
   await repo.save(data);
 
