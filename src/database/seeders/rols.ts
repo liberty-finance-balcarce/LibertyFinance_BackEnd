@@ -16,11 +16,7 @@ export async function seedRol(dataSource: DataSource): Promise<void> {
 
   console.info('Seeding Rol...');
 
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
-
   await dataSource.query('TRUNCATE TABLE rol');
-
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
 
   const data = repo.create(Roles);
   await repo.save(data);
