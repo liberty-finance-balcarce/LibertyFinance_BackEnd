@@ -8,9 +8,6 @@ import { ProvinciasModule } from './provincias/provincias.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { TransaccionHistoricoVentaModule } from './transaccion-historico-venta/transaccion-historico-venta.module';
 import { TransaccionHistoricoCompraModule } from './transaccion-historico-compra/transaccion-historico-compra.module';
-import { AuthModule } from './auth/auth.module';
-import { RolModule } from './rol/rol.module';
-import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -22,16 +19,13 @@ import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: false,
+      synchronize: true,
     }),
     InstrumentosFinancierosModule,
     ProvinciasModule,
     UsuariosModule,
     TransaccionHistoricoCompraModule,
-    TransaccionHistoricoVentaModule,
-    AuthModule,
-    RolModule,
-    PerfilInversorModule
+    TransaccionHistoricoVentaModule
   ],
   controllers: [AppController],
   providers: [AppService],
