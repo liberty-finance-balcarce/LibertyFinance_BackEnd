@@ -23,12 +23,6 @@ export async function seedPerfilInversor(
   const repo = dataSource.getRepository(PerfilInversor);
   console.info('Seeding Perfil Inversor...');
 
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 0');
-
-  await dataSource.query('TRUNCATE TABLE perfil_inversor');
-
-  await dataSource.query('SET FOREIGN_KEY_CHECKS = 1');
-
   const data = repo.create(PerfilInversores);
   await repo.save(data);
   console.info('Perfil Inversor seed completado.');
