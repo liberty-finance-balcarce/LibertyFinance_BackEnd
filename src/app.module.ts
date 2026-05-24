@@ -19,7 +19,7 @@ import { TransaccionHistoricoCompraModule } from './transaccion-historico-compra
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: true,
+      synchronize: false,
     }),
     InstrumentosFinancierosModule,
     ProvinciasModule,
