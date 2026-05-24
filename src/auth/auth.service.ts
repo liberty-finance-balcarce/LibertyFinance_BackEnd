@@ -47,8 +47,12 @@ export class AuthService {
       data: { token: await this.jwtService.signAsync(payload) },
     };
   }
+
   async getProfile(dni: number): Promise<ResponseDTO<Usuario>> {
-    const user = await this.usuarioRepository.findOneBy({ dni_usuario: dni });
+    const user = await this.usuarioRepository.findOne({
+      where: { dni_usuario: dni },
+      relations: { rol: true, provincia: true },
+    });
     if (!user) throw new NotFoundException('Usuario no encontrado');
     return {
       statusCode: HttpStatus.OK,
