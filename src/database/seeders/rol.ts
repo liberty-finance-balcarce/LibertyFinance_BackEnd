@@ -4,10 +4,10 @@ import { CreateRolDto } from 'src/rol/dto/create-rol.dto';
 
 export const Roles: CreateRolDto[] = [
   {
-    nombre: 'Administrador',
+    nombre: 'user',
   },
   {
-    nombre: 'Usuario',
+    nombre: 'admin',
   },
 ];
 
