@@ -1,12 +1,7 @@
-import {
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDTO } from './dto/login.dto';
-import { LoginResponseDTO } from './dto/response.dto';
 import bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
@@ -15,6 +10,7 @@ import { RegisterDTO } from './dto/register.dto';
 import { UsuariosService } from 'src/usuarios/usuarios.service';
 import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';
 import { ResponseDTO } from 'src/common/dto/response.dto';
+import { LoginResponse } from './dto/login-response';
 
 @Injectable()
 export class AuthService {
@@ -25,7 +21,7 @@ export class AuthService {
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
 
-  async login(loginUsuario: LoginDTO): Promise<LoginResponseDTO> {
+  async login(loginUsuario: LoginDTO): Promise<ResponseDTO<LoginResponse>> {
     const { dni_usuario, contraseña } = loginUsuario;
     const usuario = await this.usuarioRepository.findOne({
       where: { dni_usuario },
@@ -48,7 +44,7 @@ export class AuthService {
     return {
       statusCode: 200,
       message: 'Login exitoso',
-      data:{token:await this.jwtService.signAsync(payload)}
+      data: { token: await this.jwtService.signAsync(payload) },
     };
   }
   async getProfile(dni: number): Promise<ResponseDTO<Usuario>> {
@@ -60,9 +56,14 @@ export class AuthService {
       data: user,
     };
   }
-  async register(usuario: RegisterDTO) {
+
+  async register(usuario: RegisterDTO): Promise<ResponseDTO> {
     const rol: number = 1;
     const newUsuario: CreateUsuarioDto = { ...usuario, id_rol: rol };
-    return await this.usuariosService.create(newUsuario);
+    await this.usuariosService.create(newUsuario);
+    return {
+      statusCode: HttpStatus.CREATED,
+      message: 'Usuario creado exitosamente',
+    };
   }
 }

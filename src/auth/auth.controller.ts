@@ -19,12 +19,14 @@ import {
   ApiConflictResponse,
   ApiOkResponse,
   ApiNotFoundResponse,
+  ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { LoginDTO } from './dto/login.dto';
 import { type Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { ResponseDTO } from 'src/common/dto/response.dto';
 import { RegisterDTO } from './dto/register.dto';
+import { LoginResponse } from './dto/login-response';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 
 @ApiTags('Autenticación')
@@ -48,13 +50,12 @@ export class AuthController {
       },
     },
   })
-  @ApiResponse({
-    status: 200,
+  @ApiOkResponse({
     description: 'Login exitoso. Devuelve el token (JWT).',
   })
-  @ApiResponse({ status: 401, description: 'Credenciales incorrectas.' })
-  async login(@Body() loginDto: LoginDTO) {
-    return await this.authService.login(loginDto);
+  @ApiUnauthorizedResponse({ description: 'Credenciales incorrectas.' })
+  async login(@Body() loginDto: LoginDTO): Promise<ResponseDTO<LoginResponse>> {
+    return this.authService.login(loginDto);
   }
 
   @Get('profile')
@@ -65,7 +66,7 @@ export class AuthController {
   @ApiNotFoundResponse({ description: 'Usuario no encontrado' })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  async getProfile(@Req() req: Request) {
+  async getProfile(@Req() req: Request): Promise<ResponseDTO<Usuario>> {
     const dni = (req.user as any).sub;
     return this.authService.getProfile(dni);
   }
@@ -77,11 +78,11 @@ export class AuthController {
       'Registra un nuevo usuario. El DNI y el Email deben ser únicos.',
   })
   @ApiBody({ type: RegisterDTO })
-  @ApiCreatedResponse({ description: 'Usuario Creado Exitosamente!' })
+  @ApiCreatedResponse({ description: 'Usuario creado exitosamente' })
   @ApiConflictResponse({
     description: 'Conflicto: El DNI o el Email ya existen en la base de datos.',
   })
-  async register(@Body() newUser: RegisterDTO): Promise<ResponseDTO<Usuario>> {
-    return await this.authService.register(newUser);
+  async register(@Body() newUser: RegisterDTO): Promise<ResponseDTO> {
+    return this.authService.register(newUser);
   }
 }
