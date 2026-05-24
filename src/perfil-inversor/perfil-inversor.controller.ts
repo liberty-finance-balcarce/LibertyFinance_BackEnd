@@ -6,7 +6,7 @@ import { CreatePerfilInversorDto } from './dto/create-perfil-inversor.dto';
 import { UpdatePerfilInversorDto } from './dto/update-perfil-inversor.dto';
 
 @ApiTags('Perfil Inversor')
-@Controller('perfil_inversor')
+@Controller('perfil-inversor')
 export class PerfilInversorController {
     constructor(
         private readonly perfilInversorService: PerfilInversorService,) { }

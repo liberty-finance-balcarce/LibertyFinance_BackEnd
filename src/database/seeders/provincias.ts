@@ -1,9 +1,8 @@
 import { DataSource } from 'typeorm';
 import { Provincia } from 'src/provincias/entities/provincia.entity';
-import { CreateProvinciaDto } from 'src/provincias/dto/create-provincia.dto';
 import chalk from 'chalk';
 
-export const Provincias: CreateProvinciaDto[] = [
+export const Provincias: Provincia[] = [
   {
     id: 2,
     provincia: 'CABA',

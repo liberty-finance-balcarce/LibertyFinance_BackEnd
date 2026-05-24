@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsNumber } from 'class-validator';
 
 export class CreateTransaccionHistoricoVentaDto {
-  @IsDateString({}, { message: 'La fecha de operación debe ser una fecha válida.' })
+  @IsDateString({}, { message: 'La fecha de operación debe ser una fecha válida' })
   @ApiProperty({ example: '2022-01-01',
     description: 'Fecha de la operación',
     type: 'string',
@@ -10,7 +10,7 @@ export class CreateTransaccionHistoricoVentaDto {
    })
   fecha_operacion: string;
 
-  @IsNumber({}, { message: 'El id del instrumento debe ser un número.' })
+  @IsNumber({}, { message: 'El id del instrumento debe ser un número' })
   @ApiProperty({ example: 1,
     description: 'Id del instrumento',
     type: 'number',
@@ -19,7 +19,7 @@ export class CreateTransaccionHistoricoVentaDto {
    })
   id_instrumento: number;
 
-  @IsNumber({}, { message: 'El precio del instrumento debe ser un número.' })
+  @IsNumber({}, { message: 'El precio del instrumento debe ser un número' })
   @ApiProperty({ example: 100, 
     description: 'Precio del instrumento',
     type: 'number',
@@ -28,7 +28,7 @@ export class CreateTransaccionHistoricoVentaDto {
   })
   precio_instrumento: number;
 
-  @IsNumber({}, { message: 'El DNI del usuario debe ser un número.' })
+  @IsNumber({}, { message: 'El DNI del usuario debe ser un número' })
   @ApiProperty({ example: 12345678,
     description: 'DNI del usuario',
     type: 'number',
