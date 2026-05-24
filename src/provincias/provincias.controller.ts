@@ -1,4 +1,4 @@
-import { Controller, Get} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ProvinciasService } from './provincias.service';
 
 @Controller('provincias')
@@ -9,5 +9,4 @@ export class ProvinciasController {
   findAll() {
     return this.provinciasService.findAll();
   }
-
 }

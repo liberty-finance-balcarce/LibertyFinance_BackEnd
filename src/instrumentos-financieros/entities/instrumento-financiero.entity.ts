@@ -27,4 +27,6 @@ export class InstrumentoFinanciero {
     precio_instrumento: number;
     @Column({ type: 'enum', enum: TipoInstrumento })
     tipo_instrumento: TipoInstrumento;
+    @Column({ type: 'varchar', length: 255 })
+    logo_url: string;
 }

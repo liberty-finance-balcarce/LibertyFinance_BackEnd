@@ -4,13 +4,12 @@ import { TransaccionHistoricoCompraController } from "./transaccion-historico-co
 import { TransaccionHistoricoCompraService } from "./transaccion-historico-compra.service";
 import { TransaccionHistoricoCompra } from "./entities/transaccion-historico-compra.entity";
 import { InstrumentoFinanciero } from "../instrumentos-financieros/entities/instrumento-financiero.entity";
-
-// Importa las entidades de TypeORM 
-// Permite inyectar los repos en los servicios
+import { Usuario } from "../usuarios/entities/usuario.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      Usuario,
       TransaccionHistoricoCompra,
       InstrumentoFinanciero
     ])

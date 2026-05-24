@@ -1,7 +1,7 @@
 import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 import { Provincia } from './entities/provincia.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository} from 'typeorm';
+import { Repository } from 'typeorm';
 import { ResponseDTO } from './dto/response.dto';
 
 @Injectable()
@@ -10,8 +10,7 @@ export class ProvinciasService {
     @InjectRepository(Provincia)
     private readonly provinciaRepository: Repository<Provincia>,
   ) {}
-  
-  
+
   async findAll(): Promise<ResponseDTO> {
     const provincias = await this.provinciaRepository.find();
     if (!provincias.length)
@@ -22,5 +21,4 @@ export class ProvinciasService {
       data: provincias,
     };
   }
-
 }
