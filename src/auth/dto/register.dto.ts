@@ -45,7 +45,12 @@ export class RegisterDTO {
     format: 'password',
   })
   @IsString()
-  @Length(4, 10)
+  @Length(8, 8)
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[#*])/, {
+    message:
+      'La contraseña puede contener letras y numeros, una mayúscula y un carácter especial (# o *)',
+  })
+
   contraseña: string;
 
   @ApiProperty({
