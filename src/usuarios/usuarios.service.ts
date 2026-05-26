@@ -22,24 +22,25 @@ export class UsuariosService {
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
 
-    @InjectRepository(Provincia) 
+    @InjectRepository(Provincia)
     private readonly provinciaRepository: Repository<Provincia>,
 
-    @InjectRepository(Rol) 
+    @InjectRepository(Rol)
     private readonly rolRepository: Repository<Rol>,
   ) {}
 
   async findAll(): Promise<ResponseDTO> {
     const usuarios = await this.usuarioRepository.find({
-      relations: ['provincia', 'rol'],
+      relations: ['provincia', 'rol', 'perfilinv'],
     });
-    if (!usuarios.length) throw new NotFoundException('NO existen USUARIOS');
+    if (!usuarios.length)
+      throw new NotFoundException('No se han encontrado usuarios');
     return {
       statusCode: HttpStatus.OK,
-      message: 'Lectura de Usuarios Exitosa',
+      message: 'Usuarios obtenidos correctamente',
       data: usuarios,
     };
-  }  
+  }
 
   async create(usuario: CreateUsuarioDto): Promise<ResponseDTO> {
     const existsDNI = await this.usuarioRepository.findOne({
@@ -76,7 +77,7 @@ export class UsuariosService {
     const nuevoUsuario = this.usuarioRepository.create({
       ...usuario,
       contraseña: hashContraseña,
-      provincia:existsProvincia,
+      provincia: existsProvincia,
       rol: existsRol,
     });
     const res = await this.usuarioRepository.save(nuevoUsuario);
@@ -106,39 +107,47 @@ export class UsuariosService {
       throw new BadRequestException(
         'Debe enviar al menos un campo para actualizar',
       );
-    
-    const {id_provincia, id_rol, contraseña, dni_usuario, ...datosRestantes}= modificaciones; 
 
-    if (dni_usuario){
-          throw new ConflictException('No debe existir campo DNI en actualizacion.');
-    }
-    
-    const datosUpdate:QueryDeepPartialEntity<Usuario> = { ...datosRestantes };
+    const { id_provincia, id_rol, contraseña, dni_usuario, ...datosRestantes } =
+      modificaciones;
 
-    if (contraseña){
-         datosUpdate.contraseña = await bcrypt.hash(contraseña,10);
+    if (dni_usuario) {
+      throw new ConflictException(
+        'No debe existir campo DNI en actualizacion.',
+      );
     }
 
-    if (id_provincia){
-       const existsProvincia= await this.provinciaRepository.findOne({ where: { id: id_provincia } });
-       if (!existsProvincia) throw new NotFoundException('Provincia inexistente');
-       datosUpdate.provincia={id:id_provincia}
+    const datosUpdate: QueryDeepPartialEntity<Usuario> = { ...datosRestantes };
+
+    if (contraseña) {
+      datosUpdate.contraseña = await bcrypt.hash(contraseña, 10);
     }
 
-   if (id_rol) {
-    const existsRol = await this.rolRepository.findOne({ where: { id_rol: id_rol } });
-    if (!existsRol) throw new NotFoundException('Rol inexistente');
-    datosUpdate.rol = { id_rol: id_rol };
-  }
-   const res = await this.usuarioRepository.update(dni, datosUpdate);
+    if (id_provincia) {
+      const existsProvincia = await this.provinciaRepository.findOne({
+        where: { id: id_provincia },
+      });
+      if (!existsProvincia)
+        throw new NotFoundException('Provincia inexistente');
+      datosUpdate.provincia = { id: id_provincia };
+    }
 
-  if (!res.affected)
-    throw new NotFoundException('No se encontró DNI con ese numero.') 
+    if (id_rol) {
+      const existsRol = await this.rolRepository.findOne({
+        where: { id_rol: id_rol },
+      });
+      if (!existsRol) throw new NotFoundException('Rol inexistente');
+      datosUpdate.rol = { id_rol: id_rol };
+    }
+    const res = await this.usuarioRepository.update(dni, datosUpdate);
 
-  return {
-    statusCode: HttpStatus.OK,
-    message: `Usuario actualizado correctamente.`,
-  };
+    if (!res.affected)
+      throw new NotFoundException('No se encontró DNI con ese numero.');
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: `Usuario actualizado correctamente.`,
+    };
   }
 
   async getByNombre(nombreBuscar: string): Promise<ResponseDTO> {
@@ -146,7 +155,7 @@ export class UsuariosService {
       where: {
         nombre: Like(`%${nombreBuscar}%`),
       },
-      relations: ['provincia', 'rol'],
+      relations: ['provincia', 'rol', 'perfilinv'],
     });
     if (!res.length)
       throw new NotFoundException('No se encontro usuario/s con ese nombre.');
@@ -161,7 +170,7 @@ export class UsuariosService {
       where: {
         dni_usuario,
       },
-      relations: ['provincia', 'rol'],
+      relations: ['provincia', 'rol', 'perfilinv'],
     });
     if (!res)
       throw new NotFoundException(
@@ -173,15 +182,12 @@ export class UsuariosService {
       data: res,
     };
   }
-  
-async findByDniWithPassword(dni: number): Promise<Usuario | null> {
-  return await this.usuarioRepository.findOne({
-    where: { dni_usuario: dni },
-    // Importante: Forzamos la selección de 'contraseña' que tiene select: false
-    select: ['dni_usuario', 'mail', 'contraseña', 'nombre'], 
-    relations: ['rol'],
-  });
-}
 
+  async findByDniWithPassword(dni: number): Promise<Usuario | null> {
+    return await this.usuarioRepository.findOne({
+      where: { dni_usuario: dni },
+      select: ['dni_usuario', 'mail', 'contraseña', 'nombre'],
+      relations: ['rol'],
+    });
+  }
 }
-
