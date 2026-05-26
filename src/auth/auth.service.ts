@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 import { Repository } from 'typeorm';
-import { RegisterDTO } from './dto/register.dto';
+import { RegisterDto } from './dto/register.dto';
 import { UsuariosService } from 'src/usuarios/usuarios.service';
 import { CreateUsuarioDto } from 'src/usuarios/dto/create-usuario.dto';
 import { ResponseDTO } from 'src/common/dto/response.dto';
@@ -61,7 +61,7 @@ export class AuthService {
     };
   }
 
-  async register(usuario: RegisterDTO): Promise<ResponseDTO> {
+  async register(usuario: RegisterDto): Promise<ResponseDTO> {
     const rol: number = 1;
     const newUsuario: CreateUsuarioDto = { ...usuario, id_rol: rol };
     await this.usuariosService.create(newUsuario);
