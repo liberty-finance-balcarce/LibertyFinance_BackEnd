@@ -1,6 +1,5 @@
 import { DataSource } from 'typeorm';
 import { Provincia } from 'src/provincias/entities/provincia.entity';
-/*import chalk from 'chalk';*/
 
 export const Provincias: Provincia[] = [
   {
@@ -107,7 +106,7 @@ export async function seedProvincias(dataSource: DataSource): Promise<void> {
   console.log('Revisando Tabla de Provincias...');
   const existDatos = await repo.count();
   if (existDatos > 0) {
-    console.log(/*chalk.bgRed.white.bold*/('La tabla provincias NO ESTA VACIA.'));
+    console.log('La tabla provincias NO ESTA VACIA.');
     return;
   }
 
