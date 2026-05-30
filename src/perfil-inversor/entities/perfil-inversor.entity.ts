@@ -5,6 +5,7 @@ export enum PerfilInversorEnum {
   CONSERVADOR = 'Conservador',
   MODERADO = 'Moderado',
   AGRESIVO = 'Agresivo',
+  EXPERTO = 'Experto',
 }
 
 @Entity('perfil_inversor')

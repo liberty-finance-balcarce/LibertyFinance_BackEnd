@@ -15,6 +15,9 @@ export const PerfilInversores: CreatePerfilInversorDto[] = [
   {
     nombre: PerfilInversorEnum.AGRESIVO,
   },
+  {
+    nombre: PerfilInversorEnum.EXPERTO,
+  },
 ];
 
 export async function seedPerfilInversor(
