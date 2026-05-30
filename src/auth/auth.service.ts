@@ -51,7 +51,7 @@ export class AuthService {
   async getProfile(dni: number): Promise<ResponseDTO<Usuario>> {
     const user = await this.usuarioRepository.findOne({
       where: { dni_usuario: dni },
-      relations: { rol: true, provincia: true },
+      relations: { rol: true, provincia: true, perfilinv:true },
     });
     if (!user) throw new NotFoundException('Usuario no encontrado');
     return {

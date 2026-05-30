@@ -1,3 +1,4 @@
+import { PerfilInversor } from 'src/perfil-inversor/entities/perfil-inversor.entity';
 import { Provincia } from 'src/provincias/entities/provincia.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
@@ -14,19 +15,32 @@ export class Usuario {
   mail: string;
   @Column({ select: false })
   contraseña: string;
+  
+  @Column()
+  fecha_nacimiento: Date;
+  @Column()
+  foto_perfil: string;
+
   @Column()
   numero_telefono: string;
   @Column()
   direccion: string;
-  @Column()
+
+  @Column({ select: false })
   id_perfilinv: number;
+  @ManyToOne(()=> PerfilInversor, (perfilinv) => perfilinv.usuarios )
+  @JoinColumn({name:'id_perfilinv'})
+  perfilinv:PerfilInversor;
+
   @Column()
   id_codigo_referidos: number;
+
   @Column({ select: false })
   id_rol: number;
   @ManyToOne(() => Rol, (rol) => rol.usuarios)
   @JoinColumn({ name: 'id_rol' })
   rol: Rol;
+
   @Column({ select: false })
   id_provincia: number;
   @ManyToOne(() => Provincia, { nullable: false })
