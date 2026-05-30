@@ -50,7 +50,9 @@ export class UsuariosService {
     const meses:number=fecha_actual.getMonth()-fecha_cumpleaños.getMonth();
     const dias:number=fecha_actual.getDate()-fecha_cumpleaños.getDate();
     const mayor:boolean=(edad>18)||((edad===18)&&(meses>0))||((edad===18)&&(meses===0)&&(dias>=0));
-    if (mayor){
+    if (!mayor){
+      throw new ConflictException(`Para utilizar la plataforma debe ser mayor de ${edad_admitida} años`);
+      /*
       console.log("fecha actual:",fecha_actual);
       console.log("fecha cumple:",fecha_cumpleaños);
       console.log("edad ",edad);
@@ -59,8 +61,8 @@ export class UsuariosService {
       console.log(" mes cumple ",fecha_cumpleaños.getMonth());
       console.log("dia actual: ",fecha_actual.getDate());
       console.log("dia cumple: ",fecha_cumpleaños.getDate());
-      console.log("Es Mayor de 18 años");
-    } else {
+      console.log("Es Mayor de 18 años");*/
+    }/* else {
        //lanzar error
       console.log("fecha actual:",fecha_actual);
       console.log("fecha cumple:",fecha_cumpleaños);
@@ -71,7 +73,7 @@ export class UsuariosService {
       console.log("dia actual: ",fecha_actual.getDate());
       console.log("dia cumple: ",fecha_cumpleaños.getDate());
        console.log("Es menor de 18 años");
-    }
+    }*/
     const existsDNI = await this.usuarioRepository.findOne({
       where: { dni_usuario: usuario.dni_usuario },
     });
