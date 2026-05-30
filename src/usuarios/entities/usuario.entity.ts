@@ -15,6 +15,12 @@ export class Usuario {
   mail: string;
   @Column({ select: false })
   contraseña: string;
+  
+  @Column()
+  fecha_nacimiento: Date;
+  @Column()
+  foto_perfil: string;
+
   @Column()
   numero_telefono: string;
   @Column()

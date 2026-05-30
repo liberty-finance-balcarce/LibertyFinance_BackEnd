@@ -1,5 +1,5 @@
 import { ApiProperty} from '@nestjs/swagger';
-import {IsString, IsEmail, IsNumber, IsNotEmpty, Length, Min, Max, Matches} from "class-validator";
+import {IsString, IsEmail, IsNumber, IsNotEmpty, Length, Min, Max, Matches, IsDateString, IsOptional, IsUrl} from "class-validator";
 
 
 export class CreateUsuarioDto {
@@ -47,6 +47,23 @@ export class CreateUsuarioDto {
       'La contraseña puede contener letras y numeros. Al menos una minuscula, una mayúscula y un carácter especial (# o *)',
   })
   contraseña: string;
+
+
+  @ApiProperty({
+    description:
+      'El formato de la fecha de nacimiento debe ser: AAAA-MM-DD',
+    example: '1977-11-07',
+  })
+  @IsDateString({}, { message: 'La fecha de nacimiento debe ser una fecha válida' })
+  @Matches(/^\d{4}-\d{2}-\d{2}$/, {
+  message: 'La fecha de nacimiento debe cumplir estrictamente el formato AAAA-MM-DD',
+  })
+  fecha_nacimiento: string;
+
+  @ApiProperty({ example: 'https://imagenes.com/perfil.jpg', required: false })
+  @IsOptional()
+  @IsUrl({}, { message: 'Debe proporcionar una URL válida para la foto de perfil' })
+  foto_perfil?: string;
 
   @ApiProperty({
     description: 'Número de contacto para Liberty Finance',
