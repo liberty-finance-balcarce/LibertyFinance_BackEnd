@@ -18,6 +18,6 @@ export class PerfilInversor {
     unique: true,
   })
   nombre: PerfilInversorEnum;
-  @OneToMany(() => Usuario, (usuario) => usuario.perfilinv)
+  @OneToMany(() => Usuario, (usuario) => usuario.id_perfilinv)
   usuarios: Usuario[];
 }

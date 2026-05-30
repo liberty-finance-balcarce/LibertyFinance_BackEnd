@@ -56,7 +56,7 @@ export class CreateUsuarioDto {
   })
   @IsDateString({}, { message: 'La fecha de nacimiento debe ser una fecha válida' })
   @Matches(/^\d{4}-\d{2}-\d{2}$/, {
-  message: 'La fecha de nacimiento debe cumplir estrictamente el formato AAAA-MM-DD',
+  message: 'La fecha de nacimiento debe cumplir estrictamente el formato YYYY-MM-DD',
   })
   fecha_nacimiento: string;
 
