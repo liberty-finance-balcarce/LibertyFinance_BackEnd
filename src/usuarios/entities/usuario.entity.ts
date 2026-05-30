@@ -15,11 +15,12 @@ export class Usuario {
   mail: string;
   @Column({ select: false })
   contraseña: string;
-  
+
   @Column()
   fecha_nacimiento: Date;
-  @Column()
-  foto_perfil: string;
+  
+  @Column({ nullable: true })
+  foto_perfil?: string;
 
   @Column()
   numero_telefono: string;
@@ -28,9 +29,9 @@ export class Usuario {
 
   @Column({ select: false })
   id_perfilinv: number;
-  @ManyToOne(()=> PerfilInversor, (perfilinv) => perfilinv.usuarios )
-  @JoinColumn({name:'id_perfilinv'})
-  perfilinv:PerfilInversor;
+  @ManyToOne(() => PerfilInversor, (perfilinv) => perfilinv.usuarios)
+  @JoinColumn({ name: 'id_perfilinv' })
+  perfilinv: PerfilInversor;
 
   @Column()
   id_codigo_referidos: number;
