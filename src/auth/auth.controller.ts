@@ -12,7 +12,6 @@ import { AuthService } from './auth.service';
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBody,
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -25,7 +24,7 @@ import { LoginDTO } from './dto/login.dto';
 import { type Request } from 'express';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { ResponseDTO } from 'src/common/dto/response.dto';
-import { RegisterDTO } from './dto/register.dto';
+import { RegisterDto } from './dto/register.dto';
 import { LoginResponse } from './dto/login-response';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 
@@ -77,12 +76,12 @@ export class AuthController {
     description:
       'Registra un nuevo usuario. El DNI y el Email deben ser únicos.',
   })
-  @ApiBody({ type: RegisterDTO })
+  @ApiBody({ type: RegisterDto })
   @ApiCreatedResponse({ description: 'Usuario creado exitosamente' })
   @ApiConflictResponse({
     description: 'Conflicto: El DNI o el Email ya existen en la base de datos.',
   })
-  async register(@Body() newUser: RegisterDTO): Promise<ResponseDTO> {
+  async register(@Body() newUser: RegisterDto): Promise<ResponseDTO> {
     return this.authService.register(newUser);
   }
 }
