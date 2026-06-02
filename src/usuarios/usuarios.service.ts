@@ -15,6 +15,7 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import bcrypt from 'bcrypt';
+import { PerfilInversor } from 'src/perfil-inversor/entities/perfil-inversor.entity';
 
 @Injectable()
 export class UsuariosService {
@@ -27,6 +28,9 @@ export class UsuariosService {
 
     @InjectRepository(Rol)
     private readonly rolRepository: Repository<Rol>,
+
+    @InjectRepository(PerfilInversor)
+    private readonly perfilInversorRepository: Repository<PerfilInversor>,
   ) {}
 
   async findAll(): Promise<ResponseDTO> {
@@ -82,6 +86,19 @@ export class UsuariosService {
       throw new NotFoundException(
         'No se puede crear usuario, el Rol ingresado no existe',
       );
+    }
+
+    if (usuario.id_perfilinv) {
+      const existsPerfilInv = await this.perfilInversorRepository.findOne({
+        where: { id_perfil_inversor: usuario.id_perfilinv },
+      });
+      if (!existsPerfilInv) {
+        throw new NotFoundException(
+          'No se puede crear usuario, el Perfil de Inversor ingresado no existe',
+        );
+      }
+    } else {
+      usuario.id_perfilinv = 1;
     }
 
     const existsMail = await this.usuarioRepository.findOne({

@@ -18,7 +18,7 @@ export class Usuario {
 
   @Column()
   fecha_nacimiento: Date;
-  
+
   @Column({ nullable: true })
   foto_perfil?: string;
 
@@ -27,8 +27,8 @@ export class Usuario {
   @Column()
   direccion: string;
 
-  @Column({ select: false })
-  id_perfilinv: number;
+  @Column({ select: false, nullable: true })
+  id_perfilinv?: number;
   @ManyToOne(() => PerfilInversor, (perfilinv) => perfilinv.usuarios)
   @JoinColumn({ name: 'id_perfilinv' })
   perfilinv: PerfilInversor;
