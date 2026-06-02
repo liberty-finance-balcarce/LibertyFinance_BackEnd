@@ -7,12 +7,16 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 export class Usuario {
   @PrimaryColumn({ unique: true })
   dni_usuario: number;
+
   @Column()
   nombre: string;
+
   @Column()
   apellido: string;
+
   @Column({ unique: true })
   mail: string;
+
   @Column({ select: false })
   contraseña: string;
 
@@ -24,6 +28,7 @@ export class Usuario {
 
   @Column()
   numero_telefono: string;
+
   @Column()
   direccion: string;
 
