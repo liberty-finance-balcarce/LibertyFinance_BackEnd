@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { InstrumentosFinancierosService } from './instrumentos-financieros.service';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -23,6 +23,7 @@ import {
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
 import {
+  InstrumentoFinanciero,
   Riesgo,
   TipoInstrumento,
 } from './entities/instrumento-financiero.entity';
@@ -96,7 +97,7 @@ export class InstrumentosFinancierosController {
     @Query('skip') skip?: number,
     @Query('limit') limit?: number,
     @Query('orderby') orderby?: string,
-  ): Promise<ResponseDTO> {
+  ): Promise<ResponseDTO<InstrumentoFinanciero[]>> {
     const filters = {
       riesgo: riesgo,
       tipo_instrumento: tipo_instrumento,
@@ -126,7 +127,9 @@ export class InstrumentosFinancierosController {
     status: 404,
     description: 'No se encontro el instrumento financiero',
   })
-  async getById(@Param('id', ParseIntPipe) id: number): Promise<ResponseDTO> {
+  async getById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ResponseDTO<InstrumentoFinanciero>> {
     return await this.instrumentosFinancierosService.getById(id);
   }
 

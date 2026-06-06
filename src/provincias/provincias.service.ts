@@ -2,7 +2,7 @@ import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 import { Provincia } from './entities/provincia.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 
 @Injectable()
 export class ProvinciasService {
@@ -11,7 +11,7 @@ export class ProvinciasService {
     private readonly provinciaRepository: Repository<Provincia>,
   ) {}
 
-  async findAll(): Promise<ResponseDTO> {
+  async findAll(): Promise<ResponseDTO<Provincia[]>> {
     const provincias = await this.provinciaRepository.find();
     if (!provincias.length)
       throw new NotFoundException('No se encontraron provincias');
