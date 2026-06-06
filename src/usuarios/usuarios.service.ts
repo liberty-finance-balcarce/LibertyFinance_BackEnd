@@ -9,7 +9,7 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { Usuario } from './entities/usuario.entity';
 import { Provincia } from 'src/provincias/entities/provincia.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -33,7 +33,7 @@ export class UsuariosService {
     private readonly perfilInversorRepository: Repository<PerfilInversor>,
   ) {}
 
-  async findAll(): Promise<ResponseDTO> {
+  async findAll(): Promise<ResponseDTO<Usuario[]>> {
     const usuarios = await this.usuarioRepository.find({
       relations: ['provincia', 'rol', 'perfilinv'],
     });
@@ -185,7 +185,7 @@ export class UsuariosService {
     };
   }
 
-  async getByNombre(nombreBuscar: string): Promise<ResponseDTO> {
+  async getByNombre(nombreBuscar: string): Promise<ResponseDTO<Usuario[]>> {
     const res = await this.usuarioRepository.find({
       where: {
         nombre: Like(`%${nombreBuscar}%`),
@@ -200,7 +200,8 @@ export class UsuariosService {
       data: res,
     };
   }
-  async getByDNI(dni_usuario: number): Promise<ResponseDTO> {
+
+  async getByDNI(dni_usuario: number): Promise<ResponseDTO<Usuario>> {
     const res = await this.usuarioRepository.findOne({
       where: {
         dni_usuario,

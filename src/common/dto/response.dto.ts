@@ -1,5 +1,5 @@
 export interface ResponseDTO<T = void> {
   statusCode: number;
-  message: string | string[];
+  message: string;
   data?: T;
 }

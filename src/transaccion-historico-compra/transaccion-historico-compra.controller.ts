@@ -10,7 +10,7 @@ import {
 import { TransaccionHistoricoCompraService } from './transaccion-historico-compra.service';
 import { CreateTransaccionHistoricoCompraDto } from './dto/create-transaccion-historico-compra.dto';
 import { UpdateTransaccionHistoricoCompraDTO } from './dto/update-transaccion-historico-compra.dto';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 import {
   ApiBody,
   ApiOperation,
@@ -18,6 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { TransaccionHistoricoCompra } from './entities/transaccion-historico-compra.entity';
 
 @ApiTags('Transaccion Historico Compra')
 @Controller('transaccion-historico-compra')
@@ -38,7 +39,7 @@ export class TransaccionHistoricoCompraController {
     status: 404,
     description: 'No se encontraron transacciones historicas de compras.',
   })
-  async findAll(): Promise<ResponseDTO> {
+  async findAll(): Promise<ResponseDTO<TransaccionHistoricoCompra[]>> {
     return await this.transaccionHistoricoCompraService.findAll();
   }
 
@@ -54,7 +55,9 @@ export class TransaccionHistoricoCompraController {
     status: 404,
     description: 'No se encontró ninguna transaccion historica de Compra.',
   })
-  async getById(@Param('id') id: number): Promise<ResponseDTO> {
+  async getById(
+    @Param('id') id: number,
+  ): Promise<ResponseDTO<TransaccionHistoricoCompra>> {
     return await this.transaccionHistoricoCompraService.getById(id);
   }
 

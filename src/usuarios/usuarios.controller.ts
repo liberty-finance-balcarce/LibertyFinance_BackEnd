@@ -26,9 +26,10 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
+import { Usuario } from './entities/usuario.entity';
 
 @ApiTags('Usuarios')
 @Controller('usuarios')
@@ -49,12 +50,13 @@ export class UsuariosController {
   })
   @ApiOkResponse({
     description: 'Lista de usuarios obtenida.',
-    type: ResponseDTO,
   })
   @ApiNotFoundResponse({
     description: 'No se encontraron usuarios con ese criterio.',
   })
-  async findAll(@Query('nombre') nombre?: string): Promise<ResponseDTO> {
+  async findAll(
+    @Query('nombre') nombre?: string,
+  ): Promise<ResponseDTO<Usuario[]>> {
     if (nombre) {
       return this.usuariosService.getByNombre(nombre);
     }
@@ -73,14 +75,13 @@ export class UsuariosController {
   })
   @ApiOkResponse({
     description: 'Usuario encontrado con éxito.',
-    type: ResponseDTO,
   })
   @ApiNotFoundResponse({
     description: 'El DNI no corresponde a ningún usuario registrado.',
   })
   async getByDNI(
     @Param('dni', ParseIntPipe) dni: number,
-  ): Promise<ResponseDTO> {
+  ): Promise<ResponseDTO<Usuario>> {
     return this.usuariosService.getByDNI(dni);
   }
 
@@ -94,7 +95,6 @@ export class UsuariosController {
   @ApiBody({ type: CreateUsuarioDto })
   @ApiCreatedResponse({
     description: 'Usuario creado y contraseña hasheada correctamente.',
-    type: ResponseDTO,
   })
   @ApiConflictResponse({
     description: 'Conflicto: El DNI o el Email ya existen en la base de datos.',
@@ -113,7 +113,6 @@ export class UsuariosController {
   @ApiParam({ name: 'dni', description: 'DNI del usuario a modificar' })
   @ApiOkResponse({
     description: 'Usuario actualizado correctamente.',
-    type: ResponseDTO,
   })
   @ApiNotFoundResponse({
     description: 'No se encontró un usuario con el DNI proporcionado.',
