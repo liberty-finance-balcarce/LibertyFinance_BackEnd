@@ -70,6 +70,25 @@ export class AuthController {
     return this.authService.getProfile(dni);
   }
 
+  @Post('refresh-token')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Refrescar token',
+  })
+  @ApiBearerAuth()
+  @ApiOkResponse({
+    description: 'Token refrescado correctamente',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Token invalido o expirado',
+  })
+  @UseGuards(JwtAuthGuard)
+  async refreshToken(@Req() req: Request): Promise<ResponseDTO<LoginResponse>> {
+    const user = req.user as any;
+
+    return this.authService.refreshToken(user);
+  }
+
   @Post('register')
   @ApiOperation({
     summary: 'Registrar usuario',
