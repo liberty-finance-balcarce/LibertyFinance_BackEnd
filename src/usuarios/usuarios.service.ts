@@ -57,7 +57,7 @@ export class UsuariosService {
       (edad === 18 && meses > 0) ||
       (edad === 18 && meses === 0 && dias >= 0);
     if (!mayor) {
-      throw new ConflictException(
+      throw new BadRequestException(
         `Para utilizar la plataforma debe ser mayor de ${edad_admitida} años`,
       );
     }
