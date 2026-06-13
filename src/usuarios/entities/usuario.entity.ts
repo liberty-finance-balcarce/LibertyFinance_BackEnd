@@ -7,28 +7,33 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 export class Usuario {
   @PrimaryColumn({ unique: true })
   dni_usuario: number;
+
   @Column()
   nombre: string;
+
   @Column()
   apellido: string;
+
   @Column({ unique: true })
   mail: string;
+
   @Column({ select: false })
   contraseña: string;
 
   @Column()
   fecha_nacimiento: Date;
-  
+
   @Column({ nullable: true })
   foto_perfil?: string;
 
   @Column()
   numero_telefono: string;
+
   @Column()
   direccion: string;
 
-  @Column({ select: false })
-  id_perfilinv: number;
+  @Column({ select: false, nullable: true })
+  id_perfilinv?: number;
   @ManyToOne(() => PerfilInversor, (perfilinv) => perfilinv.usuarios)
   @JoinColumn({ name: 'id_perfilinv' })
   perfilinv: PerfilInversor;
