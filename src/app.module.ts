@@ -11,6 +11,7 @@ import { TransaccionHistoricoCompraModule } from './transaccion-historico-compra
 import { RolModule } from './rol/rol.module';
 import { AuthModule } from './auth/auth.module';
 import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
+import { ReportesModule } from './reportes/reportes.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
     TransaccionHistoricoCompraModule,
     TransaccionHistoricoVentaModule,
     UsuariosModule,
+    ReportesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
