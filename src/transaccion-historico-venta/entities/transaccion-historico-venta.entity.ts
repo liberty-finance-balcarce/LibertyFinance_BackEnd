@@ -26,6 +26,12 @@ export class TransaccionHistoricoVenta {
   @Column({ type: 'float', nullable: false })
   precio_instrumento: number;
 
+  @Column({ type: 'float' })
+  cantidad_paquete: number;
+
+  @Column({ type: 'float' })
+  precio_paquete: number;
+
   @ManyToOne(() => Usuario)
   @JoinColumn({
     name: 'dni_usuario',

@@ -9,24 +9,32 @@ export const TransaccionHistoricoVentas: CreateTransaccionHistoricoVentaDto[] =
       id_instrumento: 1,
       precio_instrumento: 10000,
       dni_usuario: 26134695,
+      cantidad_paquetes: 10,
+      precio_paquete: 1000,
     },
     {
       fecha_operacion: '2025-07-12',
       id_instrumento: 2,
       precio_instrumento: 5000,
       dni_usuario: 35000000,
+      cantidad_paquetes: 5,
+      precio_paquete: 1000,
     },
     {
       fecha_operacion: '2026-09-16',
       id_instrumento: 6,
       precio_instrumento: 500000,
       dni_usuario: 52000000,
+      cantidad_paquetes: 3,
+      precio_paquete: 166666.66,
     },
     {
       fecha_operacion: '2025-12-25',
       id_instrumento: 3,
       precio_instrumento: 24000,
       dni_usuario: 36000000,
+      cantidad_paquetes: 2,
+      precio_paquete: 12000,
     },
   ];
 
