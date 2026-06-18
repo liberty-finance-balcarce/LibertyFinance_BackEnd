@@ -116,7 +116,7 @@ export class TransaccionHistoricoVentaService {
     });
     if (!exists)
       throw new NotFoundException('Transacción de venta no encontrada.');
-    const res = await this.transaccionHistoricoVentaRepository.delete(id);
+    const res = await this.transaccionHistoricoVentaRepository.softDelete(id);
     if (!res.affected)
       throw new InternalServerErrorException(
         'Error al eliminar la transacción de venta.',
