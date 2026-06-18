@@ -1,5 +1,6 @@
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
@@ -18,8 +19,11 @@ export class TransaccionHistoricoCompra {
   @Column({ type: 'date' })
   fecha_operacion: Date;
 
-  @UpdateDateColumn({name: 'update_at'})
-  update_at: Date;
+  @CreateDateColumn({name: 'created_at'})
+  created_at: Date;
+
+  @UpdateDateColumn({name: 'updated_at'})
+  updated_at: Date;
 
   @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
   deleted_at: Date;
