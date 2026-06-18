@@ -1,4 +1,12 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
 
 export enum PerfilInversorEnum {
@@ -18,6 +26,15 @@ export class PerfilInversor {
     enum: PerfilInversorEnum,
     unique: true,
   })
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true, select: false })
+  deletedAt: Date;
+
   nombre: PerfilInversorEnum;
   @OneToMany(() => Usuario, (usuario) => usuario.id_perfilinv)
   usuarios: Usuario[];

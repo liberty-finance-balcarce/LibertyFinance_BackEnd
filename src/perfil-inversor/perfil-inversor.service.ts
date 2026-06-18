@@ -80,9 +80,10 @@ export class PerfilInversorService {
     });
     if (!existingPerfilInversor)
       throw new NotFoundException('El perfil de inversor no existe.');
-    const deletedPerfilInversor = await this.perfilInversorRepository.delete(
-      existingPerfilInversor.id_perfil_inversor,
-    );
+    const deletedPerfilInversor =
+      await this.perfilInversorRepository.softDelete(
+        existingPerfilInversor.id_perfil_inversor,
+      );
     return {
       statusCode: HttpStatus.OK,
       message: 'Perfil de inversor eliminado correctamente.',
