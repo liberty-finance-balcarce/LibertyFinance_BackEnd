@@ -3,6 +3,7 @@ import { Provincia } from 'src/provincias/entities/provincia.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   JoinColumn,
@@ -48,6 +49,9 @@ export class Usuario {
 
   @Column()
   id_codigo_referidos: number;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
