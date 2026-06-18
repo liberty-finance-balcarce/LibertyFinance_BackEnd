@@ -1,9 +1,11 @@
 import {
   Column,
+  DeleteDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { InstrumentoFinanciero } from '../../instrumentos-financieros/entities/instrumento-financiero.entity';
 import { Usuario } from '../../usuarios/entities/usuario.entity';
@@ -15,6 +17,12 @@ export class TransaccionHistoricoCompra {
 
   @Column({ type: 'date' })
   fecha_operacion: Date;
+
+  @UpdateDateColumn({name: 'update_at'})
+  update_at: Date;
+
+  @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
+  deleted_at: Date;
 
   @ManyToOne(() => InstrumentoFinanciero)
   @JoinColumn({

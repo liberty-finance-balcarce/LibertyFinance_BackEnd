@@ -120,7 +120,7 @@ export class TransaccionHistoricoCompraService {
     });
     if (!exists)
       throw new NotFoundException('Transacción de compra no encontrada.');
-    const res = await this.transaccionHistoricoCompraRepository.delete(id);
+    const res = await this.transaccionHistoricoCompraRepository.softDelete(id);
     if (!res.affected)
       throw new InternalServerErrorException(
         'Error al eliminar la transacción de compra, intentelo mas tarde.',
