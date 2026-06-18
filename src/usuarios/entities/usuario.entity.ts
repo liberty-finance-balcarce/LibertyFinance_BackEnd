@@ -1,7 +1,7 @@
 import { PerfilInversor } from 'src/perfil-inversor/entities/perfil-inversor.entity';
 import { Provincia } from 'src/provincias/entities/provincia.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
@@ -31,6 +31,12 @@ export class Usuario {
 
   @Column()
   direccion: string;
+
+  @UpdateDateColumn({name: 'update_at'})
+  update_at: Date;
+
+  @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
+  daleted_at: Date;
 
   @Column({ select: false, nullable: true })
   id_perfilinv?: number;
