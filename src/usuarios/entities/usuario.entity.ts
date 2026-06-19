@@ -41,6 +41,15 @@ export class Usuario {
   @Column()
   direccion: string;
 
+  @CreateDateColumn({name: 'created_at'})
+  created_at: Date;
+
+  @UpdateDateColumn({name: 'updated_at'})
+  updated_at: Date;
+
+  @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
+  daleted_at: Date;
+
   @Column({ select: false, nullable: true })
   id_perfilinv?: number;
   @ManyToOne(() => PerfilInversor, (perfilinv) => perfilinv.usuarios)
@@ -49,16 +58,7 @@ export class Usuario {
 
   @Column()
   id_codigo_referidos: number;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
-
-  @DeleteDateColumn({ name: 'deleted_at', nullable: true, select: false })
-  deletedAt: Date;
-
+  
   @Column({ select: false })
   id_rol: number;
   @ManyToOne(() => Rol, (rol) => rol.usuarios)
