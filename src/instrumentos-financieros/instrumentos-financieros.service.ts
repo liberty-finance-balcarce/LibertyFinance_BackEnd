@@ -150,7 +150,7 @@ export class InstrumentosFinancierosService {
     });
     if (!exists)
       throw new NotFoundException('Instrumento financiero no encontrado');
-    const res = await this.instrumentoFinancieroRepository.delete(id);
+    const res = await this.instrumentoFinancieroRepository.softDelete(id);
     if (!res.affected)
       throw new InternalServerErrorException(
         'Error al eliminar el instrumento financiero',
