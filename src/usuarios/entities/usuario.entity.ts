@@ -1,7 +1,16 @@
 import { PerfilInversor } from 'src/perfil-inversor/entities/perfil-inversor.entity';
 import { Provincia } from 'src/provincias/entities/provincia.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('usuarios')
 export class Usuario {
@@ -49,7 +58,7 @@ export class Usuario {
 
   @Column()
   id_codigo_referidos: number;
-
+  
   @Column({ select: false })
   id_rol: number;
   @ManyToOne(() => Rol, (rol) => rol.usuarios)
