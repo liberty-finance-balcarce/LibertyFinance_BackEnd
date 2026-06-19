@@ -23,7 +23,7 @@ import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: true,
+      synchronize: false,
     }),
     AuthModule,
     InstrumentosFinancierosModule,
