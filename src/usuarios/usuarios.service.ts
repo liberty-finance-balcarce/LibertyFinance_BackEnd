@@ -123,7 +123,7 @@ export class UsuariosService {
   }
 
   async delete(dni_usuario: number): Promise<ResponseDTO> {
-    const res = await this.usuarioRepository.delete({ dni_usuario });
+    const res = await this.usuarioRepository.softDelete({ dni_usuario });
     if (!res.affected)
       throw new NotFoundException(
         `No se encontro el usuario con DNI: ${dni_usuario}`,
