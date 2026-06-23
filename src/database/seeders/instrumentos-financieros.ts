@@ -62,10 +62,15 @@ export async function seedInstrumentosFinancieros(
 ): Promise<void> {
   const repo = dataSource.getRepository(InstrumentoFinanciero);
 
-  console.info('Seeding instrumentos financieros...');
+  console.log('Revisando Tabla de Instrumentos Financieros...');
+  const existDatos = await repo.count();
+  if (existDatos > 0) {
+    console.log('La tabla de Instrumentos Financieros NO ESTA VACÍA.');
+    return;
+  }
 
   const data = repo.create(InstrumentosFinancieros);
   await repo.save(data);
 
-  console.info('Instrumentos financieros seed completado.');
+  console.log('Tabla de Instrumentos Financieros Sembrada Correctamente.');
 }

@@ -16,33 +16,28 @@ export class TransaccionHistoricoVenta {
   @PrimaryGeneratedColumn('increment')
   id_transaccion_venta: number;
 
-  @Column({ type: 'date' })
-  fecha_operacion: Date;
-
-  @ManyToOne(() => InstrumentoFinanciero)
-  @JoinColumn({
-    name: 'id_instrumento',
-    referencedColumnName: 'id_instrumento',
-  })
-  id_instrumento: InstrumentoFinanciero;
-
-  @Column({ type: 'float', nullable: false })
-  precio_instrumento: number;
-
-  @Column({ type: 'float' })
-  cantidad_paquete: number;
-
-  @Column({ type: 'float' })
-  precio_paquete: number;
-
-  @CreateDateColumn({ name: 'created_at' })
+  @CreateDateColumn({ name: 'created_at', type: 'date' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'date' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at', nullable: true, select: false })
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    select: false,
+    type: 'date',
+  })
   deletedAt: Date;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  precio_instrumento: number;
+
+  @Column({ type: 'int' })
+  cantidad_paquetes: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  precio_paquete: number;
 
   @ManyToOne(() => Usuario)
   @JoinColumn({
@@ -50,4 +45,11 @@ export class TransaccionHistoricoVenta {
     referencedColumnName: 'dni_usuario',
   })
   dni_usuario: Usuario;
+
+  @ManyToOne(() => InstrumentoFinanciero)
+  @JoinColumn({
+    name: 'id_instrumento',
+    referencedColumnName: 'id_instrumento',
+  })
+  id_instrumento: InstrumentoFinanciero;
 }

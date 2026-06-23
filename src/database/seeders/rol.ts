@@ -14,7 +14,12 @@ export const Roles: CreateRolDto[] = [
 export async function seedRol(dataSource: DataSource): Promise<void> {
   const repo = dataSource.getRepository(Rol);
 
-  console.info('Seeding Rol...');
+  console.log('Revisando Tabla de Roles...');
+  const existDatos = await repo.count();
+  if (existDatos > 0) {
+    console.log('La tabla de Rol NO ESTA VACÍA.');
+    return;
+  }
 
   const data = repo.create(Roles);
   await repo.save(data);

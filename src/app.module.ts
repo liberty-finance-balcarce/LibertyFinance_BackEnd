@@ -16,7 +16,7 @@ import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USER,
@@ -24,7 +24,9 @@ import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
       database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: false,
+      ssl: { rejectUnauthorized: false },
     }),
+
     AuthModule,
     InstrumentosFinancierosModule,
     PerfilInversorModule,

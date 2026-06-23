@@ -24,9 +24,15 @@ export async function seedPerfilInversor(
   dataSource: DataSource,
 ): Promise<void> {
   const repo = dataSource.getRepository(PerfilInversor);
-  console.info('Seeding Perfil Inversor...');
+
+  console.log('Revisando Tabla de Perfiles Inversores...');
+  const existDatos = await repo.count();
+  if (existDatos > 0) {
+    console.log('La tabla de Perfiles Inversores NO ESTA VACÍA.');
+    return;
+  }
 
   const data = repo.create(PerfilInversores);
   await repo.save(data);
-  console.info('Perfil Inversor seed completado.');
+  console.log('Tabla de Perfiles Inversores Sembrada Correctamente.');
 }

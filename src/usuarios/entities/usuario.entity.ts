@@ -41,32 +41,40 @@ export class Usuario {
   @Column()
   direccion: string;
 
-  @CreateDateColumn({name: 'created_at'})
+  @CreateDateColumn({ name: 'created_at', type: 'date' })
   created_at: Date;
 
-  @UpdateDateColumn({name: 'updated_at'})
+  @UpdateDateColumn({ name: 'updated_at', type: 'date' })
   updated_at: Date;
 
-  @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    select: false,
+    type: 'date',
+  })
   daleted_at: Date;
 
-  @Column({ select: false, nullable: true })
+  @Column({ select: false, nullable: true, type: 'int' })
   id_perfilinv?: number;
+
+  @Column({ type: 'int' })
+  id_codigo_referidos: number;
+
+  @Column({ select: false, type: 'int' })
+  id_rol: number;
+
+  @Column({ select: false, type: 'int' })
+  id_provincia: number;
+
   @ManyToOne(() => PerfilInversor, (perfilinv) => perfilinv.usuarios)
   @JoinColumn({ name: 'id_perfilinv' })
   perfilinv: PerfilInversor;
 
-  @Column()
-  id_codigo_referidos: number;
-  
-  @Column({ select: false })
-  id_rol: number;
   @ManyToOne(() => Rol, (rol) => rol.usuarios)
   @JoinColumn({ name: 'id_rol' })
   rol: Rol;
 
-  @Column({ select: false })
-  id_provincia: number;
   @ManyToOne(() => Provincia, { nullable: false })
   @JoinColumn({ name: 'id_provincia' })
   provincia: Provincia;

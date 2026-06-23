@@ -22,20 +22,21 @@ export class PerfilInversor {
   id_perfil_inversor: number;
 
   @Column({
+    name: 'nombre',
     type: 'enum',
     enum: PerfilInversorEnum,
-    unique: true,
   })
-  @CreateDateColumn({ name: 'created_at' })
+  nombre: PerfilInversorEnum;
+
+  @CreateDateColumn({ name: 'created_at', type: 'date' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: 'updated_at' })
+  @UpdateDateColumn({ name: 'updated_at', type: 'date' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: 'deleted_at', nullable: true, select: false })
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true, select: false, type: 'date' })
   deletedAt: Date;
 
-  nombre: PerfilInversorEnum;
   @OneToMany(() => Usuario, (usuario) => usuario.id_perfilinv)
   usuarios: Usuario[];
 }

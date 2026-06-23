@@ -23,26 +23,36 @@ export enum TipoInstrumento {
 export class InstrumentoFinanciero {
   @PrimaryGeneratedColumn('increment')
   id_instrumento: number;
+
   @Column({ type: 'varchar', length: 50 })
   nombre_instrumento: string;
-  @Column({ type: 'float' })
+
+  @Column({ type: 'decimal', precision: 4, scale: 2 })
   rendimiento: number;
+
   @Column({ type: 'enum', enum: Riesgo })
   riesgo: Riesgo;
+
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   precio_instrumento: number;
+
   @Column({ type: 'enum', enum: TipoInstrumento })
   tipo_instrumento: TipoInstrumento;
+
   @Column({ type: 'varchar', length: 255 })
   logo_url: string;
-  @CreateDateColumn({ name: 'created_at' })
+
+  @CreateDateColumn({ name: 'created_at', type: 'date' })
   createdAt: Date;
-  @UpdateDateColumn({ name: 'updated_at' })
+
+  @UpdateDateColumn({ name: 'updated_at', type: 'date' })
   updatedAt: Date;
+
   @DeleteDateColumn({
     name: 'deleted_at',
     nullable: true,
-    select: false
+    select: false,
+    type: 'date',
   })
   deletedAt: Date | null;
 }

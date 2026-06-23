@@ -4,6 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 export class Provincia {
   @PrimaryGeneratedColumn()
   id: number;
+
   @Column()
   provincia: string;
 }

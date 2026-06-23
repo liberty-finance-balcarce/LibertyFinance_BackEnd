@@ -12,48 +12,53 @@ export const TransaccionesHistoricoCompra: CreateTransaccionHistoricoCompraDto[]
       cantidad_paquetes: 10,
       precio_paquete: 1000,
     },
-    {
-      fecha_operacion: '2025-07-10',
-      id_instrumento: 2,
-      precio_instrumento: 5000,
-      dni_usuario: 35000000,
-      cantidad_paquetes: 5,
-      precio_paquete: 1000,
-    },
-    {
-      fecha_operacion: '2026-09-14',
-      id_instrumento: 6,
-      precio_instrumento: 500000,
-      dni_usuario: 52000000,
-      cantidad_paquetes: 3,
-      precio_paquete: 166666.66,
-    },
-    {
-      fecha_operacion: '2025-12-23',
-      id_instrumento: 3,
-      precio_instrumento: 24000,
-      dni_usuario: 36000000,
-      cantidad_paquetes: 2,
-      precio_paquete: 12000,
-    },
+    // {
+    //   fecha_operacion: '2025-07-10',
+    //   id_instrumento: 2,
+    //   precio_instrumento: 5000,
+    //   dni_usuario: 37398970,
+    //   cantidad_paquetes: 5,
+    //   precio_paquete: 1000,
+    // },
+    // {
+    //   fecha_operacion: '2026-09-14',
+    //   id_instrumento: 6,
+    //   precio_instrumento: 500000,
+    //   dni_usuario: 52000000,
+    //   cantidad_paquetes: 3,
+    //   precio_paquete: 166666.66,
+    // },
+    // {
+    //   fecha_operacion: '2025-12-23',
+    //   id_instrumento: 3,
+    //   precio_instrumento: 24000,
+    //   dni_usuario: 36000000,
+    //   cantidad_paquetes: 2,
+    //   precio_paquete: 12000,
+    // },
   ];
 
 export async function seedTransaccionHistoricoCompra(
   dataSource: DataSource,
 ): Promise<void> {
-  const repository = dataSource.getRepository(TransaccionHistoricoCompra);
+  const repo = dataSource.getRepository(TransaccionHistoricoCompra);
 
-  console.info('Seeding transacción historico compra...');
+  console.log('Revisando Tabla de Transacciones Historico Compra...');
+  const existDatos = await repo.count();
+  if (existDatos > 0) {
+    console.log('La tabla de Transacciones Historico Compra NO ESTA VACÍA.');
+    return;
+  }
 
   const data = TransaccionesHistoricoCompra.map((item) => {
-    return repository.create({
+    return repo.create({
       ...item,
       id_instrumento: { id_instrumento: item.id_instrumento } as any,
       dni_usuario: { dni_usuario: item.dni_usuario } as any,
     });
   });
 
-  await repository.save(data);
+  await repo.save(data);
 
-  console.info('Transacción historico compra seed completado.');
+  console.log('Tabla de Transacciones Historico Compra Sembrada Correctamente.');
 }

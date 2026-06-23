@@ -13,7 +13,7 @@ import { ResponseDTO } from 'src/common/dto/response.dto';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import bcrypt from 'bcrypt';
 import { PerfilInversor } from 'src/perfil-inversor/entities/perfil-inversor.entity';
 
@@ -188,7 +188,7 @@ export class UsuariosService {
   async getByNombre(nombreBuscar: string): Promise<ResponseDTO<Usuario[]>> {
     const res = await this.usuarioRepository.find({
       where: {
-        nombre: Like(`%${nombreBuscar}%`),
+        nombre: ILike(`%${nombreBuscar}%`),
       },
       relations: ['provincia', 'rol', 'perfilinv'],
     });

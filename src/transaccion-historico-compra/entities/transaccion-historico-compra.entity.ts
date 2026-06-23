@@ -16,32 +16,27 @@ export class TransaccionHistoricoCompra {
   @PrimaryGeneratedColumn('increment')
   id_transaccion_compra: number;
 
-  @Column({ type: 'date' })
-  fecha_operacion: Date;
-
-  @CreateDateColumn({name: 'created_at'})
+  @CreateDateColumn({ name: 'created_at', type: 'date' })
   created_at: Date;
 
-  @UpdateDateColumn({name: 'updated_at'})
+  @UpdateDateColumn({ name: 'updated_at', type: 'date' })
   updated_at: Date;
 
-  @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
+  @DeleteDateColumn({
+    name: 'deleted_at',
+    nullable: true,
+    select: false,
+    type: 'date',
+  })
   deleted_at: Date;
 
-  @ManyToOne(() => InstrumentoFinanciero)
-  @JoinColumn({
-    name: 'id_instrumento',
-    referencedColumnName: 'id_instrumento',
-  })
-  id_instrumento: InstrumentoFinanciero;
-
-  @Column({ type: 'float', nullable: false })
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   precio_instrumento: number;
 
-  @Column({ type: 'float' })
-  cantidad_paquete: number;
+  @Column({ type: 'int' })
+  cantidad_paquetes: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
   precio_paquete: number;
 
   @ManyToOne(() => Usuario)
@@ -50,4 +45,11 @@ export class TransaccionHistoricoCompra {
     referencedColumnName: 'dni_usuario',
   })
   dni_usuario: Usuario;
+
+  @ManyToOne(() => InstrumentoFinanciero)
+  @JoinColumn({
+    name: 'id_instrumento',
+    referencedColumnName: 'id_instrumento',
+  })
+  id_instrumento: InstrumentoFinanciero;
 }
