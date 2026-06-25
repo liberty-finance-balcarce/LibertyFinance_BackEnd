@@ -16,5 +16,6 @@ import { Usuario } from '../usuarios/entities/usuario.entity';
   ],
   controllers: [TransaccionHistoricoCompraController],
   providers: [TransaccionHistoricoCompraService],
+  exports:[TransaccionHistoricoCompraService],
 })
 export class TransaccionHistoricoCompraModule {}

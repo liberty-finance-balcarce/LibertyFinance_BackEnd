@@ -44,6 +44,31 @@ export class CreateTransaccionHistoricoCompraDto {
   })
   cantidad_paquetes: number;
 
+
+  @IsDateString(
+    {},
+    { message: 'La fecha de actualizacion debe ser una fecha válida' },
+  )
+  @ApiProperty({
+    example: '2022-01-01',
+    description: 'Fecha de actualización',
+    type: 'string',
+    format: 'date',
+  })  
+  updated_at?: Date;
+
+  @IsDateString(
+    {},
+    { message: 'La fecha de borrado debe ser una fecha válida' },
+  )
+  @ApiProperty({
+    example: '2022-01-01',
+    description: 'Fecha de la borrado',
+    type: 'string',
+    format: 'date',
+  })
+  deleted_at?: Date;
+  
   @IsNumber({}, { message: 'El precio del paquete debe ser un número' })
   @ApiProperty({
     example: 100,

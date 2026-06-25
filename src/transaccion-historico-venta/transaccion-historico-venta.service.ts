@@ -62,7 +62,7 @@ export class TransaccionHistoricoVentaService {
   ): Promise<ResponseDTO<TransaccionHistoricoVenta[]>> {
     const transaccionHistoricoVenta =
       await this.transaccionHistoricoVentaRepository.find({
-        where: { dni_usuario: { dni_usuario: dni_usuario } },
+        where: { dni_usuario: dni_usuario as any},
         relations: ['id_instrumento', 'dni_usuario'],
       });
     if (!transaccionHistoricoVenta.length)

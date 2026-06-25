@@ -4,7 +4,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard'
 import { RolesGuard } from '../auth/guards/roles/roles.guard'; 
 import { Roles } from '../auth/decorators/roles.decorator';
 import { ResponseDTO } from 'src/common/dto/response.dto';
-import { ResumenData, ResumenByInstrumento } from './reportes.service';
+import { ResumenByInstrumento } from './reportes.service';
 
 interface UsuarioAutenticado {
   sub: number;       // o string, dependiendo de cómo manejes tus IDs en la base de datos
@@ -24,7 +24,7 @@ export class ReportesController {
   @Get('resumen')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(1, 2)
-  obtenerResumen(@Req() req: RequestConUsuario): Promise<ResponseDTO<ResumenData>> { // 4. Tipamos el objeto 'req' y el retorno de la función
+  obtenerResumen(@Req() req: RequestConUsuario): Promise<ResponseDTO<ResumenByInstrumento[]>> { // 4. Tipamos el objeto 'req' y el retorno de la función
     const dni_usuario = req.user.sub; // Ahora TypeScript sabe perfectamente que 'id' existe y de qué tipo es
     return this.reportesService.crearInformeResumen(dni_usuario);
   }

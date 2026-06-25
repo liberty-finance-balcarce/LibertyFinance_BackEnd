@@ -63,6 +63,21 @@ export const Usuarios: CreateUsuarioDto[] = [
     id_codigo_referidos: 1,
     id_rol: 2,
   },
+  {
+    dni_usuario: 40000000,
+    nombre: 'Juan',
+    apellido: 'De Los Palotes',
+    mail: 'jdlp@hotmail.com',
+    contraseña: '$2b$10$8MRJtgvy4DCi9HUPsXJv9O9o/nZzuer6e5.S0xPN9wbJVxyi/Yd0O',
+    fecha_nacimiento: '1990-07-04',
+    foto_perfil: 'https://imagenes.com/perfil.jpg',
+    numero_telefono: '2266666666',
+    direccion: 'calle Desconocida',
+    id_provincia: 6,
+    id_perfilinv: 1,
+    id_codigo_referidos: 234,
+    id_rol: 1,
+  },  
 ];
 
 export async function seedUsuarios(dataSource: DataSource): Promise<void> {

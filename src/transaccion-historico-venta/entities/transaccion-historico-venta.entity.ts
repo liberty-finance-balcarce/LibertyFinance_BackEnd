@@ -30,7 +30,7 @@ export class TransaccionHistoricoVenta {
   precio_instrumento: number;
 
   @Column({ type: 'float' })
-  cantidad_paquete: number;
+  cantidad_paquetes: number;
 
   @Column({ type: 'float' })
   precio_paquete: number;

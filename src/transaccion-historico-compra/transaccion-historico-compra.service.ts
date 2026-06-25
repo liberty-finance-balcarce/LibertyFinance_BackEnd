@@ -43,6 +43,7 @@ export class TransaccionHistoricoCompraService {
   }
 
   async getById(id: number): Promise<ResponseDTO<TransaccionHistoricoCompra>> {
+    console.log(id);
     const transaccionHistoricoCompra =
       await this.transaccionHistoricoCompraRepository.findOne({
         where: { id_transaccion_compra: id },
@@ -64,7 +65,7 @@ export class TransaccionHistoricoCompraService {
   ): Promise<ResponseDTO<TransaccionHistoricoCompra[]>> {
     const transaccionHistoricoCompra =
       await this.transaccionHistoricoCompraRepository.find({
-        where: { dni_usuario: { dni_usuario: dni_usuario } },
+        where: { dni_usuario: dni_usuario as any},
         relations: ['id_instrumento', 'dni_usuario'],
       });
     if (!transaccionHistoricoCompra.length)
