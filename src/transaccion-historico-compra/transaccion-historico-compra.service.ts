@@ -65,7 +65,7 @@ export class TransaccionHistoricoCompraService {
   ): Promise<ResponseDTO<TransaccionHistoricoCompra[]>> {
     const transaccionHistoricoCompra =
       await this.transaccionHistoricoCompraRepository.find({
-        where: { dni_usuario: dni_usuario as any},
+        where: { dni_usuario: dni_usuario as any },
         relations: ['id_instrumento', 'dni_usuario'],
       });
     if (!transaccionHistoricoCompra.length)
@@ -100,6 +100,8 @@ export class TransaccionHistoricoCompraService {
     const newTransaccionHistoricoCompra =
       this.transaccionHistoricoCompraRepository.create({
         fecha_operacion: new Date(TransaccionHistoricoCompra.fecha_operacion),
+        cantidad_paquetes: TransaccionHistoricoCompra.cantidad_paquetes,
+        precio_paquete: TransaccionHistoricoCompra.precio_paquete,
         id_instrumento: {
           id_instrumento: TransaccionHistoricoCompra.id_instrumento,
         },
@@ -111,7 +113,7 @@ export class TransaccionHistoricoCompraService {
     );
     return {
       statusCode: HttpStatus.OK,
-      message: 'Transacción historica de venta agregada correctamente.',
+      message: 'Transacción historica de compra agregada correctamente.',
     };
   }
 

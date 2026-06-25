@@ -1,6 +1,8 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
+/*
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+*/
 import { ResponseDTO } from 'src/common/dto/response.dto';
 import { TransaccionHistoricoCompraService } from '../transaccion-historico-compra/transaccion-historico-compra.service';
 import { TransaccionHistoricoVentaService } from '../transaccion-historico-venta/transaccion-historico-venta.service';
@@ -40,22 +42,27 @@ export interface ResumenData {
 export class ReportesService {
   
   constructor(
-
-    private readonly compraRepository: TransaccionHistoricoCompraService,
-    private readonly ventaRepository: TransaccionHistoricoVentaService,
+    private readonly compraService: TransaccionHistoricoCompraService,
+    private readonly ventaService: TransaccionHistoricoVentaService,
   ) {}
 
   async crearInformeResumen(dni_usuario: number): Promise<ResponseDTO<ResumenByInstrumento[]>> {
     console.log('Generando Reporte - RESUMEN:', dni_usuario);
     
-
+    /*
     const [compras, ventas] = await Promise.all([
-      this.compraRepository.getByDniUsuario(dni_usuario),
-      this.ventaRepository.getByDniUsuario(dni_usuario),
-    ]);
-    console.log(JSON.stringify(compras,null,2));
-    console.log(ventas);
-  
+      this.compraService.getByDniUsuario(dni_usuario),
+      this.ventaService.getByDniUsuario(dni_usuario),
+    ]);*/
+
+    const compras = await this.compraService.getByDniUsuario(dni_usuario);
+    //const ventas = await this.ventaService.getByDniUsuario(dni_usuario);
+    console.log("*****************************");
+    console.log(compras);
+    console.log("*****************************");    
+    //console.log(ventas);   //console.log(JSON.stringify(ventas,null,2));
+    //console.log("*****************************");    
+    
     /*
     resumenFinal = [
       {id_instrumento:1,
@@ -90,12 +97,3 @@ export class ReportesService {
   }
 }
 
-/*
-async crearInformeResumen(dni_usuario:number):Promise<ResponseDTO>{
-    console.log(dni_usuario);
-
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'Resumen enviado exitosamente',
-    };
-}*/
