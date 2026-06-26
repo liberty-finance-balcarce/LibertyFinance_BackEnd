@@ -11,6 +11,7 @@ export const TransaccionHistoricoVentas: CreateTransaccionHistoricoVentaDto[] =
       dni_usuario: 40000000,
       cantidad_paquetes: 1,
       precio_paquete: 100,
+      cantidad_intrumento_vendido:0.00147058,
     },
   ];
 

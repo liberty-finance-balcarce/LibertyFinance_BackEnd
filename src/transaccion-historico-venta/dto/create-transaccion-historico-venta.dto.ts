@@ -63,4 +63,16 @@ export class CreateTransaccionHistoricoVentaDto {
     maximum: 999999999,
   })
   dni_usuario: number;
+
+  @IsNumber({}, { message: 'La cantidad de instrumento vendido debe ser un número' })
+  @ApiProperty({
+    example: 0.00018,
+    description: 'Cantidad del instrumento',
+    type: 'number',
+    minimum: 0.000001,
+    maximum: 1000000000,
+  })
+  cantidad_intrumento_vendido: number;
+
+
 }

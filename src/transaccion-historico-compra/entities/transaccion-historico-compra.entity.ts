@@ -52,4 +52,7 @@ export class TransaccionHistoricoCompra {
     referencedColumnName: 'dni_usuario',
   })
   dni_usuario: Usuario;
+
+  @Column({ type: 'float' })
+  cantidad_intrumento_comprado: number;
 }
