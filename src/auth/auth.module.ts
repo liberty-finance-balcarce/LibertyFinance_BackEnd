@@ -9,7 +9,6 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from 'src/usuarios/entities/usuario.entity';
-import type { StringValue } from "ms";
 
 @Module({
   imports: [
@@ -20,16 +19,14 @@ import type { StringValue } from "ms";
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: configService.get<StringValue>('JWT_EXPIRES_IN') ?? '1h',
-        },
+        secret: configService.get<string>('JWT_SECRET'), 
+        signOptions: { expiresIn: '24h' },
       }),
-      global: true,
+      global: true, 
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, JwtAuthGuard],
-  exports: [AuthService],
+  exports: [AuthService]
 })
 export class AuthModule {}

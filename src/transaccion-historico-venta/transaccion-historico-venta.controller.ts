@@ -5,7 +5,7 @@ import {
   Body,
   Param,
   Delete,
-  Patch,
+  Patch, Query,
 } from '@nestjs/common';
 import { TransaccionHistoricoVentaService } from './transaccion-historico-venta.service';
 import { CreateTransaccionHistoricoVentaDto } from './dto/create-transaccion-historico-venta.dto';
@@ -16,7 +16,7 @@ import {
   ApiOperation,
   ApiParam,
   ApiResponse,
-  ApiTags,
+  ApiTags, ApiQuery,
 } from '@nestjs/swagger';
 import { TransaccionHistoricoVenta } from './entities/transaccion-historico-venta.entity';
 
@@ -27,25 +27,41 @@ export class TransaccionHistoricoVentaController {
     private readonly transaccionHistoricoVentaService: TransaccionHistoricoVentaService,
   ) {}
 
-  @Get()
-  @ApiOperation({
-    description: 'Obtener todas las transacciones historicas de ventas',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Transacciones historicas de ventas obtenidas correctamente.',
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'No se encontraron transacciones historicas de ventas.',
-  })
-  @ApiResponse({
-    status: 500,
-    description: 'Error al obtener las transacciones historicas de ventas.',
-  })
-  async findAll(): Promise<ResponseDTO<TransaccionHistoricoVenta[]>> {
-    return await this.transaccionHistoricoVentaService.findAll();
-  }
+ @Get()
+   @ApiOperation({
+     description: 'Obtener todas las transacciones históricas de Venta, opcionalmente filtradas por DNI de usuario',
+   })
+   @ApiQuery({
+     name: 'dni_usuario',
+     type: Number,
+     required: false, // 💡 IMPORTANTE: Ahora es opcional
+     description: 'DNI del usuario para filtrar las transacciones (opcional)',
+   })
+   @ApiResponse({
+     status: 200,
+     description: 'Transacciones obtenidas correctamente.',
+   })
+   @ApiResponse({
+     status: 404,
+     description: 'No se encontraron transacciones.',
+   })
+   async findAllOrByDni(
+     // 💡 Quitamos el ParseIntPipe directo porque si viene undefined fallaría. 
+     // Usamos una transformación manual o lo dejamos opcional.
+     @Query('dni_usuario') dni_usuario?: string,
+   ): Promise<ResponseDTO<TransaccionHistoricoVenta[]>> {
+     
+     // Si el usuario mandó el query param ?dni_usuario=...
+     if (dni_usuario !== undefined && dni_usuario !== '') {
+       const dniNumber = Number(dni_usuario);
+       console.log('Filtrando transacciones por DNI:', dniNumber);
+       return await this.transaccionHistoricoVentaService.getByDniUsuario(dniNumber);
+     }
+ 
+     // Si no mandó el query param, se comporta como el findAll original
+     console.log('Obteniendo absolutamente todas las transacciones');
+     return await this.transaccionHistoricoVentaService.findAll();
+   }
 
   @Get('id')
   @ApiOperation({

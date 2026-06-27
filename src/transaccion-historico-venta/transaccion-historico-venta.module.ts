@@ -10,5 +10,6 @@ import { Usuario } from '../usuarios/entities/usuario.entity';
   imports: [TypeOrmModule.forFeature([TransaccionHistoricoVenta, InstrumentoFinanciero, Usuario])],
   controllers: [TransaccionHistoricoVentaController],
   providers: [TransaccionHistoricoVentaService],
+  exports:[TransaccionHistoricoVentaService],
 })
 export class TransaccionHistoricoVentaModule { }

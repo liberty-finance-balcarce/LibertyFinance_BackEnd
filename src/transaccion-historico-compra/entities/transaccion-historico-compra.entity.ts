@@ -19,14 +19,16 @@ export class TransaccionHistoricoCompra {
   @Column({ type: 'date' })
   fecha_operacion: Date;
 
+/*
   @CreateDateColumn({name: 'created_at'})
   created_at: Date;
+*/
 
-  @UpdateDateColumn({name: 'updated_at'})
-  updated_at: Date;
+  @UpdateDateColumn({name: 'updated_at', nullable: true})
+  updated_at: Date | null;
 
   @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
-  deleted_at: Date;
+  deleted_at: Date | null;
 
   @ManyToOne(() => InstrumentoFinanciero)
   @JoinColumn({
@@ -38,8 +40,8 @@ export class TransaccionHistoricoCompra {
   @Column({ type: 'float', nullable: false })
   precio_instrumento: number;
 
-  @Column({ type: 'float' })
-  cantidad_paquete: number;
+  @Column({ type: 'integer' }) ///era float
+  cantidad_paquetes: number;
 
   @Column({ type: 'float' })
   precio_paquete: number;
@@ -50,4 +52,7 @@ export class TransaccionHistoricoCompra {
     referencedColumnName: 'dni_usuario',
   })
   dni_usuario: Usuario;
+
+  @Column({ type: 'float' })
+  cantidad_instrumento_comprado: number;
 }

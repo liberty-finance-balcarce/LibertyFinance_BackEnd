@@ -62,7 +62,7 @@ export class TransaccionHistoricoVentaService {
   ): Promise<ResponseDTO<TransaccionHistoricoVenta[]>> {
     const transaccionHistoricoVenta =
       await this.transaccionHistoricoVentaRepository.find({
-        where: { dni_usuario: { dni_usuario: dni_usuario } },
+        where: { dni_usuario: dni_usuario as any},
         relations: ['id_instrumento', 'dni_usuario'],
       });
     if (!transaccionHistoricoVenta.length)
@@ -99,7 +99,10 @@ export class TransaccionHistoricoVentaService {
           id_instrumento: transaccionHistoricoVenta.id_instrumento,
         },
         precio_instrumento: transaccionHistoricoVenta.precio_instrumento,
+        cantidad_paquetes:transaccionHistoricoVenta.cantidad_paquetes,
+        precio_paquete:transaccionHistoricoVenta.precio_paquete,
         dni_usuario: { dni_usuario: transaccionHistoricoVenta.dni_usuario },
+        cantidad_instrumento_vendido:transaccionHistoricoVenta.cantidad_instrumento_vendido,
       });
     const res = await this.transaccionHistoricoVentaRepository.save(
       newTransaccionHistoricoVenta,
