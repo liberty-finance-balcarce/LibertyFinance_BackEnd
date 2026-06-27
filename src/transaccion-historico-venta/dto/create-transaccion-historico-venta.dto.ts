@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNumber, IsNotEmpty } from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsNotEmpty } from 'class-validator';
 
 export class CreateTransaccionHistoricoVentaDto {
   @IsDateString(
@@ -53,6 +53,34 @@ export class CreateTransaccionHistoricoVentaDto {
     maximum: 1000000,
   })
   precio_paquete: number;
+
+
+  @IsDateString(
+    {},
+    { message: 'La fecha de actualizacion debe ser una fecha válida' },
+  )
+  @ApiProperty({
+    example: '2025-01-01',
+    description: 'Fecha de actualización',
+    type: 'string',
+    format: 'date',
+  })  
+  @IsOptional()
+  updated_at?: Date;
+
+  @IsDateString(
+    {},
+    { message: 'La fecha de borrado debe ser una fecha válida' },
+  )
+  @ApiProperty({
+    example: '2025-01-01',
+    description: 'Fecha de borrado',
+    type: 'string',
+    format: 'date',
+  })
+  @IsOptional()
+  deleted_at?: Date;
+
 
   @IsNumber({}, { message: 'El DNI del usuario debe ser un número' })
   @ApiProperty({

@@ -99,6 +99,8 @@ export class TransaccionHistoricoVentaService {
           id_instrumento: transaccionHistoricoVenta.id_instrumento,
         },
         precio_instrumento: transaccionHistoricoVenta.precio_instrumento,
+        cantidad_paquetes:transaccionHistoricoVenta.cantidad_paquetes,
+        precio_paquete:transaccionHistoricoVenta.precio_paquete,
         dni_usuario: { dni_usuario: transaccionHistoricoVenta.dni_usuario },
         cantidad_instrumento_vendido:transaccionHistoricoVenta.cantidad_instrumento_vendido,
       });
