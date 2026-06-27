@@ -107,6 +107,7 @@ export class TransaccionHistoricoCompraService {
         },
         precio_instrumento: TransaccionHistoricoCompra.precio_instrumento,
         dni_usuario: { dni_usuario: TransaccionHistoricoCompra.dni_usuario },
+        cantidad_instrumento_comprado:TransaccionHistoricoCompra.cantidad_instrumento_comprado,
       });
     const res = await this.transaccionHistoricoCompraRepository.save(
       newTransaccionHistoricoCompra,

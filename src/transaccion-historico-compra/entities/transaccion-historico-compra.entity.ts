@@ -54,5 +54,5 @@ export class TransaccionHistoricoCompra {
   dni_usuario: Usuario;
 
   @Column({ type: 'float' })
-  cantidad_intrumento_comprado: number;
+  cantidad_instrumento_comprado: number;
 }

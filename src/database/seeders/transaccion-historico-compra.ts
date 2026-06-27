@@ -11,7 +11,7 @@ export const TransaccionesHistoricoCompra: CreateTransaccionHistoricoCompraDto[]
       dni_usuario: 40000000,
       cantidad_paquetes: 2,
       precio_paquete: 100,
-      cantidad_intrumento_comprado:0.00307692,      
+      cantidad_instrumento_comprado:0.00307692,      
 
     },
     {
@@ -21,7 +21,7 @@ export const TransaccionesHistoricoCompra: CreateTransaccionHistoricoCompraDto[]
       dni_usuario: 40000000,
       cantidad_paquetes: 3,
       precio_paquete: 100,
-      cantidad_intrumento_comprado:0.15,
+      cantidad_instrumento_comprado:0.15,
     },
     {
       fecha_operacion: '2025-08-29',
@@ -30,7 +30,7 @@ export const TransaccionesHistoricoCompra: CreateTransaccionHistoricoCompraDto[]
       dni_usuario: 40000000,
       cantidad_paquetes: 4,
       precio_paquete: 100,
-      cantidad_intrumento_comprado:0.006779661,
+      cantidad_instrumento_comprado:0.006779661,
     },
     {
       fecha_operacion: '2025-12-23',
@@ -39,7 +39,7 @@ export const TransaccionesHistoricoCompra: CreateTransaccionHistoricoCompraDto[]
       dni_usuario: 40000000,
       cantidad_paquetes: 2,
       precio_paquete: 100,
-      cantidad_intrumento_comprado:0.125,      
+      cantidad_instrumento_comprado:0.125,      
     },
   ];
 

@@ -26,17 +26,14 @@ export interface ResumenByInstrumento {
   nombre: string;
   logo_url: string;
   tipo_instrumento: string;
-  
-  // Paquetes
+  //Paquetes
   total_paquetes_comprados: number;
   total_paquetes_vendidos: number;
   tenencia_actual_paquetes: number;
-  
-  // Instrumentos (Activo puro)
+  // Instrumentos
   total_instrumento_comprado: number;
   total_instrumento_vendido: number;
   tenencia_actual_instrumento: number;
-
   // Métricas Financieras Valuadas
   valor_promedio_compra_paquete: number;
   valor_actual_mercado_instrumento: number;
@@ -91,7 +88,7 @@ export class ReportesService {
       const instId = inst.id_instrumento;
       const cantPaquetes = Number(c.cantidad_paquetes || 0);
       const precioPaquete = Number(c.precio_paquete || 0);
-      const cantInstrumento = Number(c.cantidad_intrumento_comprado || 0);
+      const cantInstrumento = Number(c.cantidad_instrumento_comprado || 0);
       const precioInst = Number(c.precio_instrumento || 0);
       const fechaOp = new Date(c.fecha_operacion);
 
@@ -119,7 +116,7 @@ export class ReportesService {
       const instId = inst.id_instrumento;
       const cantPaquetes = Number(v.cantidad_paquetes || 0);
       const precioPaquete = Number(v.precio_paquete || 0);
-      const cantInstrumento = Number(v.cantidad_intrumento_vendido || 0);
+      const cantInstrumento = Number(v.cantidad_instrumento_vendido || 0);
       const precioInst = Number(v.precio_instrumento || 0);
       const fechaOp = new Date(v.fecha_operacion);
 

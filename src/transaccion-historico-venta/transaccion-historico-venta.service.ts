@@ -100,6 +100,7 @@ export class TransaccionHistoricoVentaService {
         },
         precio_instrumento: transaccionHistoricoVenta.precio_instrumento,
         dni_usuario: { dni_usuario: transaccionHistoricoVenta.dni_usuario },
+        cantidad_instrumento_vendido:transaccionHistoricoVenta.cantidad_instrumento_vendido,
       });
     const res = await this.transaccionHistoricoVentaRepository.save(
       newTransaccionHistoricoVenta,
