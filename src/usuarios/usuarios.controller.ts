@@ -34,9 +34,12 @@ import { Usuario } from './entities/usuario.entity';
 @ApiTags('Usuarios')
 @Controller('usuarios')
 export class UsuariosController {
-  constructor(private readonly usuariosService: UsuariosService) {}
+  constructor(private readonly usuariosService: UsuariosService) { }
 
   @Get()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Listar usuarios',
     description:
@@ -64,6 +67,9 @@ export class UsuariosController {
   }
 
   @Get(':dni')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Buscar por DNI',
     description: 'Obtiene los detalles de un usuario específico usando su DNI.',
@@ -86,6 +92,8 @@ export class UsuariosController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Crear usuario',
@@ -104,6 +112,8 @@ export class UsuariosController {
   }
 
   @Patch(':dni')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Actualizar usuario',
