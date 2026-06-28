@@ -12,6 +12,7 @@ import { RolModule } from './rol/rol.module';
 import { AuthModule } from './auth/auth.module';
 import { PerfilInversorModule } from './perfil-inversor/perfil-inversor.module';
 import { ReportesModule } from './reportes/reportes.module';
+import { CompraVentaModule } from './compra-venta/compra-venta.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ReportesModule } from './reportes/reportes.module';
     TransaccionHistoricoVentaModule,
     UsuariosModule,
     ReportesModule,
+    CompraVentaModule,
   ],
   controllers: [AppController],
   providers: [AppService],

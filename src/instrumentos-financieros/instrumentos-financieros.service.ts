@@ -17,7 +17,7 @@ export class InstrumentosFinancierosService {
   constructor(
     @InjectRepository(InstrumentoFinanciero)
     private readonly instrumentoFinancieroRepository: Repository<InstrumentoFinanciero>,
-  ) {}
+  ) { }
   async findAll(filters: any): Promise<ResponseDTO<InstrumentoFinanciero[]>> {
     const { skip, limit, orderby, ...where } = filters;
 
@@ -117,6 +117,7 @@ export class InstrumentosFinancierosService {
       data: instrumentosFinancieros,
     };
   }
+
   async getById(id: number): Promise<ResponseDTO<InstrumentoFinanciero>> {
     const instrumentoFinanciero =
       await this.instrumentoFinancieroRepository.findOne({
