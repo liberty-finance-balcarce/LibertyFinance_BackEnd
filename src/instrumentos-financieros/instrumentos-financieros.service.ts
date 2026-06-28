@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InstrumentoFinanciero } from './entities/instrumento-financiero.entity';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 import { CreateInstrumentoFinancieroDto } from './dto/create-instrumento-financiero.dto';
 import { UpdateInstrumentoFinancieroDto } from './dto/update-instrumento-financiero.dto';
 
@@ -18,7 +18,7 @@ export class InstrumentosFinancierosService {
     @InjectRepository(InstrumentoFinanciero)
     private readonly instrumentoFinancieroRepository: Repository<InstrumentoFinanciero>,
   ) {}
-  async findAll(filters: any): Promise<ResponseDTO> {
+  async findAll(filters: any): Promise<ResponseDTO<InstrumentoFinanciero[]>> {
     const { skip, limit, orderby, ...where } = filters;
 
     const DEFAULT_SKIP = 0;
@@ -117,7 +117,7 @@ export class InstrumentosFinancierosService {
       data: instrumentosFinancieros,
     };
   }
-  async getById(id: number): Promise<ResponseDTO> {
+  async getById(id: number): Promise<ResponseDTO<InstrumentoFinanciero>> {
     const instrumentoFinanciero =
       await this.instrumentoFinancieroRepository.findOne({
         where: { id_instrumento: id },
@@ -150,7 +150,7 @@ export class InstrumentosFinancierosService {
     });
     if (!exists)
       throw new NotFoundException('Instrumento financiero no encontrado');
-    const res = await this.instrumentoFinancieroRepository.delete(id);
+    const res = await this.instrumentoFinancieroRepository.softDelete(id);
     if (!res.affected)
       throw new InternalServerErrorException(
         'Error al eliminar el instrumento financiero',

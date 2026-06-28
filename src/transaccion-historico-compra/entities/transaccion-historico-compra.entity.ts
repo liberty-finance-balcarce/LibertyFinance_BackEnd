@@ -1,34 +1,58 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { InstrumentoFinanciero } from '../../instrumentos-financieros/entities/instrumento-financiero.entity';
 import { Usuario } from '../../usuarios/entities/usuario.entity';
 
-@Entity ('transaccion_historico_compra')
-
+@Entity('transaccion_historico_compra')
 export class TransaccionHistoricoCompra {
-    @PrimaryGeneratedColumn('increment')
-    id_transaccion_compra: number;
+  @PrimaryGeneratedColumn('increment')
+  id_transaccion_compra: number;
 
-    @Column({ type: 'date' })
-    fecha_operacion: Date;
+  @Column({ type: 'date' })
+  fecha_operacion: Date;
 
-    @ManyToOne(() => InstrumentoFinanciero)
-    @JoinColumn({ 
-        name: 'id_instrumento',
-        referencedColumnName: 'id_instrumento'    
-    })
-        id_instrumento: InstrumentoFinanciero;
+/*
+  @CreateDateColumn({name: 'created_at'})
+  created_at: Date;
+*/
 
-    @ManyToOne(()=> InstrumentoFinanciero)
-    @JoinColumn({ 
-        name: 'precio_instrumento',
-        referencedColumnName: 'precio_instrumento'
-    })
-    precio_instrumento: number;
+  @UpdateDateColumn({name: 'updated_at', nullable: true})
+  updated_at: Date | null;
 
-    @ManyToOne(()=> Usuario)
-    @JoinColumn({ 
-        name: 'dni_usuario',
-        referencedColumnName: 'dni_usuario'
-    })
-    dni_usuario: Usuario;
+  @DeleteDateColumn({name: 'deleted_at', nullable: true, select: false})
+  deleted_at: Date | null;
+
+  @ManyToOne(() => InstrumentoFinanciero)
+  @JoinColumn({
+    name: 'id_instrumento',
+    referencedColumnName: 'id_instrumento',
+  })
+  id_instrumento: InstrumentoFinanciero;
+
+  @Column({ type: 'float', nullable: false })
+  precio_instrumento: number;
+
+  @Column({ type: 'integer' }) ///era float
+  cantidad_paquetes: number;
+
+  @Column({ type: 'float' })
+  precio_paquete: number;
+
+  @ManyToOne(() => Usuario)
+  @JoinColumn({
+    name: 'dni_usuario',
+    referencedColumnName: 'dni_usuario',
+  })
+  dni_usuario: Usuario;
+
+  @Column({ type: 'float' })
+  cantidad_instrumento_comprado: number;
 }

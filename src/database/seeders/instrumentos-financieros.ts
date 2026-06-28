@@ -55,6 +55,22 @@ export const InstrumentosFinancieros: CreateInstrumentoFinancieroDto[] = [
     tipo_instrumento: TipoInstrumento.NO_TRADICIONAL,
     logo_url: 'https://cdn-icons-png.flaticon.com/512/2592/2592201.png',
   },
+  {
+    nombre_instrumento: 'Bitcoin',
+    rendimiento: 300,
+    riesgo: Riesgo.ALTO,
+    precio_instrumento: 62000,
+    tipo_instrumento: TipoInstrumento.NO_TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/2592/2592201.png',
+  },  
+  {
+    nombre_instrumento: 'Ethereum',
+    rendimiento: 100,
+    riesgo: Riesgo.ALTO,
+    precio_instrumento: 1700,
+    tipo_instrumento: TipoInstrumento.NO_TRADICIONAL,
+    logo_url: 'https://cdn-icons-png.flaticon.com/512/2592/2592201.png',
+  },  
 ];
 
 export async function seedInstrumentosFinancieros(

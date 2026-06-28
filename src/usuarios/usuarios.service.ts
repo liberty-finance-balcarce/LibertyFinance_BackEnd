@@ -9,12 +9,13 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { Usuario } from './entities/usuario.entity';
 import { Provincia } from 'src/provincias/entities/provincia.entity';
 import { Rol } from 'src/rol/entities/rol.entity';
-import { ResponseDTO } from './dto/response.dto';
+import { ResponseDTO } from 'src/common/dto/response.dto';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like } from 'typeorm';
 import bcrypt from 'bcrypt';
+import { PerfilInversor } from 'src/perfil-inversor/entities/perfil-inversor.entity';
 
 @Injectable()
 export class UsuariosService {
@@ -27,9 +28,12 @@ export class UsuariosService {
 
     @InjectRepository(Rol)
     private readonly rolRepository: Repository<Rol>,
+
+    @InjectRepository(PerfilInversor)
+    private readonly perfilInversorRepository: Repository<PerfilInversor>,
   ) {}
 
-  async findAll(): Promise<ResponseDTO> {
+  async findAll(): Promise<ResponseDTO<Usuario[]>> {
     const usuarios = await this.usuarioRepository.find({
       relations: ['provincia', 'rol', 'perfilinv'],
     });
@@ -57,7 +61,7 @@ export class UsuariosService {
       (edad === 18 && meses > 0) ||
       (edad === 18 && meses === 0 && dias >= 0);
     if (!mayor) {
-      throw new ConflictException(
+      throw new BadRequestException(
         `Para utilizar la plataforma debe ser mayor de ${edad_admitida} años`,
       );
     }
@@ -84,6 +88,19 @@ export class UsuariosService {
       );
     }
 
+    if (usuario.id_perfilinv) {
+      const existsPerfilInv = await this.perfilInversorRepository.findOne({
+        where: { id_perfil_inversor: usuario.id_perfilinv },
+      });
+      if (!existsPerfilInv) {
+        throw new NotFoundException(
+          'No se puede crear usuario, el Perfil de Inversor ingresado no existe',
+        );
+      }
+    } else {
+      usuario.id_perfilinv = 1;
+    }
+
     const existsMail = await this.usuarioRepository.findOne({
       where: { mail: usuario.mail },
     });
@@ -106,7 +123,7 @@ export class UsuariosService {
   }
 
   async delete(dni_usuario: number): Promise<ResponseDTO> {
-    const res = await this.usuarioRepository.delete({ dni_usuario });
+    const res = await this.usuarioRepository.softDelete({ dni_usuario });
     if (!res.affected)
       throw new NotFoundException(
         `No se encontro el usuario con DNI: ${dni_usuario}`,
@@ -168,7 +185,7 @@ export class UsuariosService {
     };
   }
 
-  async getByNombre(nombreBuscar: string): Promise<ResponseDTO> {
+  async getByNombre(nombreBuscar: string): Promise<ResponseDTO<Usuario[]>> {
     const res = await this.usuarioRepository.find({
       where: {
         nombre: Like(`%${nombreBuscar}%`),
@@ -183,7 +200,8 @@ export class UsuariosService {
       data: res,
     };
   }
-  async getByDNI(dni_usuario: number): Promise<ResponseDTO> {
+
+  async getByDNI(dni_usuario: number): Promise<ResponseDTO<Usuario>> {
     const res = await this.usuarioRepository.findOne({
       where: {
         dni_usuario,
