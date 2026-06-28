@@ -17,8 +17,6 @@ export class CompraVentaService {
     private readonly ventaService: TransaccionHistoricoVentaService,
   ) { }
 
-  // ─── Público ──────────────────────────────────────────────────────────────
-
   async comprar(dto: CreateTransaccionHistoricoCompraDto): Promise<ResponseDTO> {
     await this.sumarTenencia(
       dto.dni_usuario,
@@ -44,8 +42,6 @@ export class CompraVentaService {
     return this.ventaService.create(dto);
   }
 
-  // ─── Privados ─────────────────────────────────────────────────────────────
-
   private async getTenencia(dni: number, idInstrumento: number): Promise<CompraVenta> {
     const tenencia = await this.compraVentaRepo.findOne({
       where: { dni_usuario: dni, id_instrumento: idInstrumento },
@@ -54,15 +50,6 @@ export class CompraVentaService {
     if (!tenencia) {
       throw new BadRequestException(
         'No puedes vender un instrumento que no has comprado previamente',
-      );
-    }
-
-    if (
-      Number(tenencia.cantidad_paquetes) <= 0 &&
-      Number(tenencia.cantidad_instrumento) <= 0
-    ) {
-      throw new BadRequestException(
-        'Ya has vendido toda tu tenencia de este instrumento financiero',
       );
     }
 
@@ -117,16 +104,25 @@ export class CompraVentaService {
     tenencia: CompraVenta,
     dto: CreateTransaccionHistoricoVentaDto,
   ): void {
+    const tenenciaPaquetes = Number(tenencia.cantidad_paquetes);
+    const tenenciaInstrumento = Number(tenencia.cantidad_instrumento);
+
+    if (tenenciaPaquetes === 0 && tenenciaInstrumento === 0) {
+      throw new BadRequestException(
+        'Ya has vendido toda tu tenencia de este instrumento financiero',
+      );
+    }
+
     const paquetesAVender = Number(dto.cantidad_paquetes ?? 0);
     const instrumentoAVender = Number(dto.cantidad_instrumento_vendido ?? 0);
 
-    if (paquetesAVender > Number(tenencia.cantidad_paquetes)) {
+    if (paquetesAVender > tenenciaPaquetes) {
       throw new BadRequestException('No puedes vender más paquetes de los que tienes');
     }
 
-    if (instrumentoAVender > Number(tenencia.cantidad_instrumento)) {
+    if (instrumentoAVender > tenenciaInstrumento) {
       throw new BadRequestException(
-        'No puedes vender más cantidad de instrumento de la que tienes',
+        'No puedes vender mas cantidad de instrumento de la que tienes',
       );
     }
   }
