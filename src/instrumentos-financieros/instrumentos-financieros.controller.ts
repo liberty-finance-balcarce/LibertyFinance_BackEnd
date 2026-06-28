@@ -8,9 +8,13 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { InstrumentosFinancierosService } from './instrumentos-financieros.service';
 import { ResponseDTO } from 'src/common/dto/response.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -33,7 +37,7 @@ import {
 export class InstrumentosFinancierosController {
   constructor(
     private readonly instrumentosFinancierosService: InstrumentosFinancierosService,
-  ) {}
+  ) { }
 
   @Get()
   @ApiOperation({
@@ -110,6 +114,9 @@ export class InstrumentosFinancierosController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(1, 2)
+  @ApiBearerAuth()
   @ApiOperation({
     description: 'Obtener un instrumento financiero por Id',
   })
@@ -134,6 +141,8 @@ export class InstrumentosFinancierosController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
   @ApiBearerAuth()
   @ApiOperation({
     description: 'Eliminar un instrumento financiero por Id',
@@ -161,6 +170,8 @@ export class InstrumentosFinancierosController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
   @ApiBearerAuth()
   @ApiOperation({
     description: 'Crear un nuevo instrumento financiero',
@@ -185,6 +196,8 @@ export class InstrumentosFinancierosController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
   @ApiBearerAuth()
   @ApiOperation({
     description: 'Actualizar un instrumento financiero',
