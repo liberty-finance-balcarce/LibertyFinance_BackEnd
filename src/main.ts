@@ -32,7 +32,12 @@ async function bootstrap() {
   );
 
   app.setGlobalPrefix('api/v1');
-  const allowedOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+  const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://libertyfinance.nubeapi.xyz',
+    'https://libertyfinance-develop.nubeapi.xyz',
+  ];
   app.enableCors({
     origin: allowedOrigins,
     credentials: true,
