@@ -1,4 +1,7 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CompraVenta } from './entities/compra-venta.entity';
 import { TransaccionHistoricoCompraService } from '../transaccion-historico-compra/transaccion-historico-compra.service';
 import { TransaccionHistoricoVentaService } from '../transaccion-historico-venta/transaccion-historico-venta.service';
 import { CreateTransaccionHistoricoCompraDto } from '../transaccion-historico-compra/dto/create-transaccion-historico-compra.dto';
@@ -8,77 +11,127 @@ import { ResponseDTO } from 'src/common/dto/response.dto';
 @Injectable()
 export class CompraVentaService {
   constructor(
+    @InjectRepository(CompraVenta)
+    private readonly compraVentaRepo: Repository<CompraVenta>,
     private readonly compraService: TransaccionHistoricoCompraService,
     private readonly ventaService: TransaccionHistoricoVentaService,
   ) { }
 
+  // ─── Público ──────────────────────────────────────────────────────────────
+
   async comprar(dto: CreateTransaccionHistoricoCompraDto): Promise<ResponseDTO> {
+    await this.sumarTenencia(
+      dto.dni_usuario,
+      dto.id_instrumento,
+      Number(dto.cantidad_paquetes ?? 0),
+      Number(dto.cantidad_instrumento_comprado ?? 0),
+    );
+
     return this.compraService.create(dto);
   }
 
   async vender(dto: CreateTransaccionHistoricoVentaDto): Promise<ResponseDTO> {
-    const compras = await this.getComprasDelInstrumento(dto.dni_usuario, dto.id_instrumento);
+    const tenencia = await this.getTenencia(dto.dni_usuario, dto.id_instrumento);
 
-    if (!compras.length) {
-      throw new BadRequestException('No puedes vender un instrumento que no has comprado previamente');
-    }
+    this.validarTenencia(tenencia, dto);
 
-    const ventas = await this.getVentasDelInstrumento(dto.dni_usuario, dto.id_instrumento);
-
-    this.validarTenencia(compras, ventas, dto);
+    await this.restarTenencia(
+      tenencia,
+      Number(dto.cantidad_paquetes ?? 0),
+      Number(dto.cantidad_instrumento_vendido ?? 0),
+    );
 
     return this.ventaService.create(dto);
   }
 
+  // ─── Privados ─────────────────────────────────────────────────────────────
 
-  private async getComprasDelInstrumento(dni: number, idInstrumento: number): Promise<any[]> {
-    const { data } = await this.compraService.getByDniUsuario(dni);
-    return data?.filter((c) => c.id_instrumento?.id_instrumento === idInstrumento) ?? [];
-  }
+  private async getTenencia(dni: number, idInstrumento: number): Promise<CompraVenta> {
+    const tenencia = await this.compraVentaRepo.findOne({
+      where: { dni_usuario: dni, id_instrumento: idInstrumento },
+    });
 
-  private async getVentasDelInstrumento(dni: number, idInstrumento: number): Promise<any[]> {
-    try {
-      const { data } = await this.ventaService.getByDniUsuario(dni);
-      return data?.filter((v: any) => v.id_instrumento?.id_instrumento === idInstrumento) ?? [];
-    } catch (error) {
-      if (error instanceof NotFoundException) return []; // primer venta del usuario: sin historial previo
-      throw error;
+    if (!tenencia) {
+      throw new BadRequestException(
+        'No puedes vender un instrumento que no has comprado previamente',
+      );
     }
+
+    if (
+      Number(tenencia.cantidad_paquetes) <= 0 &&
+      Number(tenencia.cantidad_instrumento) <= 0
+    ) {
+      throw new BadRequestException(
+        'Ya has vendido toda tu tenencia de este instrumento financiero',
+      );
+    }
+
+    return tenencia;
   }
 
-  private sumarCampo(items: any[], campo: string): number {
-    return items.reduce((acc, item) => acc + Number(item[campo] ?? 0), 0);
+  private async sumarTenencia(
+    dni: number,
+    idInstrumento: number,
+    paquetes: number,
+    instrumento: number,
+  ): Promise<void> {
+    let tenencia = await this.compraVentaRepo.findOne({
+      where: { dni_usuario: dni, id_instrumento: idInstrumento },
+    });
+
+    if (!tenencia) {
+      tenencia = this.compraVentaRepo.create({
+        dni_usuario: dni,
+        id_instrumento: idInstrumento,
+        cantidad_paquetes: 0,
+        cantidad_instrumento: 0,
+      });
+    }
+
+    tenencia.cantidad_paquetes = this.redondear(
+      Number(tenencia.cantidad_paquetes) + paquetes,
+    );
+    tenencia.cantidad_instrumento = this.redondear(
+      Number(tenencia.cantidad_instrumento) + instrumento,
+    );
+
+    await this.compraVentaRepo.save(tenencia);
+  }
+
+  private async restarTenencia(
+    tenencia: CompraVenta,
+    paquetes: number,
+    instrumento: number,
+  ): Promise<void> {
+    tenencia.cantidad_paquetes = this.redondear(
+      Number(tenencia.cantidad_paquetes) - paquetes,
+    );
+    tenencia.cantidad_instrumento = this.redondear(
+      Number(tenencia.cantidad_instrumento) - instrumento,
+    );
+
+    await this.compraVentaRepo.save(tenencia);
   }
 
   private validarTenencia(
-    compras: any[],
-    ventas: any[],
+    tenencia: CompraVenta,
     dto: CreateTransaccionHistoricoVentaDto,
   ): void {
-    const tenenciaPaquetes =
-      this.sumarCampo(compras, 'cantidad_paquetes') -
-      this.sumarCampo(ventas, 'cantidad_paquetes');
-
-    const tenenciaInstrumento = Number(
-      (
-        this.sumarCampo(compras, 'cantidad_instrumento_comprado') -
-        this.sumarCampo(ventas, 'cantidad_instrumento_vendido')
-      ).toFixed(8),
-    );
-
-    if (tenenciaPaquetes <= 0 && tenenciaInstrumento <= 0) {
-      throw new BadRequestException('Ya has vendido toda tu tenencia de este instrumento financiero');
-    }
-
     const paquetesAVender = Number(dto.cantidad_paquetes ?? 0);
     const instrumentoAVender = Number(dto.cantidad_instrumento_vendido ?? 0);
 
-    if (paquetesAVender > tenenciaPaquetes) {
+    if (paquetesAVender > Number(tenencia.cantidad_paquetes)) {
       throw new BadRequestException('No puedes vender más paquetes de los que tienes');
     }
 
-    if (instrumentoAVender > tenenciaInstrumento) {
-      throw new BadRequestException('No puedes vender más cantidad de instrumento de la que tienes');
+    if (instrumentoAVender > Number(tenencia.cantidad_instrumento)) {
+      throw new BadRequestException(
+        'No puedes vender más cantidad de instrumento de la que tienes',
+      );
     }
+  }
+
+  private redondear(valor: number): number {
+    return Number(valor.toFixed(8));
   }
 }
