@@ -181,7 +181,6 @@ export class ReportesService {
         valor_actual_mercado_instrumento: valorActualMercadoInstrumento,
         saldo_valuado_actual_cartera: saldoValuadoActualCartera,
         ganancia_perdida_monetaria: gananciaPerdidaMonetaria,
-        percentage_retorno: porcentajeRetorno, // Cambiado el cálculo del mock anterior (*180) por el estándar universal (*100)
         porcentaje_retorno: porcentajeRetorno,
       };
     });
