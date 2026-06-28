@@ -8,63 +8,77 @@ import { ResponseDTO } from 'src/common/dto/response.dto';
 @Injectable()
 export class CompraVentaService {
   constructor(
-    private readonly transaccionHistoricoCompraService: TransaccionHistoricoCompraService,
-    private readonly transaccionHistoricoVentaService: TransaccionHistoricoVentaService,
+    private readonly compraService: TransaccionHistoricoCompraService,
+    private readonly ventaService: TransaccionHistoricoVentaService,
   ) { }
 
-  async comprar(compraDto: CreateTransaccionHistoricoCompraDto): Promise<ResponseDTO> {
-    return await this.transaccionHistoricoCompraService.create(compraDto);
+  async comprar(dto: CreateTransaccionHistoricoCompraDto): Promise<ResponseDTO> {
+    return this.compraService.create(dto);
   }
 
-  async vender(ventaDto: CreateTransaccionHistoricoVentaDto): Promise<ResponseDTO> {
-    const comprasResponse = await this.transaccionHistoricoCompraService.getByDniUsuario(ventaDto.dni_usuario);
-    const comprasDelInstrumento = comprasResponse.data?.filter(
-      (compra) =>
-        compra.id_instrumento?.id_instrumento === ventaDto.id_instrumento
-    ) || [];
+  async vender(dto: CreateTransaccionHistoricoVentaDto): Promise<ResponseDTO> {
+    const compras = await this.getComprasDelInstrumento(dto.dni_usuario, dto.id_instrumento);
 
-    if (comprasDelInstrumento.length === 0) {
+    if (!compras.length) {
       throw new BadRequestException('No puedes vender un instrumento que no has comprado previamente');
     }
 
-    const totalPaquetesComprados = comprasDelInstrumento.reduce((acc, curr: any) => acc + Number(curr.cantidad_paquetes || 0), 0);
-    const totalInstrumentoComprado = comprasDelInstrumento.reduce((acc, curr: any) => acc + Number(curr.cantidad_instrumento_comprado || 0), 0);
+    const ventas = await this.getVentasDelInstrumento(dto.dni_usuario, dto.id_instrumento);
 
-    let ventasDelInstrumento: any[] = [];
+    this.validarTenencia(compras, ventas, dto);
+
+    return this.ventaService.create(dto);
+  }
+
+
+  private async getComprasDelInstrumento(dni: number, idInstrumento: number): Promise<any[]> {
+    const { data } = await this.compraService.getByDniUsuario(dni);
+    return data?.filter((c) => c.id_instrumento?.id_instrumento === idInstrumento) ?? [];
+  }
+
+  private async getVentasDelInstrumento(dni: number, idInstrumento: number): Promise<any[]> {
     try {
-      const ventasResponse = await this.transaccionHistoricoVentaService.getByDniUsuario(ventaDto.dni_usuario);
-      ventasDelInstrumento = ventasResponse.data?.filter(
-        (venta: any) => venta.id_instrumento?.id_instrumento === ventaDto.id_instrumento
-      ) || [];
-
-      const totalPaquetesVendidos = ventasDelInstrumento.reduce((acc, curr) => acc + Number(curr.cantidad_paquetes || 0), 0);
-      const totalInstrumentoVendido = ventasDelInstrumento.reduce((acc, curr) => acc + Number(curr.cantidad_instrumento_vendido || 0), 0);
-
-      const tenenciaActualPaquetes = totalPaquetesComprados - totalPaquetesVendidos;
-      const tenenciaActualInstrumento = Number((totalInstrumentoComprado - totalInstrumentoVendido).toFixed(8));
-
-      const paquetesAVender = Number(ventaDto.cantidad_paquetes || 0);
-      const instrumentoAVender = Number(ventaDto.cantidad_instrumento_vendido || 0);
-
-      if (tenenciaActualPaquetes <= 0 && tenenciaActualInstrumento <= 0) {
-        throw new BadRequestException('Ya has vendido toda tu tenencia de este instrumento financiero');
-      }
-
-      if (paquetesAVender > tenenciaActualPaquetes) {
-        throw new BadRequestException(`No puedes vender mas paquetes de los que tienes`);
-      }
-
-      if (instrumentoAVender > tenenciaActualInstrumento) {
-        throw new BadRequestException(`No puedes vender mas cantidad de instrumento de la que tienes`);
-      }
-
+      const { data } = await this.ventaService.getByDniUsuario(dni);
+      return data?.filter((v: any) => v.id_instrumento?.id_instrumento === idInstrumento) ?? [];
     } catch (error) {
-      if (error instanceof NotFoundException) {
-        throw new BadRequestException('No tienes compras registradas para poder vender');
-      }
+      if (error instanceof NotFoundException) return []; // primer venta del usuario: sin historial previo
       throw error;
     }
+  }
 
-    return await this.transaccionHistoricoVentaService.create(ventaDto);
+  private sumarCampo(items: any[], campo: string): number {
+    return items.reduce((acc, item) => acc + Number(item[campo] ?? 0), 0);
+  }
+
+  private validarTenencia(
+    compras: any[],
+    ventas: any[],
+    dto: CreateTransaccionHistoricoVentaDto,
+  ): void {
+    const tenenciaPaquetes =
+      this.sumarCampo(compras, 'cantidad_paquetes') -
+      this.sumarCampo(ventas, 'cantidad_paquetes');
+
+    const tenenciaInstrumento = Number(
+      (
+        this.sumarCampo(compras, 'cantidad_instrumento_comprado') -
+        this.sumarCampo(ventas, 'cantidad_instrumento_vendido')
+      ).toFixed(8),
+    );
+
+    if (tenenciaPaquetes <= 0 && tenenciaInstrumento <= 0) {
+      throw new BadRequestException('Ya has vendido toda tu tenencia de este instrumento financiero');
+    }
+
+    const paquetesAVender = Number(dto.cantidad_paquetes ?? 0);
+    const instrumentoAVender = Number(dto.cantidad_instrumento_vendido ?? 0);
+
+    if (paquetesAVender > tenenciaPaquetes) {
+      throw new BadRequestException('No puedes vender más paquetes de los que tienes');
+    }
+
+    if (instrumentoAVender > tenenciaInstrumento) {
+      throw new BadRequestException('No puedes vender más cantidad de instrumento de la que tienes');
+    }
   }
 }
