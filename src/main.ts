@@ -37,6 +37,8 @@ async function bootstrap() {
     'http://localhost:3000',
     'https://libertyfinance.nubeapi.xyz',
     'https://libertyfinance-develop.nubeapi.xyz',
+    'https://www.liberty-finance.xyz',
+    'https://liberty-finance.xyz',
   ];
   app.enableCors({
     origin: allowedOrigins,

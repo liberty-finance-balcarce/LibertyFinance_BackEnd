@@ -6,9 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ResponseDTO } from 'src/common/dto/response.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles/roles.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 import { PerfilInversorService } from './perfil-inversor.service';
 import { CreatePerfilInversorDto } from './dto/create-perfil-inversor.dto';
 import { UpdatePerfilInversorDto } from './dto/update-perfil-inversor.dto';
@@ -17,7 +21,7 @@ import { PerfilInversor } from './entities/perfil-inversor.entity';
 @ApiTags('Perfil Inversor')
 @Controller('perfil-inversor')
 export class PerfilInversorController {
-  constructor(private readonly perfilInversorService: PerfilInversorService) {}
+  constructor(private readonly perfilInversorService: PerfilInversorService) { }
 
   @Get()
   @ApiOperation({ description: 'Obtener todos los perfiles de inversor' })
@@ -33,7 +37,7 @@ export class PerfilInversorController {
     status: 500,
     description: 'Error al obtener los perfiles de inversor.',
   })
- 
+
   async findAll(): Promise<ResponseDTO<PerfilInversor[]>> {
     return await this.perfilInversorService.findAll();
   }
@@ -80,6 +84,9 @@ export class PerfilInversorController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Eliminar un perfil de inversor' })
   @ApiResponse({
     status: 200,
@@ -98,6 +105,9 @@ export class PerfilInversorController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Crear un perfil de inversor' })
   @ApiResponse({
     status: 200,
@@ -117,6 +127,9 @@ export class PerfilInversorController {
     return await this.perfilInversorService.create(createPerfilInversorDto);
   }
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(2)
+  @ApiBearerAuth()
   @ApiOperation({ description: 'Actualizar un perfil de inversor' })
   @ApiResponse({
     status: 200,
